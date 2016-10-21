@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package sample.freemarker;
+package com.beanlet.web;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SampleWebFreeMarkerApplication {
+public class BeanletWebApplication {
 
 	public static void main(String[] args) throws Exception {
-		SpringApplication.run(SampleWebFreeMarkerApplication.class, args);
+		SpringApplication.run(BeanletWebApplication.class, args);
 	}
 
 }
