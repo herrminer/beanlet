@@ -13,22 +13,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http
       .authorizeRequests()
-        .antMatchers("/css/*").permitAll()
+        .antMatchers("/css/**", "/js/**", "/bootstrap-3.3.7-dist/**").permitAll()
         .anyRequest().authenticated()
         .and()
       .formLogin()
         .loginPage("/login")
-        .defaultSuccessUrl("/users")
+        .defaultSuccessUrl("/")
         .permitAll()
         .and()
       .logout()
         .logoutUrl("/logout")
-        .logoutSuccessUrl("/login")
-//      .logoutSuccessHandler(logoutSuccessHandler)
-//      .invalidateHttpSession(true)
-//      .addLogoutHandler(logoutHandler)
-//      .deleteCookies(cookieNamesToClear)
-      ;
+        .logoutSuccessUrl("/login");
   }
 
 }
