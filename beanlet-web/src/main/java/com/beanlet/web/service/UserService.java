@@ -26,7 +26,13 @@ public interface UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-      return userRepository.findByEmail(username);
+      User user = userRepository.findByEmail(username);
+
+      if (user == null) {
+        throw new UsernameNotFoundException("no user found for email " + username);
+      }
+
+      return user;
     }
   }
 }

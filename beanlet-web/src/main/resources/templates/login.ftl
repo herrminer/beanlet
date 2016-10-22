@@ -19,12 +19,13 @@
 <body>
 <div class="container">
 
-  <form class="form-signin">
+  <form class="form-signin" action="/login" method="post">
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     <h2 class="form-signin-heading"><@spring.message "login.title"/></h2>
     <label for="inputEmail" class="sr-only"><@spring.message "login.email"/></label>
-    <input type="email" id="inputEmail" class="form-control" placeholder="Email address" autocomplete="off" required autofocus>
+    <input type="email" name="username" id="inputEmail" class="form-control" placeholder="Email address" autocomplete="off" required autofocus>
     <label for="inputPassword" class="sr-only"><@spring.message "login.password"/></label>
-    <input type="password" id="inputPassword" class="form-control" placeholder="Password" autocomplete="off" required>
+    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" autocomplete="off" required>
     <div class="checkbox">
       <label>
         <input type="checkbox" value="remember-me"> <@spring.message "login.remember.me"/>

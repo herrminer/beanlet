@@ -3,6 +3,8 @@ package com.beanlet.web.jpa;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -19,6 +21,7 @@ public class UserRole implements GrantedAuthority {
   @JoinColumn(name = "user_id")
   private User user;
 
+  @Enumerated(EnumType.STRING)
   private RoleType roleType;
 
   public Integer getId() {
