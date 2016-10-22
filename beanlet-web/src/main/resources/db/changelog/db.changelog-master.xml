@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="1" author="joseph">
+    <createTable tableName="user">
+      <column name="id" type="int" autoIncrement="true" startWith="1000">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="email" type="varchar(255)">
+        <constraints nullable="false" unique="true" uniqueConstraintName="usr_eml_unique"/>
+      </column>
+      <column name="password" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="account_non_expired" type="boolean" defaultValueBoolean="true"/>
+      <column name="account_non_locked" type="boolean" defaultValueBoolean="true"/>
+      <column name="credentials_non_expired" type="boolean" defaultValueBoolean="true"/>
+      <column name="enabled" type="boolean" defaultValueBoolean="true"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="2" author="joseph">
+    <createTable tableName="user_role">
+      <column name="id" type="int" autoIncrement="true" startWith="1000">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="user_id" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="role_type" type="varchar(50)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <createIndex tableName="user_role" indexName="user_role_user_id_idx">
+      <column name="user_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="3" author="joseph">
+    <insert tableName="user">
+      <column name="id">1</column>
+      <column name="email">herrminer@gmail.com</column>
+      <column name="password">password</column>
+    </insert>
+    <insert tableName="user_role">
+      <column name="user_id">1</column>
+      <column name="role_type">ROLE_USER</column>
+    </insert>
+    <insert tableName="user">
+      <column name="id">2</column>
+      <column name="email">frauminer@gmail.com</column>
+      <column name="password">password</column>
+    </insert>
+    <insert tableName="user_role">
+      <column name="user_id">2</column>
+      <column name="role_type">ROLE_USER</column>
+    </insert>
+  </changeSet>
+
+</databaseChangeLog>

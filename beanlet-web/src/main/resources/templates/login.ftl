@@ -9,7 +9,7 @@
   <title><@spring.message "login.sign.in"/></title>
 
   <!-- Bootstrap core CSS -->
-  <link href="<@spring.url "/bootstrap-3.3.7-dist/css/bootstrap.min.css"/>" rel="stylesheet">
+  <link href="<@spring.url "/css/bootstrap.min.css"/>" rel="stylesheet">
 
   <!-- Custom styles for this template -->
   <link href="<@spring.url "/css/beanlet.css"/>" rel="stylesheet">

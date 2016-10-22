@@ -3,6 +3,8 @@ package com.beanlet.web.jpa;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 public class User {
@@ -14,6 +16,9 @@ public class User {
   private String email;
 
   private String password;
+
+  @OneToMany(mappedBy = "user")
+  private List<UserRole> roles;
 
   public Integer getId() {
     return id;
