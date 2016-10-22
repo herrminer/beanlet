@@ -1,0 +1,31 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title th:text="'Users'">Sign in to Beanlet</title>
+  <link th:href="@{/css/bootstrap.min.css}" href="/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+
+<body>
+<table class="table table-striped table-bordered">
+  <thead>
+  <tr>
+    <th>id</th>
+    <th>email</th>
+    <th>password</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="user : ${users}">
+    <td th:text="${user.id}">12345</td>
+    <td th:text="${user.email}">foo@bar.com</td>
+    <td th:text="${user.password}">kk37dujd</td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>
+
