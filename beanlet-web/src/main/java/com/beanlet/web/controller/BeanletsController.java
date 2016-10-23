@@ -11,16 +11,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class BeansController {
+public class BeanletsController {
 
-  public static final Logger logger = LoggerFactory.getLogger(BeansController.class);
+  public static final Logger logger = LoggerFactory.getLogger(BeanletsController.class);
 
   @Autowired
   private UserService userService;
 
   @GetMapping("/")
   public String displayBeans(Model model, @AuthenticationPrincipal User user) {
-    return "beans";
+    return "beanlets";
   }
 
 }

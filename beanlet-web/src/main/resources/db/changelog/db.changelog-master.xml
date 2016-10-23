@@ -42,6 +42,7 @@
   </changeSet>
 
   <changeSet id="3" author="joseph">
+    <comment>add default users</comment>
     <insert tableName="user">
       <column name="id">1</column>
       <column name="email">herrminer@gmail.com</column>
@@ -60,6 +61,35 @@
       <column name="user_id">2</column>
       <column name="role_type">ROLE_USER</column>
     </insert>
+  </changeSet>
+
+  <changeSet id="4" author="joseph">
+    <comment>create beanlet table</comment>
+    <createTable tableName="beanlet">
+      <column name="id" type="int" autoIncrement="true" startWith="1000">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="user_id" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="date_last_logged" type="datetime"/>
+      <column name="date_created" type="datetime">
+        <constraints nullable="false"/>
+      </column>
+      <column name="date_updated" type="datetime">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="int">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <createIndex tableName="beanlet" indexName="beanlet_usr_id_dt_lst_idx">
+      <column name="user_id"/>
+      <column name="date_last_logged"/>
+    </createIndex>
   </changeSet>
 
 </databaseChangeLog>
