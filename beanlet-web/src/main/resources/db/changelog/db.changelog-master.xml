@@ -103,6 +103,42 @@
       <column name="date_last_logged">2016-07-04 20:30:40</column>
       <column name="version">1</column>
     </insert>
+    <insert tableName="beanlet">
+      <column name="id">2</column>
+      <column name="user_id">1</column>
+      <column name="name">scripture reading</column>
+      <column name="date_created">2016-01-01 12:00:00</column>
+      <column name="date_updated">2016-01-01 12:00:00</column>
+      <column name="date_last_logged">2016-07-04 20:30:40</column>
+      <column name="version">1</column>
+    </insert>
+    <insert tableName="beanlet">
+      <column name="id">3</column>
+      <column name="user_id">1</column>
+      <column name="name">journal</column>
+      <column name="date_created">2016-01-01 12:00:00</column>
+      <column name="date_updated">2016-01-01 12:00:00</column>
+      <column name="date_last_logged">2016-07-04 20:30:40</column>
+      <column name="version">1</column>
+    </insert>
+    <insert tableName="beanlet">
+      <column name="id">4</column>
+      <column name="user_id">1</column>
+      <column name="name">prayer</column>
+      <column name="date_created">2016-01-01 12:00:00</column>
+      <column name="date_updated">2016-01-01 12:00:00</column>
+      <column name="date_last_logged">2016-07-04 20:30:40</column>
+      <column name="version">1</column>
+    </insert>
+    <insert tableName="beanlet">
+      <column name="id">5</column>
+      <column name="user_id">1</column>
+      <column name="name">reflux</column>
+      <column name="date_created">2016-01-01 12:00:00</column>
+      <column name="date_updated">2016-01-01 12:00:00</column>
+      <column name="date_last_logged">2016-07-04 20:30:40</column>
+      <column name="version">1</column>
+    </insert>
   </changeSet>
 
 </databaseChangeLog>
