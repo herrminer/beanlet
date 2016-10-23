@@ -11,13 +11,17 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 public interface UserService {
+
   List<User> getAllUsers();
 
   @Service
   class DefaultUserService implements UserService, UserDetailsService {
 
-    @Autowired
-    UserRepository userRepository;
+    public DefaultUserService(UserRepository userRepository) {
+      this.userRepository = userRepository;
+    }
+
+    private UserRepository userRepository;
 
     @Override
     public List<User> getAllUsers() {

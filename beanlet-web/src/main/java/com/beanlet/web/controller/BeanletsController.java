@@ -1,9 +1,7 @@
 package com.beanlet.web.controller;
 
 import com.beanlet.web.jpa.User;
-import com.beanlet.web.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.beanlet.web.service.BeanletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -13,13 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class BeanletsController {
 
-  public static final Logger logger = LoggerFactory.getLogger(BeanletsController.class);
-
   @Autowired
-  private UserService userService;
+  private BeanletService beanletService;
 
-  @GetMapping("/")
+  @GetMapping("/beanlets")
   public String displayBeans(Model model, @AuthenticationPrincipal User user) {
+    model.addAttribute("beanlets", beanletService.getBeanletsForUserId(user.getId()));
     return "beanlets";
   }
 

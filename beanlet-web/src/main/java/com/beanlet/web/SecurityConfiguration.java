@@ -18,7 +18,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
       .formLogin()
         .loginPage("/login")
-        .defaultSuccessUrl("/")
+        .defaultSuccessUrl("/beanlets")
         .permitAll()
         .and()
       .logout()

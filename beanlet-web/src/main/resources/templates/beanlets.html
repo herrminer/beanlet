@@ -3,13 +3,14 @@
       xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
       layout:decorate="layout">
 <head>
-  <title th:text="'beans'">beans</title>
+  <title th:text="'beanlets'">beanlets</title>
 </head>
-<body layout:fragment="content">
-<a class="btn btn-lg btn-default btn-block" href="beans-add.html" th:href="@{/beans/add}">read scriptures</a>
-<a class="btn btn-lg btn-default btn-block" href="beans-add.html" th:href="@{/beans/add}">pray</a>
-<a class="btn btn-lg btn-default btn-block" href="beans-add.html" th:href="@{/beans/add}">exercise</a>
-<a class="btn btn-lg btn-primary btn-block" href="beans-add.html" th:href="@{/beans/add}">add bean</a>
+<body>
+<div class="container" layout:fragment="content">
+  <div class="beanlet" th:each="beanlet : ${beanlets}">
+    <span th:text="${beanlet.name}">something</span>
+  </div>
+</div>
 </body>
 </html>
 

@@ -92,4 +92,17 @@
     </createIndex>
   </changeSet>
 
+  <changeSet id="5" author="joseph">
+    <comment>add beanlet test data</comment>
+    <insert tableName="beanlet">
+      <column name="id">1</column>
+      <column name="user_id">1</column>
+      <column name="name">exercise</column>
+      <column name="date_created">2016-01-01 12:00:00</column>
+      <column name="date_updated">2016-01-01 12:00:00</column>
+      <column name="date_last_logged">2016-07-04 20:30:40</column>
+      <column name="version">1</column>
+    </insert>
+  </changeSet>
+
 </databaseChangeLog>

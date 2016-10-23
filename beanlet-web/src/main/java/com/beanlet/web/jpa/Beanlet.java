@@ -33,6 +33,15 @@ public class Beanlet {
   @Version
   private Integer version;
 
+  public Beanlet() {
+    // no-arg constructor
+  }
+
+  public Beanlet(User user, String name) {
+    this.user = user;
+    this.name = name;
+  }
+
   public Integer getId() {
     return id;
   }
