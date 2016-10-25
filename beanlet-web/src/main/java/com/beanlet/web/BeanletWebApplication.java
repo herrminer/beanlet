@@ -27,10 +27,15 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+import java.util.TimeZone;
+
 @SpringBootApplication
 public class BeanletWebApplication {
 
   public static void main(String[] args) throws Exception {
+    if (!TimeZone.getDefault().getID().equals("UTC")) {
+      throw new IllegalStateException("TIMEZONE NOT UTC!!!");
+    }
     SpringApplication.run(BeanletWebApplication.class, args);
   }
 
