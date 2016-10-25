@@ -75,6 +75,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<useSystemClassLoader>false</useSystemClassLoader>
+					<argLine>-Duser.timezone=UTC</argLine>
 				</configuration>
 			</plugin>
 		</plugins>
