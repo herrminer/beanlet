@@ -46,7 +46,7 @@
     <insert tableName="user">
       <column name="id">1</column>
       <column name="email">herrminer@gmail.com</column>
-      <column name="password">password</column>
+      <column name="password">$2a$10$6ENy8H/XGUyb5iLmhKi7fOyHQ5RFw9Z7fF0JzlRHvxoNCXEHgltUq</column>
     </insert>
     <insert tableName="user_role">
       <column name="user_id">1</column>
@@ -55,7 +55,7 @@
     <insert tableName="user">
       <column name="id">2</column>
       <column name="email">frauminer@gmail.com</column>
-      <column name="password">password</column>
+      <column name="password">$2a$10$z76z4s3sghgGwRtGrcKdK.aiBkq7QW.732E4eYlbcQotXuUCwvM2q</column>
     </insert>
     <insert tableName="user_role">
       <column name="user_id">2</column>
