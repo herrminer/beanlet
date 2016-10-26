@@ -45,10 +45,13 @@
       <ul class="nav navbar-nav">
         <li><a href="beanlets.html" th:href="@{/beanlets}">beanlets</a></li>
         <li><a href="users.html" th:href="@{/users}">users</a></li>
+        <li><a href="#" onclick="document.getElementById('form-logout').submit();">log out</a></li>
       </ul>
     </div><!--/.nav-collapse -->
   </div>
 </nav>
+
+<form id="form-logout" th:action="@{/logout}" method="post" style="display:none"></form>
 
   <div class="container" layout:fragment="content">
     <div class="starter-template">
