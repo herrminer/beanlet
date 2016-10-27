@@ -141,4 +141,21 @@
     </insert>
   </changeSet>
 
+  <changeSet id="6" author="joseph">
+    <createTable tableName="remember_me_token">
+      <column name="username" type="varchar(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="series" type="varchar(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="token" type="varchar(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_used" type="datetime">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
 </databaseChangeLog>
