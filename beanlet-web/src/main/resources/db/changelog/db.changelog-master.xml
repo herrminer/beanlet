@@ -156,6 +156,9 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
+    <createIndex tableName="remember_me_token" indexName="rmt_username_idx">
+      <column name="username"/>
+    </createIndex>
   </changeSet>
 
 </databaseChangeLog>

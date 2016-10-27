@@ -23,6 +23,7 @@ public class RememberMeTokenService implements PersistentTokenRepository {
 
   @Override
   public void createNewToken(PersistentRememberMeToken token) {
+    logger.debug("saving remember me token with series: " + token.getSeries() + " and username " + token.getUsername());
     RememberMeToken rememberMeToken = new RememberMeToken(
       token.getSeries(),
       token.getUsername(),
@@ -39,7 +40,7 @@ public class RememberMeTokenService implements PersistentTokenRepository {
     RememberMeToken rememberMeToken = rememberMeTokenRepository.findOne(series);
 
     if (rememberMeToken == null) {
-      logger.warn("no remember me token found for series: " + series);
+      logger.warn("can't update token: no remember me token found for series: " + series);
       return;
     }
 
@@ -55,7 +56,9 @@ public class RememberMeTokenService implements PersistentTokenRepository {
 
     RememberMeToken rememberMeToken = rememberMeTokenRepository.findOne(seriesId);
 
-    if (rememberMeToken != null) {
+    if (rememberMeToken == null) {
+      logger.warn("can't find token for series id: " + seriesId);
+    } else {
       token = new PersistentRememberMeToken(
         rememberMeToken.getUsername(),
         rememberMeToken.getSeries(),
