@@ -1,5 +1,6 @@
 package com.beanlet.web.service;
 
+import com.beanlet.web.jpa.EntityId;
 import com.beanlet.web.repository.BeanletRepository;
 import com.beanlet.web.repository.UserRepository;
 import org.junit.Test;
@@ -15,8 +16,8 @@ public class DefaultBeanletServiceTest {
     UserRepository userRepository = mock(UserRepository.class);
     BeanletService.DefaultBeanletService service =
       new BeanletService.DefaultBeanletService(repository, userRepository);
-    service.getBeanletsForUserId(1);
-    verify(repository).findAllByUserId(1);
+    service.getBeanletsForUserId(new EntityId<>("1234567890"));
+    verify(repository).findAllByUserId(new EntityId<>("1234567890"));
   }
 
 }

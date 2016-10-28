@@ -1,8 +1,11 @@
 package com.beanlet.web.jpa;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.TypeDef;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,11 +15,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-public class User implements UserDetails {
-
-  @Id
-  @GeneratedValue
-  private Integer id;
+public class User extends AbstractEntity<User> implements UserDetails {
 
   private String email;
 
@@ -33,12 +32,12 @@ public class User implements UserDetails {
   @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
   private List<UserRole> roles;
 
-  public Integer getId() {
-    return id;
+  public User() {
+    // no-arg
   }
 
-  public void setId(Integer id) {
-    this.id = id;
+  public User(String id) {
+    super(id);
   }
 
   public String getEmail() {
@@ -111,11 +110,4 @@ public class User implements UserDetails {
     return roles;
   }
 
-  @Override
-  public String toString() {
-    return "User{" +
-      "id=" + id +
-      ", email='" + email + '\'' +
-      '}';
-  }
 }

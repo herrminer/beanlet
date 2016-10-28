@@ -4,11 +4,20 @@
       layout:decorate="layout">
 <head>
   <title th:text="'beanlets'">beanlets</title>
+  <style type="text/css">
+    .beanlet {
+      border: 1px solid #2e6da4;
+      padding: 5px;
+      margin-bottom: 5px;
+    }
+  </style>
 </head>
 <body>
 <div class="container" layout:fragment="content">
   <div class="beanlet" th:each="beanlet : ${beanlets}">
-    <span th:text="${beanlet.name}">something</span>
+    <h3 th:text="${beanlet.name}">something</h3>
+    <br/><br/>
+    Latest Bean: <span th:text="${beanlet.dateLastLogged}">some date</span>
   </div>
 </div>
 </body>

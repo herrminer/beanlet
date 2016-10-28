@@ -27,6 +27,8 @@ public class UserRepositoryTests {
     user.setEmail("test@foo.com");
     user.setPassword("pwd");
     repository.save(user);
+    assertThat(user.getId()).isNotNull();
+    assertThat(user.getId().length()).isEqualTo(32);
     assertThat(repository.findOne(user.getId())).isNotNull();
     assertThat(repository.findByEmail("test@foo.com")).isNotNull();
   }
