@@ -1,5 +1,7 @@
 package com.beanlet.web.jpa;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.TypeDef;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,11 +14,13 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
+@TypeDef(defaultForType = EntityId.class, typeClass = EntityIdUserType.class)
 public class User implements UserDetails {
 
   @Id
-  @GeneratedValue
-  private Integer id;
+  @GeneratedValue(generator = "uuid")
+  @GenericGenerator(name="uuid", strategy = "com.beanlet.web.jpa.EntityIdGenerator")
+  private EntityId<User> id;
 
   private String email;
 
@@ -33,11 +37,11 @@ public class User implements UserDetails {
   @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
   private List<UserRole> roles;
 
-  public Integer getId() {
+  public EntityId<User> getId() {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(EntityId<User> id) {
     this.id = id;
   }
 

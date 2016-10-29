@@ -8,7 +8,7 @@
 
   <changeSet id="1" author="joseph">
     <createTable tableName="user">
-      <column name="id" type="int" autoIncrement="true" startWith="1000">
+      <column name="id" type="char(32)">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="email" type="varchar(255)">
@@ -29,7 +29,7 @@
       <column name="id" type="int" autoIncrement="true" startWith="1000">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="user_id" type="int">
+      <column name="user_id" type="char(32)">
         <constraints nullable="false"/>
       </column>
       <column name="role_type" type="varchar(50)">
@@ -44,21 +44,21 @@
   <changeSet id="3" author="joseph">
     <comment>add default users</comment>
     <insert tableName="user">
-      <column name="id">1</column>
+      <column name="id">ff4c5073e2ec4d8eb42c5786a904a444</column>
       <column name="email">herrminer@gmail.com</column>
       <column name="password">$2a$10$6ENy8H/XGUyb5iLmhKi7fOyHQ5RFw9Z7fF0JzlRHvxoNCXEHgltUq</column>
     </insert>
     <insert tableName="user_role">
-      <column name="user_id">1</column>
+      <column name="user_id">ff4c5073e2ec4d8eb42c5786a904a444</column>
       <column name="role_type">ROLE_USER</column>
     </insert>
     <insert tableName="user">
-      <column name="id">2</column>
+      <column name="id">52f06c519e0f42dead1ba516bb82cca7</column>
       <column name="email">frauminer@gmail.com</column>
       <column name="password">$2a$10$z76z4s3sghgGwRtGrcKdK.aiBkq7QW.732E4eYlbcQotXuUCwvM2q</column>
     </insert>
     <insert tableName="user_role">
-      <column name="user_id">2</column>
+      <column name="user_id">52f06c519e0f42dead1ba516bb82cca7</column>
       <column name="role_type">ROLE_USER</column>
     </insert>
   </changeSet>
