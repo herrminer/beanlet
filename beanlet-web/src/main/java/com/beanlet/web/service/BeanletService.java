@@ -1,7 +1,6 @@
 package com.beanlet.web.service;
 
 import com.beanlet.web.jpa.Beanlet;
-import com.beanlet.web.jpa.EntityId;
 import com.beanlet.web.jpa.User;
 import com.beanlet.web.repository.BeanletRepository;
 import com.beanlet.web.repository.UserRepository;
@@ -12,9 +11,9 @@ import java.util.List;
 
 public interface BeanletService {
 
-  List<Beanlet> getBeanletsForUserId(EntityId<User> userId);
+  List<Beanlet> getBeanletsForUserId(Integer userId);
 
-  Beanlet addBeanlet(EntityId<User> userId, String name);
+  Beanlet addBeanlet(Integer userId, String name);
 
   @Service
   class DefaultBeanletService implements BeanletService {
@@ -29,12 +28,12 @@ public interface BeanletService {
     private UserRepository userRepository;
 
     @Override
-    public List<Beanlet> getBeanletsForUserId(EntityId<User> userId) {
+    public List<Beanlet> getBeanletsForUserId(Integer userId) {
       return beanletRepository.findAllByUserId(userId);
     }
 
     @Override
-    public Beanlet addBeanlet(EntityId<User> userId, String name) {
+    public Beanlet addBeanlet(Integer userId, String name) {
       Beanlet beanlet = new Beanlet(userRepository.findOne(userId), name);
       beanletRepository.save(beanlet);
       return beanlet;

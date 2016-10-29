@@ -1,5 +1,6 @@
 package com.beanlet.web.repository;
 
+import com.beanlet.web.jpa.EntityId;
 import com.beanlet.web.jpa.User;
 import org.junit.*;
 import org.junit.runner.*;
@@ -22,13 +23,19 @@ public class UserRepositoryTests {
   private Environment environment;
 
   @Test
+  public void testGetUser() {
+    User user = repository.findOne(1);
+    assertThat(user).isNotNull();
+    assertThat(user.getEmail()).isEqualTo("herrminer@gmail.com");
+    assertThat(user.getRoles()).isNotNull().isNotEmpty().hasSize(1);
+  }
+
+  @Test
   public void testSaveUser() throws Exception {
     User user = new User();
     user.setEmail("test@foo.com");
     user.setPassword("pwd");
     repository.save(user);
-    assertThat(user.getId()).isNotNull();
-    assertThat(user.getId().length()).isEqualTo(32);
     assertThat(repository.findOne(user.getId())).isNotNull();
     assertThat(repository.findByEmail("test@foo.com")).isNotNull();
   }

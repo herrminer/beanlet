@@ -1,7 +1,6 @@
 package com.beanlet.web.repository;
 
 import com.beanlet.web.jpa.Beanlet;
-import com.beanlet.web.jpa.EntityId;
 import com.beanlet.web.jpa.User;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -45,7 +44,7 @@ public class BeanletRepositoryTests {
   public void testSaveBeanlet() {
     Beanlet beanlet = new Beanlet();
     beanlet.setName("scripture reading");
-    beanlet.setUser(userRepository.findOne(new EntityId<>("1234567890")));
+    beanlet.setUser(userRepository.findOne(1));
     beanlet.setDateLastLogged(new DateTime());
     beanletRepository.save(beanlet);
 
@@ -63,7 +62,7 @@ public class BeanletRepositoryTests {
     createBeanlet("mar", new DateTime(2016, 3, 1, 1, 1, 1, 1));
     createBeanlet("jan", new DateTime(2016, 1, 1, 1, 1, 1, 1));
     createBeanlet("feb", new DateTime(2016, 2, 1, 1, 1, 1, 1));
-    List<Beanlet> beanlets = beanletRepository.findAllByUserId(new EntityId<>("0987654321"));
+    List<Beanlet> beanlets = beanletRepository.findAllByUserId(2);
     assertThat(beanlets).isNotNull().hasSize(3);
     assertThat(beanlets.get(0).getName()).isEqualTo("jan");
     assertThat(beanlets.get(1).getName()).isEqualTo("feb");
@@ -72,7 +71,9 @@ public class BeanletRepositoryTests {
 
   @Test
   public void testCreateBeanletInUtc() {
-    Beanlet beanlet = new Beanlet(userRepository.findOne(new EntityId<>("1234567890")), "UTC you know it");
+    User user = new User();
+    user.setId(1);
+    Beanlet beanlet = new Beanlet(user, "UTC you know it");
     beanlet.setDateLastLogged(new DateTime(2000, 6, 1, 12, 0, 0, DateTimeZone.forID("America/Chicago")));
     beanletRepository.save(beanlet);
   }
@@ -80,7 +81,7 @@ public class BeanletRepositoryTests {
   private Beanlet createBeanlet(String name, DateTime lastLogged) {
     Beanlet beanlet = new Beanlet();
     beanlet.setName(name);
-    beanlet.setUser(userRepository.findOne(new EntityId<>("0987654321")));
+    beanlet.setUser(userRepository.findOne(2));
     beanlet.setDateLastLogged(lastLogged);
     beanletRepository.save(beanlet);
     return beanlet;

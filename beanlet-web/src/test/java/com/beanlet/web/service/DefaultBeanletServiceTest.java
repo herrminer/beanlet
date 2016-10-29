@@ -16,8 +16,8 @@ public class DefaultBeanletServiceTest {
     UserRepository userRepository = mock(UserRepository.class);
     BeanletService.DefaultBeanletService service =
       new BeanletService.DefaultBeanletService(repository, userRepository);
-    service.getBeanletsForUserId(new EntityId<>("1234567890"));
-    verify(repository).findAllByUserId(new EntityId<>("1234567890"));
+    service.getBeanletsForUserId(1);
+    verify(repository).findAllByUserId(1);
   }
 
 }
