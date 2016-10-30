@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface BeanletRepository extends JpaRepository<Beanlet, Integer> {
+public interface BeanletRepository extends JpaRepository<Beanlet, EntityId<Beanlet>> {
 
   List<Beanlet> findAllByUserId(EntityId<User> userId);
 

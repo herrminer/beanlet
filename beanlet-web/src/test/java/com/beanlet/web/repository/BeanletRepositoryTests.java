@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
+import static com.beanlet.web.TestConstants.EXERCISE;
 import static com.beanlet.web.TestConstants.FRAUMINER;
 import static com.beanlet.web.TestConstants.HERRMINER;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,7 +30,7 @@ public class BeanletRepositoryTests {
 
   @Test
   public void testFindOne() {
-    Beanlet beanlet = beanletRepository.findOne(1);
+    Beanlet beanlet = beanletRepository.findOne(EXERCISE);
     assertThat(beanlet.getName()).isEqualTo("exercise");
     DateTime dateLastLogged = beanlet.getDateLastLogged().withZone(DateTimeZone.UTC);
     assertThat(dateLastLogged.getYear()).isEqualTo(2016);
@@ -52,9 +53,8 @@ public class BeanletRepositoryTests {
     beanlet = beanletRepository.findOne(beanlet.getId());
     assertThat(beanlet.getName()).isEqualTo("scripture reading");
     assertThat(beanlet.getDateCreated()).isNotNull();
-    assertThat(beanlet.getDateUpdated()).isNotNull();
+    assertThat(beanlet.getDateModified()).isNotNull();
     assertThat(beanlet.getDateLastLogged()).isNotNull();
-    assertThat(beanlet.getVersion()).isNotNull();
   }
 
   @Test

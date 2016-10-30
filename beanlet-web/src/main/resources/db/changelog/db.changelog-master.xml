@@ -8,7 +8,7 @@
 
   <changeSet id="1" author="joseph">
     <createTable tableName="user">
-      <column name="id" type="varchar(64)">
+      <column name="id" type="char(32)">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="date_created" type="datetime">
@@ -33,7 +33,7 @@
 
   <changeSet id="2" author="joseph">
     <createTable tableName="user_role">
-      <column name="id" type="varchar(64)">
+      <column name="id" type="char(32)">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="date_created" type="datetime">
@@ -94,9 +94,16 @@
   <changeSet id="4" author="joseph">
     <comment>create beanlet table</comment>
     <createTable tableName="beanlet">
-      <column name="id" type="int" autoIncrement="true" startWith="1000">
+      <column name="id" type="char(32)">
         <constraints primaryKey="true" nullable="false"/>
       </column>
+      <column name="date_created" type="datetime">
+        <constraints nullable="false"/>
+      </column>
+      <column name="date_modified" type="datetime">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="int"/>
       <column name="user_id" type="char(32)">
         <constraints nullable="false"/>
       </column>
@@ -104,15 +111,6 @@
         <constraints nullable="false"/>
       </column>
       <column name="date_last_logged" type="datetime"/>
-      <column name="date_created" type="datetime">
-        <constraints nullable="false"/>
-      </column>
-      <column name="date_updated" type="datetime">
-        <constraints nullable="false"/>
-      </column>
-      <column name="version" type="int">
-        <constraints nullable="false"/>
-      </column>
     </createTable>
     <createIndex tableName="beanlet" indexName="beanlet_usr_id_dt_lst_idx">
       <column name="user_id"/>
@@ -123,49 +121,49 @@
   <changeSet id="5" author="joseph">
     <comment>add beanlet test data</comment>
     <insert tableName="beanlet">
-      <column name="id">1</column>
+      <column name="id">fe6d642c80424153b842229acc7bd2f9</column>
+      <column name="date_created">2016-07-01 12:00:00</column>
+      <column name="date_modified">2016-07-01 12:00:00</column>
+      <column name="version">0</column>
       <column name="user_id">52f06c519e0f42dead1ba516bb82cca7</column>
       <column name="name">exercise</column>
-      <column name="date_created">2016-07-01 12:00:00</column>
-      <column name="date_updated">2016-07-01 12:00:00</column>
       <column name="date_last_logged">2016-07-01 12:00:00</column>
-      <column name="version">1</column>
     </insert>
     <insert tableName="beanlet">
-      <column name="id">2</column>
+      <column name="id">6b304b64e03e478c890aee5efb7186d3</column>
+      <column name="date_created">2016-07-01 12:00:00</column>
+      <column name="date_modified">2016-07-01 12:00:00</column>
+      <column name="version">0</column>
       <column name="user_id">52f06c519e0f42dead1ba516bb82cca7</column>
       <column name="name">scripture reading</column>
-      <column name="date_created">2016-06-01 12:00:00</column>
-      <column name="date_updated">2016-06-15 12:00:00</column>
       <column name="date_last_logged">2016-07-04 20:30:40</column>
-      <column name="version">1</column>
     </insert>
     <insert tableName="beanlet">
-      <column name="id">3</column>
+      <column name="id">f2c7b6daf48f43b2abcb6136d955059d</column>
+      <column name="date_created">2016-07-01 12:00:00</column>
+      <column name="date_modified">2016-07-01 12:00:00</column>
+      <column name="version">0</column>
       <column name="user_id">52f06c519e0f42dead1ba516bb82cca7</column>
       <column name="name">journal</column>
-      <column name="date_created">2016-01-01 12:00:00</column>
-      <column name="date_updated">2016-01-01 12:00:00</column>
       <column name="date_last_logged">2016-07-04 20:30:40</column>
-      <column name="version">1</column>
     </insert>
     <insert tableName="beanlet">
-      <column name="id">4</column>
+      <column name="id">1151699c9df54abda3db1098912b994e</column>
+      <column name="date_created">2016-07-01 12:00:00</column>
+      <column name="date_modified">2016-07-01 12:00:00</column>
+      <column name="version">0</column>
       <column name="user_id">52f06c519e0f42dead1ba516bb82cca7</column>
       <column name="name">prayer</column>
-      <column name="date_created">2016-01-01 12:00:00</column>
-      <column name="date_updated">2016-01-01 12:00:00</column>
       <column name="date_last_logged">2016-07-04 20:30:40</column>
-      <column name="version">1</column>
     </insert>
     <insert tableName="beanlet">
-      <column name="id">5</column>
+      <column name="id">f3e51521576f41c8a207f4751bd99ae1</column>
+      <column name="date_created">2016-07-01 12:00:00</column>
+      <column name="date_modified">2016-07-01 12:00:00</column>
+      <column name="version">0</column>
       <column name="user_id">52f06c519e0f42dead1ba516bb82cca7</column>
       <column name="name">reflux</column>
-      <column name="date_created">2016-01-01 12:00:00</column>
-      <column name="date_updated">2016-01-01 12:00:00</column>
       <column name="date_last_logged">2016-07-04 20:30:40</column>
-      <column name="version">1</column>
     </insert>
   </changeSet>
 
