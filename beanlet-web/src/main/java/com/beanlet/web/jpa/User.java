@@ -1,15 +1,11 @@
 package com.beanlet.web.jpa;
 
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.TypeDef;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.Collection;
 import java.util.List;
@@ -110,4 +106,16 @@ public class User extends AbstractEntity<User> implements UserDetails {
     return roles;
   }
 
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this)
+      .append("email", email)
+      .append("password", password)
+      .append("accountNonExpired", accountNonExpired)
+      .append("accountNonLocked", accountNonLocked)
+      .append("credentialsNonExpired", credentialsNonExpired)
+      .append("enabled", enabled)
+      .append("roles", roles)
+      .toString();
+  }
 }

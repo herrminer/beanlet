@@ -1,8 +1,6 @@
 package com.beanlet.web.repository;
 
 import com.beanlet.web.jpa.Beanlet;
-import com.beanlet.web.jpa.EntityId;
-import com.beanlet.web.jpa.User;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.junit.Test;
@@ -10,12 +8,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static com.beanlet.web.TestConstants.FRAUMINER;
+import static com.beanlet.web.TestConstants.HERRMINER;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -45,7 +44,7 @@ public class BeanletRepositoryTests {
   public void testSaveBeanlet() {
     Beanlet beanlet = new Beanlet();
     beanlet.setName("scripture reading");
-    beanlet.setUser(userRepository.findOne(new EntityId<>("1234567890")));
+    beanlet.setUser(userRepository.findOne(HERRMINER));
     beanlet.setDateLastLogged(new DateTime());
     beanletRepository.save(beanlet);
 
@@ -63,7 +62,7 @@ public class BeanletRepositoryTests {
     createBeanlet("mar", new DateTime(2016, 3, 1, 1, 1, 1, 1));
     createBeanlet("jan", new DateTime(2016, 1, 1, 1, 1, 1, 1));
     createBeanlet("feb", new DateTime(2016, 2, 1, 1, 1, 1, 1));
-    List<Beanlet> beanlets = beanletRepository.findAllByUserId(new EntityId<>("0987654321"));
+    List<Beanlet> beanlets = beanletRepository.findAllByUserId(FRAUMINER);
     assertThat(beanlets).isNotNull().hasSize(3);
     assertThat(beanlets.get(0).getName()).isEqualTo("jan");
     assertThat(beanlets.get(1).getName()).isEqualTo("feb");
@@ -72,7 +71,7 @@ public class BeanletRepositoryTests {
 
   @Test
   public void testCreateBeanletInUtc() {
-    Beanlet beanlet = new Beanlet(userRepository.findOne(new EntityId<>("1234567890")), "UTC you know it");
+    Beanlet beanlet = new Beanlet(userRepository.findOne(HERRMINER), "UTC you know it");
     beanlet.setDateLastLogged(new DateTime(2000, 6, 1, 12, 0, 0, DateTimeZone.forID("America/Chicago")));
     beanletRepository.save(beanlet);
   }
@@ -80,7 +79,7 @@ public class BeanletRepositoryTests {
   private Beanlet createBeanlet(String name, DateTime lastLogged) {
     Beanlet beanlet = new Beanlet();
     beanlet.setName(name);
-    beanlet.setUser(userRepository.findOne(new EntityId<>("0987654321")));
+    beanlet.setUser(userRepository.findOne(FRAUMINER));
     beanlet.setDateLastLogged(lastLogged);
     beanletRepository.save(beanlet);
     return beanlet;

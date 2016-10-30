@@ -1,14 +1,16 @@
 package com.beanlet.web.repository;
 
 import com.beanlet.web.jpa.User;
-import org.junit.*;
-import org.junit.runner.*;
+import com.beanlet.web.jpa.UserRole;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.*;
-import org.springframework.core.env.Environment;
+import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.assertj.core.api.Assertions.*;
+import static com.beanlet.web.TestConstants.HERRMINER;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -18,8 +20,13 @@ public class UserRepositoryTests {
   @Autowired
   private UserRepository repository;
 
-  @Autowired
-  private Environment environment;
+  @Test
+  public void testRetrieveUser() {
+    User user = repository.findOne(HERRMINER);
+    assertThat(user).isNotNull();
+    assertThat(user.getRoles()).hasSize(1);
+    assertThat(user.getRoles().get(0).getRoleType()).isEqualTo(UserRole.RoleType.ROLE_USER);
+  }
 
   @Test
   public void testSaveUser() throws Exception {

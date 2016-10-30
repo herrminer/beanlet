@@ -33,9 +33,16 @@
 
   <changeSet id="2" author="joseph">
     <createTable tableName="user_role">
-      <column name="id" type="int" autoIncrement="true" startWith="1000">
+      <column name="id" type="varchar(64)">
         <constraints primaryKey="true" nullable="false"/>
       </column>
+      <column name="date_created" type="datetime">
+        <constraints nullable="false"/>
+      </column>
+      <column name="date_modified" type="datetime">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="int"/>
       <column name="user_id" type="char(32)">
         <constraints nullable="false"/>
       </column>
@@ -51,7 +58,7 @@
   <changeSet id="3" author="joseph">
     <comment>add default users</comment>
     <insert tableName="user">
-      <column name="id">1234567890</column>
+      <column name="id">52f06c519e0f42dead1ba516bb82cca7</column>
       <column name="email">herrminer@gmail.com</column>
       <column name="password">$2a$10$6ENy8H/XGUyb5iLmhKi7fOyHQ5RFw9Z7fF0JzlRHvxoNCXEHgltUq</column>
       <column name="date_created">2016-07-01 12:00:00</column>
@@ -59,11 +66,15 @@
       <column name="version">0</column>
     </insert>
     <insert tableName="user_role">
-      <column name="user_id">1234567890</column>
+      <column name="id">f3b8a9fa36dd4c6ca2774f1d1331d85f</column>
+      <column name="user_id">52f06c519e0f42dead1ba516bb82cca7</column>
       <column name="role_type">ROLE_USER</column>
+      <column name="date_created">2016-07-01 12:00:00</column>
+      <column name="date_modified">2016-07-01 12:00:00</column>
+      <column name="version">0</column>
     </insert>
     <insert tableName="user">
-      <column name="id">0987654321</column>
+      <column name="id">d00ae4150090458eb1ebab71d9b7e522</column>
       <column name="email">frauminer@gmail.com</column>
       <column name="password">$2a$10$z76z4s3sghgGwRtGrcKdK.aiBkq7QW.732E4eYlbcQotXuUCwvM2q</column>
       <column name="date_created">2016-07-01 12:00:00</column>
@@ -71,8 +82,12 @@
       <column name="version">0</column>
     </insert>
     <insert tableName="user_role">
-      <column name="user_id">0987654321</column>
+      <column name="id">c22b4f571cbf4f30b8a91e86a62b1369</column>
+      <column name="user_id">d00ae4150090458eb1ebab71d9b7e522</column>
       <column name="role_type">ROLE_USER</column>
+      <column name="date_created">2016-07-01 12:00:00</column>
+      <column name="date_modified">2016-07-01 12:00:00</column>
+      <column name="version">0</column>
     </insert>
   </changeSet>
 
@@ -109,7 +124,7 @@
     <comment>add beanlet test data</comment>
     <insert tableName="beanlet">
       <column name="id">1</column>
-      <column name="user_id">1234567890</column>
+      <column name="user_id">52f06c519e0f42dead1ba516bb82cca7</column>
       <column name="name">exercise</column>
       <column name="date_created">2016-07-01 12:00:00</column>
       <column name="date_updated">2016-07-01 12:00:00</column>
@@ -118,7 +133,7 @@
     </insert>
     <insert tableName="beanlet">
       <column name="id">2</column>
-      <column name="user_id">1234567890</column>
+      <column name="user_id">52f06c519e0f42dead1ba516bb82cca7</column>
       <column name="name">scripture reading</column>
       <column name="date_created">2016-06-01 12:00:00</column>
       <column name="date_updated">2016-06-15 12:00:00</column>
@@ -127,7 +142,7 @@
     </insert>
     <insert tableName="beanlet">
       <column name="id">3</column>
-      <column name="user_id">1234567890</column>
+      <column name="user_id">52f06c519e0f42dead1ba516bb82cca7</column>
       <column name="name">journal</column>
       <column name="date_created">2016-01-01 12:00:00</column>
       <column name="date_updated">2016-01-01 12:00:00</column>
@@ -136,7 +151,7 @@
     </insert>
     <insert tableName="beanlet">
       <column name="id">4</column>
-      <column name="user_id">1234567890</column>
+      <column name="user_id">52f06c519e0f42dead1ba516bb82cca7</column>
       <column name="name">prayer</column>
       <column name="date_created">2016-01-01 12:00:00</column>
       <column name="date_updated">2016-01-01 12:00:00</column>
@@ -145,7 +160,7 @@
     </insert>
     <insert tableName="beanlet">
       <column name="id">5</column>
-      <column name="user_id">1234567890</column>
+      <column name="user_id">52f06c519e0f42dead1ba516bb82cca7</column>
       <column name="name">reflux</column>
       <column name="date_created">2016-01-01 12:00:00</column>
       <column name="date_updated">2016-01-01 12:00:00</column>

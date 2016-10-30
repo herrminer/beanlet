@@ -1,21 +1,16 @@
 package com.beanlet.web.jpa;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class UserRole implements GrantedAuthority {
-
-  @Id
-  @GeneratedValue
-  private Integer id;
+public class UserRole extends AbstractEntity<UserRole> implements GrantedAuthority {
 
   @ManyToOne
   @JoinColumn(name = "user_id")
@@ -23,14 +18,6 @@ public class UserRole implements GrantedAuthority {
 
   @Enumerated(EnumType.STRING)
   private RoleType roleType;
-
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
-  }
 
   public User getUser() {
     return user;
@@ -57,4 +44,10 @@ public class UserRole implements GrantedAuthority {
     ROLE_USER
   }
 
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this)
+      .append("roleType", roleType)
+      .toString();
+  }
 }
