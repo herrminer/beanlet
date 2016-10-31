@@ -56,9 +56,18 @@ public class BeanRepositoryTests {
   public void testFindByBeanletId_indexIsOrderingBeansCorrectly() {
     List<Bean> beans = beanRepository.findByBeanletId(EXERCISE);
     assertThat(beans).isNotNull().isNotEmpty();
-    assertThat(beans.size()).isEqualTo(2);
+    assertThat(beans.size()).isEqualTo(3);
     assertThat(beans.get(0).getDateLocal().getMonthOfYear()).isEqualTo(6);
-    assertThat(beans.get(1).getDateLocal().getMonthOfYear()).isEqualTo(7);
+    assertThat(beans.get(1).getDateLocal().getMonthOfYear()).isEqualTo(6);
+    assertThat(beans.get(2).getDateLocal().getMonthOfYear()).isEqualTo(7);
+  }
+
+  @Test
+  public void testCountByBeanletIdAndDateLocalBetween() {
+    DateTime start = new DateTime(2016, 6, 1, 0, 0, 0);
+    DateTime end = new DateTime(2016, 6, 30, 23, 59, 59);
+    Long result = beanRepository.countByBeanletIdAndDateLocalBetween(EXERCISE, start, end);
+    assertThat(result).isEqualTo(2);
   }
 
 }
