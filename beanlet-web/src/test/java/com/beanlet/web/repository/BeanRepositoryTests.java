@@ -70,4 +70,11 @@ public class BeanRepositoryTests {
     assertThat(result).isEqualTo(2);
   }
 
+  @Test
+  public void testFindFirstByBeanletIdOrderByDateLocalDesc() {
+    Bean bean = beanRepository.findFirstByBeanletIdOrderByDateLocalDesc(EXERCISE);
+    assertThat(bean).isNotNull();
+    assertThat(bean.getId()).isEqualTo(new EntityId<>("ae3018d456114794a5d35ba7d5a4d180"));
+  }
+
 }
