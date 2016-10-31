@@ -187,4 +187,54 @@
     </createIndex>
   </changeSet>
 
+  <changeSet id="7" author="joseph">
+    <comment>create bean table</comment>
+    <createTable tableName="bean">
+      <column name="id" type="char(32)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="date_created" type="datetime">
+        <constraints nullable="false"/>
+      </column>
+      <column name="date_modified" type="datetime">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="int"/>
+      <column name="beanlet_id" type="char(32)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="date_utc" type="datetime">
+        <constraints nullable="false"/>
+      </column>
+      <column name="date_local" type="datetime">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <createIndex tableName="bean" indexName="bean_blt_id_idx">
+      <column name="beanlet_id"/>
+      <column name="date_local"/>
+    </createIndex>
+  </changeSet>
+  
+  <changeSet id="8" author="joseph">
+    <comment>add default bean data</comment>
+    <insert tableName="bean">
+      <column name="id">ae3018d456114794a5d35ba7d5a4d180</column>
+      <column name="date_created">2016-07-01 12:00:00</column>
+      <column name="date_modified">2016-07-01 12:00:00</column>
+      <column name="version">0</column>
+      <column name="beanlet_id">fe6d642c80424153b842229acc7bd2f9</column>
+      <column name="date_utc">2016-07-01 12:00:00</column>
+      <column name="date_local">2016-07-01 7:00:00</column>
+    </insert>
+    <insert tableName="bean">
+      <column name="id">7c79a4fe35f14bf08a6d38c4f2ade329</column>
+      <column name="date_created">2016-06-01 12:00:00</column>
+      <column name="date_modified">2016-06-01 12:00:00</column>
+      <column name="version">0</column>
+      <column name="beanlet_id">fe6d642c80424153b842229acc7bd2f9</column>
+      <column name="date_utc">2016-06-01 12:00:00</column>
+      <column name="date_local">2016-06-01 7:00:00</column>
+    </insert>
+  </changeSet>
 </databaseChangeLog>
