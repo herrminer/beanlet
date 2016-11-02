@@ -12,9 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-import static com.beanlet.web.TestConstants.EXERCISE;
-import static com.beanlet.web.TestConstants.FRAUMINER;
-import static com.beanlet.web.TestConstants.HERRMINER;
+import static com.beanlet.web.TestUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)

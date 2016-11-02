@@ -15,8 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-import static com.beanlet.web.TestConstants.BEAN_ID;
-import static com.beanlet.web.TestConstants.EXERCISE;
+import static com.beanlet.web.TestUtils.*;
 import static com.beanlet.web.TestUtils.uuid;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -75,6 +74,13 @@ public class BeanRepositoryTests {
     Bean bean = beanRepository.findFirstByBeanletIdOrderByDateLocalDesc(EXERCISE);
     assertThat(bean).isNotNull();
     assertThat(bean.getId()).isEqualTo(new EntityId<>("ae3018d456114794a5d35ba7d5a4d180"));
+  }
+
+  @Test
+  public void testFindFirstByBeanletIdOrderByDateLocalDesc_noResult() {
+    Bean bean = beanRepository.findFirstByBeanletIdOrderByDateLocalDesc(
+      new EntityId<>("ae1238d456114794a5d35ba7d5a4d180"));
+    assertThat(bean).isNull();
   }
 
 }

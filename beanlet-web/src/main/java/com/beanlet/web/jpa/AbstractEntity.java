@@ -4,7 +4,9 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -14,7 +16,6 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Version;
 
 @MappedSuperclass
-@TypeDef(defaultForType = EntityId.class, typeClass = EntityIdUserType.class)
 public abstract class AbstractEntity<T> {
 
   @Id

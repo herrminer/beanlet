@@ -1,12 +1,15 @@
 package com.beanlet.web.jpa;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.joda.time.DateTimeZone;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,6 +27,8 @@ public class User extends AbstractEntity<User> implements UserDetails {
   private boolean credentialsNonExpired;
 
   private boolean enabled;
+
+  private DateTimeZone timeZone;
 
   @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
   private List<UserRole> roles;
@@ -91,6 +96,14 @@ public class User extends AbstractEntity<User> implements UserDetails {
 
   public void setEnabled(boolean enabled) {
     this.enabled = enabled;
+  }
+
+  public DateTimeZone getTimeZone() {
+    return timeZone;
+  }
+
+  public void setTimeZone(DateTimeZone timeZone) {
+    this.timeZone = timeZone;
   }
 
   public List<UserRole> getRoles() {

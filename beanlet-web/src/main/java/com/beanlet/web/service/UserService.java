@@ -17,10 +17,6 @@ public interface UserService {
   @Service
   class DefaultUserService implements UserService, UserDetailsService {
 
-    public DefaultUserService(UserRepository userRepository) {
-      this.userRepository = userRepository;
-    }
-
     private UserRepository userRepository;
 
     @Override
@@ -37,6 +33,11 @@ public interface UserService {
       }
 
       return user;
+    }
+
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+      this.userRepository = userRepository;
     }
   }
 }

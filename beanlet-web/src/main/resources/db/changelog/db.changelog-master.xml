@@ -28,6 +28,7 @@
       <column name="account_non_locked" type="boolean" defaultValueBoolean="true"/>
       <column name="credentials_non_expired" type="boolean" defaultValueBoolean="true"/>
       <column name="enabled" type="boolean" defaultValueBoolean="true"/>
+      <column name="time_zone" type="varchar(64)"/>
     </createTable>
   </changeSet>
 
@@ -61,6 +62,7 @@
       <column name="id">52f06c519e0f42dead1ba516bb82cca7</column>
       <column name="email">herrminer@gmail.com</column>
       <column name="password">$2a$10$6ENy8H/XGUyb5iLmhKi7fOyHQ5RFw9Z7fF0JzlRHvxoNCXEHgltUq</column>
+      <column name="time_zone">America/Chicago</column>
       <column name="date_created">2016-07-01 12:00:00</column>
       <column name="date_modified">2016-07-01 12:00:00</column>
       <column name="version">0</column>
@@ -77,6 +79,7 @@
       <column name="id">d00ae4150090458eb1ebab71d9b7e522</column>
       <column name="email">frauminer@gmail.com</column>
       <column name="password">$2a$10$z76z4s3sghgGwRtGrcKdK.aiBkq7QW.732E4eYlbcQotXuUCwvM2q</column>
+      <column name="time_zone">America/Chicago</column>
       <column name="date_created">2016-07-01 12:00:00</column>
       <column name="date_modified">2016-07-01 12:00:00</column>
       <column name="version">0</column>

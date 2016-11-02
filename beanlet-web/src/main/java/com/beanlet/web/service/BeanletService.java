@@ -5,6 +5,7 @@ import com.beanlet.web.jpa.EntityId;
 import com.beanlet.web.jpa.User;
 import com.beanlet.web.repository.BeanletRepository;
 import com.beanlet.web.repository.UserRepository;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,17 +17,16 @@ public interface BeanletService {
 
   Beanlet addBeanlet(EntityId<User> userId, String name);
 
+  Beanlet countIt(EntityId<User> userId, EntityId<Beanlet> beanletId);
+
   @Service
   class DefaultBeanletService implements BeanletService {
-
-    public DefaultBeanletService(BeanletRepository beanletRepository, UserRepository userRepository) {
-      this.beanletRepository = beanletRepository;
-      this.userRepository = userRepository;
-    }
 
     private BeanletRepository beanletRepository;
 
     private UserRepository userRepository;
+
+    private BeanService beanService;
 
     @Override
     public List<Beanlet> getBeanletsForUserId(EntityId<User> userId) {
@@ -38,6 +38,35 @@ public interface BeanletService {
       Beanlet beanlet = new Beanlet(userRepository.findOne(userId), name);
       beanletRepository.save(beanlet);
       return beanlet;
+    }
+
+    @Override
+    public Beanlet countIt(EntityId<User> userId, EntityId<Beanlet> beanletId) {
+      User user = userRepository.findOne(userId);
+      beanService.addBean(userId, beanletId, new DateTime(user.getTimeZone()));
+      return updateMostRecent(userId, beanletId);
+    }
+
+    Beanlet updateMostRecent(EntityId<User> userId, EntityId<Beanlet> beanletId) {
+      Beanlet beanlet = beanletRepository.findOne(beanletId);
+      beanlet.setDateLastLogged(beanService.getMostRecentBean(userId, beanletId).getDateLocal());
+      beanletRepository.save(beanlet);
+      return beanlet;
+    }
+
+    @Autowired
+    public void setBeanletRepository(BeanletRepository beanletRepository) {
+      this.beanletRepository = beanletRepository;
+    }
+
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+      this.userRepository = userRepository;
+    }
+
+    @Autowired
+    public void setBeanService(BeanService beanService) {
+      this.beanService = beanService;
     }
   }
 
