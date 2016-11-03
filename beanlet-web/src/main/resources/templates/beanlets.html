@@ -24,7 +24,7 @@
         var id = $(this).addClass('btn-success').removeClass('btn-primary').attr('id');
         $.post("/countIt", {beanletId:id, _csrf:token})
           .done(function(data, textStatus, jqXHR){
-            console.log('done!');
+            $('#last-' + id).text(data);
           })
           .fail(function(jqXHR, textStatus, errorThrown){
             console.log(jqXHR.responseText);
@@ -40,7 +40,7 @@
     <h3 th:text="${beanlet.name}">something</h3>
     <span th:text="${beanlet.id}">beanlet id</span>
     <br/><br/>
-    Latest Bean: <span th:text="${beanlet.dateLastLogged}">some date</span>
+    Latest Bean: <span th:text="${{beanlet.dateLastLogged}}" th:id="|last-${beanlet.id}|">some date</span>
   </div>
 </div>
 </body>
