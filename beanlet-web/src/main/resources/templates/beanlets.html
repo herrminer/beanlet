@@ -4,18 +4,41 @@
       layout:decorate="layout">
 <head>
   <title th:text="'beanlets'">beanlets</title>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   <style type="text/css">
     .beanlet {
       border: 1px solid #2e6da4;
       padding: 5px;
-      margin-bottom: 5px;
+      margin: 5px 0;
+    }
+    div.beanlet > .btn {
+      float: right;
+      margin-bottom: 10px;
     }
   </style>
+  <script>
+    $(function(){
+      $('button').click(function(){
+        var token = $("meta[name='_csrf']").attr("content");
+        var id = $(this).addClass('btn-success').removeClass('btn-primary').attr('id');
+        $.post("/countIt", {beanletId:id, _csrf:token})
+          .done(function(data, textStatus, jqXHR){
+            console.log('done!');
+          })
+          .fail(function(jqXHR, textStatus, errorThrown){
+            console.log(jqXHR.responseText);
+          });
+      });
+    });
+  </script>
 </head>
 <body>
 <div class="container" layout:fragment="content">
-  <div class="beanlet" th:each="beanlet : ${beanlets}">
+  <div class="beanlet" th:each="beanlet : ${beanlets}" th:id="${'div' + beanlet.id}">
+    <button class="btn btn-primary" type="submit" th:text="'count it!'" th:id="${beanlet.id}">Button</button>
     <h3 th:text="${beanlet.name}">something</h3>
+    <span th:text="${beanlet.id}">beanlet id</span>
     <br/><br/>
     Latest Bean: <span th:text="${beanlet.dateLastLogged}">some date</span>
   </div>

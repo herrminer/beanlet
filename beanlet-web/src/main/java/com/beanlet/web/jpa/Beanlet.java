@@ -1,5 +1,6 @@
 package com.beanlet.web.jpa;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.joda.time.DateTime;
 
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Beanlet extends AbstractEntity<Beanlet> {
 
+  @JsonIgnore
   @ManyToOne
   @JoinColumn(name = "user_id")
   private User user;
