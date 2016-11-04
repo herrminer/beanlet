@@ -11,13 +11,20 @@ import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 public interface BeanService {
 
   Bean addBean(EntityId<User> userId, EntityId<Beanlet> beanletId, DateTime date);
 
   Bean getMostRecentBean(EntityId<User> userId, EntityId<Beanlet> beanletId);
+
+  List<Bean> getBeans(EntityId<User> userId, EntityId<Beanlet> beanletId);
 
   @Service
   class DefaultBeanService implements BeanService {
@@ -27,6 +34,8 @@ public interface BeanService {
     private BeanletRepository beanletRepository;
 
     private BeanRepository beanRepository;
+
+    private static Sort sort = new Sort(Sort.Direction.DESC, "localDate");
 
     @Override
     public Bean addBean(EntityId<User> userId, EntityId<Beanlet> beanletId, DateTime date) {
@@ -56,6 +65,12 @@ public interface BeanService {
     public Bean getMostRecentBean(EntityId<User> userId, EntityId<Beanlet> beanletId) {
       checkBeanletAuthorization(userId, beanletId);
       return beanRepository.findFirstByBeanletIdOrderByLocalDateDesc(beanletId);
+    }
+
+    @Override
+    public List<Bean> getBeans(EntityId<User> userId, EntityId<Beanlet> beanletId) {
+      checkBeanletAuthorization(userId, beanletId);
+      return beanRepository.findByBeanletId(beanletId, sort);
     }
 
     void checkBeanletAuthorization(EntityId<User> userId, EntityId<Beanlet> beanletId) {

@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -54,7 +55,7 @@ public class BeanRepositoryTests {
 
   @Test
   public void testFindByBeanletId_indexIsOrderingBeansCorrectly() {
-    List<Bean> beans = beanRepository.findByBeanletId(EXERCISE);
+    List<Bean> beans = beanRepository.findByBeanletId(EXERCISE, new Sort(Sort.Direction.ASC, "localDate"));
     assertThat(beans).isNotNull().isNotEmpty();
     assertThat(beans.size()).isEqualTo(3);
     assertThat(beans.get(0).getLocalDate().getMonthOfYear()).isEqualTo(6);
