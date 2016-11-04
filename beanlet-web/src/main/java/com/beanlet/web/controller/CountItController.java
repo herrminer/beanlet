@@ -5,6 +5,7 @@ import com.beanlet.web.jpa.EntityId;
 import com.beanlet.web.jpa.User;
 import com.beanlet.web.service.BeanletService;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.format.Formatter;
@@ -24,8 +25,10 @@ public class CountItController {
   private ConversionService conversionService;
 
   @PostMapping("/countIt")
-  public String countIt(@RequestParam EntityId<Beanlet> beanletId, @AuthenticationPrincipal User user) {
-    Beanlet beanlet = beanletService.countIt(user.getId(), beanletId);
+  public String countIt(@RequestParam EntityId<Beanlet> beanletId,
+                        @RequestParam DateTimeZone timeZone,
+                        @AuthenticationPrincipal User user) {
+    Beanlet beanlet = beanletService.countIt(user.getId(), beanletId, timeZone);
     return conversionService.convert(beanlet.getDateLastLogged(), String.class);
   }
 

@@ -1,4 +1,4 @@
-package com.beanlet.web.controller;
+package com.beanlet.web.formatter;
 
 import com.beanlet.web.jpa.EntityId;
 import org.springframework.format.Formatter;

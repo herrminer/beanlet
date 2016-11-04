@@ -12,8 +12,8 @@ public interface BeanRepository extends JpaRepository<Bean, EntityId<Bean>> {
 
   List<Bean> findByBeanletId(EntityId<Beanlet> beanletId);
 
-  Long countByBeanletIdAndDateLocalBetween(EntityId<Beanlet> beanletId, DateTime start, DateTime end);
+  Long countByBeanletIdAndLocalDateBetween(EntityId<Beanlet> beanletId, DateTime start, DateTime end);
 
-  Bean findFirstByBeanletIdOrderByDateLocalDesc(EntityId<Beanlet> beanletId);
+  Bean findFirstByBeanletIdOrderByLocalDateDesc(EntityId<Beanlet> beanletId);
 
 }

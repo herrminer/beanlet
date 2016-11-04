@@ -6,6 +6,7 @@ import com.beanlet.web.jpa.User;
 import com.beanlet.web.repository.BeanletRepository;
 import com.beanlet.web.repository.UserRepository;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ public interface BeanletService {
 
   Beanlet addBeanlet(EntityId<User> userId, String name);
 
-  Beanlet countIt(EntityId<User> userId, EntityId<Beanlet> beanletId);
+  Beanlet countIt(EntityId<User> userId, EntityId<Beanlet> beanletId, DateTimeZone timeZone);
 
   @Service
   class DefaultBeanletService implements BeanletService {
@@ -41,15 +42,16 @@ public interface BeanletService {
     }
 
     @Override
-    public Beanlet countIt(EntityId<User> userId, EntityId<Beanlet> beanletId) {
+    public Beanlet countIt(EntityId<User> userId, EntityId<Beanlet> beanletId, DateTimeZone timeZone) {
       User user = userRepository.findOne(userId);
-      beanService.addBean(userId, beanletId, new DateTime(user.getTimeZone()));
+      DateTimeZone zone = timeZone == null ? user.getTimeZone() : timeZone;
+      beanService.addBean(userId, beanletId, new DateTime(zone));
       return updateMostRecent(userId, beanletId);
     }
 
     Beanlet updateMostRecent(EntityId<User> userId, EntityId<Beanlet> beanletId) {
       Beanlet beanlet = beanletRepository.findOne(beanletId);
-      beanlet.setDateLastLogged(beanService.getMostRecentBean(userId, beanletId).getDateLocal());
+      beanlet.setDateLastLogged(beanService.getMostRecentBean(userId, beanletId).getLocalDate());
       beanletRepository.save(beanlet);
       return beanlet;
     }

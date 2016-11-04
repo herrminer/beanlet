@@ -35,7 +35,8 @@ public class BeanRepositoryTests {
     bean.setBeanletId(beanletId);
     DateTime date = new DateTime(2016, 8, 1, 12, 0, 0, DateTimeZone.forID("America/Chicago"));
     bean.setDateUtc(date);
-    bean.setDateLocal(date.withZoneRetainFields(DateTimeZone.UTC));
+    bean.setLocalDate(date.withZoneRetainFields(DateTimeZone.UTC));
+    bean.setLocalTimeZone(DateTimeZone.forID("America/Chicago"));
     beanRepository.save(bean);
     assertThat(bean.getId()).isNotNull();
     assertThat(bean.getId().length()).isEqualTo(32);
@@ -48,7 +49,7 @@ public class BeanRepositoryTests {
     assertThat(bean.getId()).isEqualTo(BEAN_ID);
     assertThat(bean.getBeanletId()).isEqualTo(EXERCISE);
     assertThat(bean.getDateUtc()).isEqualTo(new DateTime(2016, 7, 1, 12, 0, 0));
-    assertThat(bean.getDateLocal()).isEqualTo(new DateTime(2016, 7, 1, 7, 0, 0));
+    assertThat(bean.getLocalDate()).isEqualTo(new DateTime(2016, 7, 1, 7, 0, 0));
   }
 
   @Test
@@ -56,29 +57,29 @@ public class BeanRepositoryTests {
     List<Bean> beans = beanRepository.findByBeanletId(EXERCISE);
     assertThat(beans).isNotNull().isNotEmpty();
     assertThat(beans.size()).isEqualTo(3);
-    assertThat(beans.get(0).getDateLocal().getMonthOfYear()).isEqualTo(6);
-    assertThat(beans.get(1).getDateLocal().getMonthOfYear()).isEqualTo(6);
-    assertThat(beans.get(2).getDateLocal().getMonthOfYear()).isEqualTo(7);
+    assertThat(beans.get(0).getLocalDate().getMonthOfYear()).isEqualTo(6);
+    assertThat(beans.get(1).getLocalDate().getMonthOfYear()).isEqualTo(6);
+    assertThat(beans.get(2).getLocalDate().getMonthOfYear()).isEqualTo(7);
   }
 
   @Test
-  public void testCountByBeanletIdAndDateLocalBetween() {
+  public void testCountByBeanletIdAndLocalDateBetween() {
     DateTime start = new DateTime(2016, 6, 1, 0, 0, 0);
     DateTime end = new DateTime(2016, 6, 30, 23, 59, 59);
-    Long result = beanRepository.countByBeanletIdAndDateLocalBetween(EXERCISE, start, end);
+    Long result = beanRepository.countByBeanletIdAndLocalDateBetween(EXERCISE, start, end);
     assertThat(result).isEqualTo(2);
   }
 
   @Test
-  public void testFindFirstByBeanletIdOrderByDateLocalDesc() {
-    Bean bean = beanRepository.findFirstByBeanletIdOrderByDateLocalDesc(EXERCISE);
+  public void testFindFirstByBeanletIdOrderByLocalDateDesc() {
+    Bean bean = beanRepository.findFirstByBeanletIdOrderByLocalDateDesc(EXERCISE);
     assertThat(bean).isNotNull();
     assertThat(bean.getId()).isEqualTo(new EntityId<>("ae3018d456114794a5d35ba7d5a4d180"));
   }
 
   @Test
-  public void testFindFirstByBeanletIdOrderByDateLocalDesc_noResult() {
-    Bean bean = beanRepository.findFirstByBeanletIdOrderByDateLocalDesc(
+  public void testFindFirstByBeanletIdOrderByLocalDateDesc_noResult() {
+    Bean bean = beanRepository.findFirstByBeanletIdOrderByLocalDateDesc(
       new EntityId<>("ae1238d456114794a5d35ba7d5a4d180"));
     assertThat(bean).isNull();
   }

@@ -43,7 +43,8 @@ public interface BeanService {
       // use UTC time zone *but keep the date fields,*
       // thus the database will represent the *local time*
       // this bean was created.
-      bean.setDateLocal(date.withZoneRetainFields(DateTimeZone.UTC));
+      bean.setLocalDate(date.withZoneRetainFields(DateTimeZone.UTC));
+      bean.setLocalTimeZone(date.getZone());
 
       beanRepository.save(bean);
 
@@ -53,7 +54,7 @@ public interface BeanService {
     @Override
     public Bean getMostRecentBean(EntityId<User> userId, EntityId<Beanlet> beanletId) {
       checkBeanletAuthorization(userId, beanletId);
-      return beanRepository.findFirstByBeanletIdOrderByDateLocalDesc(beanletId);
+      return beanRepository.findFirstByBeanletIdOrderByLocalDateDesc(beanletId);
     }
 
     void checkBeanletAuthorization(EntityId<User> userId, EntityId<Beanlet> beanletId) {

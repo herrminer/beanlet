@@ -209,13 +209,16 @@
       <column name="date_utc" type="datetime">
         <constraints nullable="false"/>
       </column>
-      <column name="date_local" type="datetime">
+      <column name="local_date" type="datetime">
+        <constraints nullable="false"/>
+      </column>
+      <column name="local_time_zone" type="varchar(64)">
         <constraints nullable="false"/>
       </column>
     </createTable>
     <createIndex tableName="bean" indexName="bean_blt_id_idx">
       <column name="beanlet_id"/>
-      <column name="date_local"/>
+      <column name="local_date"/>
     </createIndex>
   </changeSet>
   
@@ -228,7 +231,8 @@
       <column name="version">0</column>
       <column name="beanlet_id">fe6d642c80424153b842229acc7bd2f9</column>
       <column name="date_utc">2016-07-01 12:00:00</column>
-      <column name="date_local">2016-07-01 7:00:00</column>
+      <column name="local_date">2016-07-01 7:00:00</column>
+      <column name="local_time_zone">America/Chicago</column>
     </insert>
     <insert tableName="bean">
       <column name="id">7c79a4fe35f14bf08a6d38c4f2ade329</column>
@@ -237,7 +241,8 @@
       <column name="version">0</column>
       <column name="beanlet_id">fe6d642c80424153b842229acc7bd2f9</column>
       <column name="date_utc">2016-06-01 12:00:00</column>
-      <column name="date_local">2016-06-01 0:00:00</column>
+      <column name="local_date">2016-06-01 0:00:00</column>
+      <column name="local_time_zone">America/Chicago</column>
     </insert>
     <insert tableName="bean">
       <column name="id">8c79a4fe35f14bf08a6d38c4f2ade329</column>
@@ -246,7 +251,8 @@
       <column name="version">0</column>
       <column name="beanlet_id">fe6d642c80424153b842229acc7bd2f9</column>
       <column name="date_utc">2016-06-30 12:00:00</column>
-      <column name="date_local">2016-06-30 23:59:59</column>
+      <column name="local_date">2016-06-30 23:59:59</column>
+      <column name="local_time_zone">America/Chicago</column>
     </insert>
   </changeSet>
 </databaseChangeLog>

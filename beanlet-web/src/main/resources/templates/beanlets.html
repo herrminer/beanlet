@@ -17,12 +17,14 @@
       margin-bottom: 10px;
     }
   </style>
+  <script th:src="@{/js/jstz.min.js}"></script>
   <script>
     $(function(){
       $('button').click(function(){
+        var timeZone = jstz.determine().name();
         var token = $("meta[name='_csrf']").attr("content");
         var id = $(this).addClass('btn-success').removeClass('btn-primary').attr('id');
-        $.post("/countIt", {beanletId:id, _csrf:token})
+        $.post("/countIt", {beanletId:id, _csrf:token, timeZone: timeZone})
           .done(function(data, textStatus, jqXHR){
             $('#last-' + id).text(data);
           })

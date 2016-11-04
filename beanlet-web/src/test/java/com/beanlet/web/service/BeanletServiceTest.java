@@ -5,6 +5,7 @@ import com.beanlet.web.jpa.EntityId;
 import com.beanlet.web.jpa.User;
 import com.beanlet.web.repository.BeanletRepository;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class BeanletServiceTest {
   @Test
   public void testCountIt() {
     DateTime originalDateLastLogged = beanletRepository.findOne(EXERCISE).getDateLastLogged();
-    Beanlet beanlet = beanletService.countIt(HERRMINER, EXERCISE);
+    Beanlet beanlet = beanletService.countIt(HERRMINER, EXERCISE, DateTimeZone.UTC);
     assertThat(beanlet).isNotNull();
     assertThat(beanlet.getDateLastLogged()).isGreaterThan(originalDateLastLogged);
   }

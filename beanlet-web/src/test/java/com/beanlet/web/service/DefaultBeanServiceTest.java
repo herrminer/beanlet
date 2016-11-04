@@ -48,16 +48,16 @@ public class DefaultBeanServiceTest {
     Bean bean = service.addBean(HERRMINER, EXERCISE, date);
     assertThat(bean).isNotNull();
     assertThat(bean.getDateUtc()).isEqualTo(date);
-    assertThat(bean.getDateLocal()).isEqualTo(date.withZoneRetainFields(DateTimeZone.UTC));
+    assertThat(bean.getLocalDate()).isEqualTo(date.withZoneRetainFields(DateTimeZone.UTC));
     verify(beanRepository).save(isA(Bean.class));
   }
 
   @Test
   public void getMostRecentBean() throws Exception {
-    when(beanRepository.findFirstByBeanletIdOrderByDateLocalDesc(EXERCISE)).thenReturn(new Bean());
+    when(beanRepository.findFirstByBeanletIdOrderByLocalDateDesc(EXERCISE)).thenReturn(new Bean());
     Bean bean = service.getMostRecentBean(HERRMINER, EXERCISE);
     assertThat(bean).isNotNull();
-    verify(beanRepository).findFirstByBeanletIdOrderByDateLocalDesc(EXERCISE);
+    verify(beanRepository).findFirstByBeanletIdOrderByLocalDateDesc(EXERCISE);
   }
 
   @Test

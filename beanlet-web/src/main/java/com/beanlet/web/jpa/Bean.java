@@ -1,6 +1,7 @@
 package com.beanlet.web.jpa;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import javax.persistence.Entity;
 
@@ -11,7 +12,9 @@ public class Bean extends AbstractEntity<Bean> {
 
   private DateTime dateUtc;
 
-  private DateTime dateLocal;
+  private DateTime localDate;
+
+  private DateTimeZone localTimeZone;
 
   public EntityId<Beanlet> getBeanletId() {
     return beanletId;
@@ -29,11 +32,19 @@ public class Bean extends AbstractEntity<Bean> {
     this.dateUtc = dateUtc;
   }
 
-  public DateTime getDateLocal() {
-    return dateLocal;
+  public DateTime getLocalDate() {
+    return localDate;
   }
 
-  public void setDateLocal(DateTime dateLocal) {
-    this.dateLocal = dateLocal;
+  public void setLocalDate(DateTime localDate) {
+    this.localDate = localDate;
+  }
+
+  public DateTimeZone getLocalTimeZone() {
+    return localTimeZone;
+  }
+
+  public void setLocalTimeZone(DateTimeZone localTimeZone) {
+    this.localTimeZone = localTimeZone;
   }
 }
