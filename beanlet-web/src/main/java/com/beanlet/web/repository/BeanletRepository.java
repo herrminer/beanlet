@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface BeanletRepository extends JpaRepository<Beanlet, EntityId<Beanlet>> {
 
-  List<Beanlet> findAllByUserId(EntityId<User> userId);
+  List<Beanlet> findAllByUserIdOrderByDateLastLoggedDesc(EntityId<User> userId);
 
 }

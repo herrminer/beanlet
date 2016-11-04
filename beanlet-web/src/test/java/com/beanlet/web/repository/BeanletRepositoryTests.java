@@ -60,11 +60,11 @@ public class BeanletRepositoryTests {
     createBeanlet("mar", new DateTime(2016, 3, 1, 1, 1, 1, 1));
     createBeanlet("jan", new DateTime(2016, 1, 1, 1, 1, 1, 1));
     createBeanlet("feb", new DateTime(2016, 2, 1, 1, 1, 1, 1));
-    List<Beanlet> beanlets = beanletRepository.findAllByUserId(FRAUMINER);
+    List<Beanlet> beanlets = beanletRepository.findAllByUserIdOrderByDateLastLoggedDesc(FRAUMINER);
     assertThat(beanlets).isNotNull().hasSize(3);
-    assertThat(beanlets.get(0).getName()).isEqualTo("jan");
+    assertThat(beanlets.get(0).getName()).isEqualTo("mar");
     assertThat(beanlets.get(1).getName()).isEqualTo("feb");
-    assertThat(beanlets.get(2).getName()).isEqualTo("mar");
+    assertThat(beanlets.get(2).getName()).isEqualTo("jan");
   }
 
   @Test

@@ -31,7 +31,7 @@ public interface BeanletService {
 
     @Override
     public List<Beanlet> getBeanletsForUserId(EntityId<User> userId) {
-      return beanletRepository.findAllByUserId(userId);
+      return beanletRepository.findAllByUserIdOrderByDateLastLoggedDesc(userId);
     }
 
     @Override

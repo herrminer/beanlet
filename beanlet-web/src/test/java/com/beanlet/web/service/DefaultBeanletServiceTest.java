@@ -33,7 +33,7 @@ public class DefaultBeanletServiceTest {
   @Test
   public void testGetAllBeanletsForUser() {
     service.getBeanletsForUserId(new EntityId<>("1234567890"));
-    verify(beanletRepository).findAllByUserId(new EntityId<>("1234567890"));
+    verify(beanletRepository).findAllByUserIdOrderByDateLastLoggedDesc(new EntityId<>("1234567890"));
   }
 
 }
