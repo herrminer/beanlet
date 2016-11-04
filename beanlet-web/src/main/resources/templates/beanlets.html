@@ -40,8 +40,6 @@
   <div class="beanlet" th:each="beanlet : ${beanlets}" th:id="${'div' + beanlet.id}">
     <button class="btn btn-primary" type="submit" th:text="'count it!'" th:id="${beanlet.id}">Button</button>
     <h3><a th:text="${beanlet.name}" th:href="@{|/beanlets/${beanlet.id}/beans|}">something</a></h3>
-    <span th:text="${beanlet.id}">beanlet id</span>
-    <br/><br/>
     Latest Bean: <span th:text="${{beanlet.dateLastLogged}}" th:id="|last-${beanlet.id}|">some date</span>
   </div>
 </div>
