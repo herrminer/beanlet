@@ -12,10 +12,12 @@
       padding: 5px;
       margin: 5px 0;
     }
+    h3.beanlet-title { margin: 0 0 5px 0; }
     div.beanlet > .btn {
       float: right;
       margin-bottom: 10px;
     }
+    div.most-recent { color: #9d9d9d;}
   </style>
   <script th:src="@{/js/jstz.min.js}"></script>
   <script>
@@ -30,6 +32,10 @@
           })
           .fail(function(jqXHR, textStatus, errorThrown){
             console.log(jqXHR.responseText);
+            // detect if the session has expired
+            if (jqXHR.status == 403) {
+              window.location = '/';
+            }
           });
       });
     });
@@ -39,8 +45,8 @@
 <div class="container" layout:fragment="content">
   <div class="beanlet" th:each="beanlet : ${beanlets}" th:id="${'div' + beanlet.id}">
     <button class="btn btn-primary" type="submit" th:text="'count it!'" th:id="${beanlet.id}">Button</button>
-    <h3><a th:text="${beanlet.name}" th:href="@{|/beanlets/${beanlet.id}/beans|}">something</a></h3>
-    Latest Bean: <span th:text="${{beanlet.dateLastLogged}}" th:id="|last-${beanlet.id}|">some date</span>
+    <h3 class="beanlet-title"><a th:text="${beanlet.name}" th:href="@{|/beanlets/${beanlet.id}/beans|}">something</a></h3>
+    <div class="most-recent">Last: <span th:text="${{beanlet.dateLastLogged}}" th:id="|last-${beanlet.id}|">some date</span></div>
   </div>
 </div>
 </body>
