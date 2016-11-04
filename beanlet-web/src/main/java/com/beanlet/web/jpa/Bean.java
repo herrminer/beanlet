@@ -3,6 +3,7 @@ package com.beanlet.web.jpa;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
@@ -10,6 +11,7 @@ public class Bean extends AbstractEntity<Bean> {
 
   private EntityId<Beanlet> beanletId;
 
+  @Column(name = "utcdate")
   private DateTime utcDate;
 
   private DateTime localDate;

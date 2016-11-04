@@ -206,7 +206,7 @@
       <column name="beanlet_id" type="char(32)">
         <constraints nullable="false"/>
       </column>
-      <column name="utc_date" type="datetime">
+      <column name="utcdate" type="datetime">
         <constraints nullable="false"/>
       </column>
       <column name="local_date" type="datetime">
@@ -230,7 +230,7 @@
       <column name="date_modified">2016-07-01 12:00:00</column>
       <column name="version">0</column>
       <column name="beanlet_id">fe6d642c80424153b842229acc7bd2f9</column>
-      <column name="utc_date">2016-07-01 12:00:00</column>
+      <column name="utcdate">2016-07-01 12:00:00</column>
       <column name="local_date">2016-07-01 7:00:00</column>
       <column name="local_time_zone">America/Chicago</column>
     </insert>
@@ -240,7 +240,7 @@
       <column name="date_modified">2016-06-01 12:00:00</column>
       <column name="version">0</column>
       <column name="beanlet_id">fe6d642c80424153b842229acc7bd2f9</column>
-      <column name="utc_date">2016-06-01 12:00:00</column>
+      <column name="utcdate">2016-06-01 12:00:00</column>
       <column name="local_date">2016-06-01 0:00:00</column>
       <column name="local_time_zone">America/Chicago</column>
     </insert>
@@ -250,7 +250,7 @@
       <column name="date_modified">2016-06-01 12:00:00</column>
       <column name="version">0</column>
       <column name="beanlet_id">fe6d642c80424153b842229acc7bd2f9</column>
-      <column name="utc_date">2016-06-30 12:00:00</column>
+      <column name="utcdate">2016-06-30 12:00:00</column>
       <column name="local_date">2016-06-30 23:59:59</column>
       <column name="local_time_zone">America/Chicago</column>
     </insert>
