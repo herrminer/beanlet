@@ -10,7 +10,7 @@ public class Bean extends AbstractEntity<Bean> {
 
   private EntityId<Beanlet> beanletId;
 
-  private DateTime dateUtc;
+  private DateTime utcDate;
 
   private DateTime localDate;
 
@@ -24,12 +24,12 @@ public class Bean extends AbstractEntity<Bean> {
     this.beanletId = beanletId;
   }
 
-  public DateTime getDateUtc() {
-    return dateUtc;
+  public DateTime getUtcDate() {
+    return utcDate;
   }
 
-  public void setDateUtc(DateTime dateUtc) {
-    this.dateUtc = dateUtc;
+  public void setUtcDate(DateTime utcDate) {
+    this.utcDate = utcDate;
   }
 
   public DateTime getLocalDate() {

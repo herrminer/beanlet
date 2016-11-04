@@ -34,7 +34,7 @@ public class BeanRepositoryTests {
     Bean bean = new Bean();
     bean.setBeanletId(beanletId);
     DateTime date = new DateTime(2016, 8, 1, 12, 0, 0, DateTimeZone.forID("America/Chicago"));
-    bean.setDateUtc(date);
+    bean.setUtcDate(date);
     bean.setLocalDate(date.withZoneRetainFields(DateTimeZone.UTC));
     bean.setLocalTimeZone(DateTimeZone.forID("America/Chicago"));
     beanRepository.save(bean);
@@ -48,7 +48,7 @@ public class BeanRepositoryTests {
     assertThat(bean).isNotNull();
     assertThat(bean.getId()).isEqualTo(BEAN_ID);
     assertThat(bean.getBeanletId()).isEqualTo(EXERCISE);
-    assertThat(bean.getDateUtc()).isEqualTo(new DateTime(2016, 7, 1, 12, 0, 0));
+    assertThat(bean.getUtcDate()).isEqualTo(new DateTime(2016, 7, 1, 12, 0, 0));
     assertThat(bean.getLocalDate()).isEqualTo(new DateTime(2016, 7, 1, 7, 0, 0));
   }
 

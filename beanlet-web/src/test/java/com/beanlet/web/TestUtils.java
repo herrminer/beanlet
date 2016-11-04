@@ -21,7 +21,7 @@ public class TestUtils {
     return UUID.randomUUID().toString().replace("-", "");
   }
 
-  public static DateTime testDateUtc() {
+  public static DateTime testUtcDate() {
     return new DateTime(2016, 6, 1, 12, 0, 0, DateTimeZone.UTC);
   }
 

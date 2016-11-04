@@ -47,7 +47,7 @@ public class DefaultBeanServiceTest {
     DateTime date = testDateCentral();
     Bean bean = service.addBean(HERRMINER, EXERCISE, date);
     assertThat(bean).isNotNull();
-    assertThat(bean.getDateUtc()).isEqualTo(date);
+    assertThat(bean.getUtcDate().getMillis()).isEqualTo(date.getMillis());
     assertThat(bean.getLocalDate()).isEqualTo(date.withZoneRetainFields(DateTimeZone.UTC));
     verify(beanRepository).save(isA(Bean.class));
   }

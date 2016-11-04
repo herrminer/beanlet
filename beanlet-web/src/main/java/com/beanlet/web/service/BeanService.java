@@ -37,8 +37,9 @@ public interface BeanService {
       bean.setBeanletId(beanletId);
 
       // this will be converted and saved to the database in UTC time
-      // this represent the actual *instant* the bean took place
-      bean.setDateUtc(date);
+      // this represent the actual *instant* the bean took place.
+      // this would have been converted to UTC for storage in db anyway, so just doing .withZone(UTC) to be explicit
+      bean.setUtcDate(date.withZone(DateTimeZone.UTC));
 
       // use UTC time zone *but keep the date fields,*
       // thus the database will represent the *local time*
