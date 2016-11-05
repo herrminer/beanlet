@@ -21,8 +21,8 @@
   </style>
   <script th:src="@{/js/jstz.min.js}"></script>
   <script>
-    $(function(){
-      $('button').click(function(){
+    var initializeBeanlets = function(){
+      $('div.beanlet > button.new').click(function(){
         var timeZone = jstz.determine().name();
         var token = $("meta[name='_csrf']").attr("content");
         var id = $(this).addClass('btn-success').removeClass('btn-primary').attr('id');
@@ -37,17 +37,49 @@
               window.location = '/';
             }
           });
+      }).removeClass('new');
+    };
+    $(function(){
+      initializeBeanlets();
+      $('#btn-add-beanlet').click(function(){
+        var token = $("meta[name='_csrf']").attr("content");
+        var name = $('#beanlet-name').val();
+        $.post("/beanlets", {_csrf:token, name:name})
+          .done(function(data, textStatus, jqXHR){
+            var beanlets = $(data).find('div.beanlet');
+            beanlets.appendTo($('#beanlet-list'));
+            initializeBeanlets();
+          })
+          .fail(function(jqXHR, textStatus, errorThrown){
+            console.log(jqXHR.responseText);
+            // detect if the session has expired
+            if (jqXHR.status == 403) {
+              window.location = '/';
+            }
+          });
       });
     });
   </script>
 </head>
 <body>
 <div class="container" layout:fragment="content">
-  <div class="beanlet" th:each="beanlet : ${beanlets}" th:id="${'div' + beanlet.id}">
-    <button class="btn btn-primary" type="submit" th:text="'count it!'" th:id="${beanlet.id}">Button</button>
-    <h3 class="beanlet-title"><a th:text="${beanlet.name}" th:href="@{|/beanlets/${beanlet.id}/beans|}">something</a></h3>
-    <div class="most-recent">Last: <span th:text="${{beanlet.dateLastLogged}}" th:id="|last-${beanlet.id}|">some date</span></div>
+  <div th:if="${#lists.isEmpty(beanlets)}">
+    You don't have any beanlets!
   </div>
+  <div id="beanlet-list">
+    <div class="beanlet" th:each="beanlet : ${beanlets}" th:id="${'div' + beanlet.id}">
+      <button class="btn btn-primary new" type="submit" th:text="'count it!'" th:id="${beanlet.id}">Button</button>
+      <h3 class="beanlet-title"><a th:text="${beanlet.name}" th:href="@{|/beanlets/${beanlet.id}/beans|}">something</a></h3>
+      <div class="most-recent">Last: <span th:text="${{beanlet.dateLastLogged}}" th:id="|last-${beanlet.id}|">some date</span></div>
+    </div>
+  </div>
+  <form id="frm-add-beanlet" class="form-inline" onsubmit="return false;">
+    <div class="form-group">
+      <!--<label for="beanlet-name">Name</label>-->
+      <input type="text" class="form-control" id="beanlet-name" placeholder="new beanlet name">
+    </div>
+    <button id="btn-add-beanlet" type="submit" class="btn btn-default">add beanlet</button>
+  </form>
 </div>
 </body>
 </html>

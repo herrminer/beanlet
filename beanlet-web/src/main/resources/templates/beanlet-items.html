@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div id="result-html">
+  <div class="beanlet" th:each="beanlet : ${beanlets}" th:id="${'div' + beanlet.id}">
+    <button class="btn btn-primary new" type="submit" th:text="'count it!'" th:id="${beanlet.id}">Button</button>
+    <h3 class="beanlet-title"><a th:text="${beanlet.name}" th:href="@{|/beanlets/${beanlet.id}/beans|}">something</a></h3>
+    <div class="most-recent">Last: <span th:text="${{beanlet.dateLastLogged}}" th:id="|last-${beanlet.id}|">some date</span></div>
+  </div>
+</div>
+</html>
