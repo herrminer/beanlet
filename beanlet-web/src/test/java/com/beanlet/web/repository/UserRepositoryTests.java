@@ -26,7 +26,7 @@ public class UserRepositoryTests {
   public void testRetrieveUser() {
     User user = repository.findOne(HERRMINER);
     assertThat(user).isNotNull();
-    assertThat(user.getRoles()).hasSize(1);
+    assertThat(user.getRoles()).hasSize(2);
     assertThat(user.getRoles().get(0).getRoleType()).isEqualTo(UserRole.RoleType.ROLE_USER);
     assertThat(user.getTimeZone()).isEqualTo(DateTimeZone.forID("America/Chicago"));
   }
