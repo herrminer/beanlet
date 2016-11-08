@@ -75,6 +75,14 @@
       <column name="date_modified">2016-07-01 12:00:00</column>
       <column name="version">0</column>
     </insert>
+    <insert tableName="user_role">
+      <column name="id">3c64e2ee78fc42ecb3baff1a1e18e443</column>
+      <column name="user_id">52f06c519e0f42dead1ba516bb82cca7</column>
+      <column name="role_type">ROLE_ADMIN</column>
+      <column name="date_created">2016-07-01 12:00:00</column>
+      <column name="date_modified">2016-07-01 12:00:00</column>
+      <column name="version">0</column>
+    </insert>
     <insert tableName="user">
       <column name="id">d00ae4150090458eb1ebab71d9b7e522</column>
       <column name="email">frauminer@gmail.com</column>

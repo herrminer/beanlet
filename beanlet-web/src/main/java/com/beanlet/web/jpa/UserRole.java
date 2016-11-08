@@ -41,7 +41,8 @@ public class UserRole extends AbstractEntity<UserRole> implements GrantedAuthori
   }
 
   public enum RoleType {
-    ROLE_USER
+    ROLE_USER,
+    ROLE_ADMIN
   }
 
   @Override
