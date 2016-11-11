@@ -23,7 +23,7 @@ public class BeanletsController {
   @GetMapping("/beanlets")
   public String displayBeans(Model model, @AuthenticationPrincipal User user) {
     model.addAttribute("beanlets", beanletService.getBeanletsForUserId(user.getId()));
-    return "beanlets";
+    return "beanlets2";
   }
 
   @PostMapping("/beanlets")

@@ -1,0 +1,17 @@
+.beanlet { border: 1px solid #e7e7e7; margin-bottom: 10px; background-color: #f8f8f8; }
+.beanlet h3 { margin-top: 0; }
+.beanlet > a { display: block; padding: 10px; overflow: auto; }
+.beanlet > a:hover { text-decoration: none; }
+.beanlet .most-recent { color: #777; }
+.beanlet .details-link { display: block; width: 100px; height: 100%; border: 1px solid red; float: right; }
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #f5f5f5;
+  text-align: center;
+}
+
+.footer > ul { margin: 0 auto;}
+.footer a { display: block; padding: 15px 30px; font-size: 14px; text-decoration: none; color: #222; }

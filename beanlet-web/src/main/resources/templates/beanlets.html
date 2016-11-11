@@ -13,32 +13,50 @@
       margin: 5px 0;
     }
     h3.beanlet-title { margin: 0 0 5px 0; }
-    div.beanlet > .btn {
+    .beanlet-controls {
       float: right;
-      margin-bottom: 10px;
     }
     div.most-recent { color: #9d9d9d;}
   </style>
   <script th:src="@{/js/jstz.min.js}"></script>
   <script>
+    // handle ajax errors globally
+    $(document).ajaxError(function(event, jqxhr, settings, thrownError) {
+      console.log('ajax error: ' + thrownError);
+      if (jqxhr.status == 403) {
+        window.location = '/';
+      }
+    });
+
+    // function to count a bean
+    var countIt = function(beanletId){
+      console.log('counting ' + beanletId);
+      var timeZone = jstz.determine().name();
+      var csrfToken = $("meta[name='_csrf']").attr("content");
+      $.post("/countIt", {beanletId:beanletId, _csrf:csrfToken, timeZone: timeZone})
+        .done(function(data, textStatus, jqXHR){
+          $('#last-' + beanletId).text(data);
+        });
+    };
+
+    // function to move a beanlet up in the list
+    var moveUp = function(){ console.log('moving up') };
+
+    // function to move a beanlet down in the list
+    var moveDown = function(){ console.log('moving down') };
+
+    // function to initialize beanlets with appropriate event handlers
     var initializeBeanlets = function(){
-      $('div.beanlet > button.new').click(function(){
-        var timeZone = jstz.determine().name();
-        var token = $("meta[name='_csrf']").attr("content");
-        var id = $(this).addClass('btn-success').removeClass('btn-primary').attr('id');
-        $.post("/countIt", {beanletId:id, _csrf:token, timeZone: timeZone})
-          .done(function(data, textStatus, jqXHR){
-            $('#last-' + id).text(data);
-          })
-          .fail(function(jqXHR, textStatus, errorThrown){
-            console.log(jqXHR.responseText);
-            // detect if the session has expired
-            if (jqXHR.status == 403) {
-              window.location = '/';
-            }
-          });
+      $('div.beanlet.new').each(function(){
+        var beanlet = $(this);
+        var beanletId = beanlet.attr('id');
+        $('#ci-'+beanletId).attr('bid', beanletId).click(function(){countIt(beanletId);});
+        $('#mu-'+beanletId).attr('bid', beanletId).click(moveUp);
+        $('#md-'+beanletId).attr('bid', beanletId).click(moveDown);
       }).removeClass('new');
     };
+
+    // run when the DOM is ready
     $(function(){
       initializeBeanlets();
       $('#btn-add-beanlet').click(function(){
@@ -67,8 +85,22 @@
     You don't have any beanlets!
   </div>
   <div id="beanlet-list">
-    <div class="beanlet" th:each="beanlet : ${beanlets}" th:id="${'div' + beanlet.id}">
-      <button class="btn btn-primary new" type="submit" th:text="'count it!'" th:id="${beanlet.id}">Button</button>
+    <div class="beanlet clearfix new" th:each="beanlet : ${beanlets}" th:id="${beanlet.id}" th:attr="index=${beanletStat.index}">
+      <div class="beanlet-controls">
+        <div class="btn-group">
+          <button type="button" class="btn btn-primary count-it" th:id="|ci-${beanlet.id}|">count it!</button>
+          <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li><a href="#" class="move-up" th:id="|mu-${beanlet.id}|"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> move up</a></li>
+            <li><a href="#" class="move-down" th:id="|md-${beanlet.id}|"><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> move down</a></li>
+            <!--<li role="separator" class="divider"></li>-->
+            <!--<li><a href="#">Separated link</a></li>-->
+          </ul>
+        </div>
+      </div>
       <h3 class="beanlet-title"><a th:text="${beanlet.name}" th:href="@{|/beanlets/${beanlet.id}/beans|}">something</a></h3>
       <div class="most-recent">Last: <span th:text="${{beanlet.dateLastLogged}}" th:id="|last-${beanlet.id}|">some date</span></div>
     </div>

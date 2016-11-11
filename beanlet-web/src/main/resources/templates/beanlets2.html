@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout2::head(~{::title},~{::link})">
+  <title>beanlets</title>
+  <link rel="stylesheet" th:href="@{/css/beanlets.css}"/>
+</head>
+<body>
+
+<nav th:replace="layout2::navbar"></nav>
+
+<div class="container">
+  <ul th:include="beanlet-items::list" class="list-unstyled">
+    <li>something</li>
+  </ul>
+</div>
+
+<footer class="footer">
+  <ul class="list-inline">
+    <li>
+      <a href="#"><span class="glyphicon glyphicon-sort"></span><br/>sort</a>
+    </li>
+  </ul>
+</footer>
+
+<div th:include="layout2::scripts"></div>
+<script th:src="@{/js/jstz.min.js}"></script>
+<script th:src="@{/js/beanlets.js}"></script>
+
+</body>
+</html>

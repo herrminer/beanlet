@@ -9,6 +9,7 @@
 	</parent>
 	<groupId>com.beanlet</groupId>
 	<artifactId>beanlet-web</artifactId>
+	<version>0.1.0</version>
 	<name>beanlet-web</name>
 	<description>beanlet web application</description>
 	<properties>
