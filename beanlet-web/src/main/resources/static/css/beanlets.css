@@ -1,5 +1,5 @@
 #beanlets {  }
-#beanlets > li { display: table; width: 100%; border: 1px solid #e7e7e7; margin-bottom: 10px; background-color: #ffffff; }
+#beanlets > li { display: table; width: 100%; border: 1px solid #e7e7e7; margin-bottom: 10px; }
 /*#beanlets > li { display: table; width: 100%; border: 1px solid #e7e7e7; margin-bottom: 10px; background-color: #f8f8f8; }*/
 #beanlets > li > a { display: table-cell; }
 

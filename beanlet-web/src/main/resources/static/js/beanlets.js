@@ -23,19 +23,25 @@ var service = {
 };
 
 var beanlets = {
+  countIt: function(beanletId) {
+    $('#'+beanletId).addClass('bg-info');
+    service.countIt(beanletId, beanlets.countItSuccess);
+  },
   countItSuccess: function(countItResponse){
-    var bid = countItResponse.beanletId;
-    $('#ll-'+bid).text(countItResponse.lastLogged);
-    $('#count-'+bid).text(countItResponse.beanCount);
+    var beanletId = countItResponse.beanletId;
+    $('#ll-'+beanletId).text(countItResponse.lastLogged);
+    $('#count-'+beanletId).text(countItResponse.beanCount);
+    var li = $('#'+beanletId);
+    li.addClass('bg-success').removeClass('bg-info');
+    setTimeout(function(){ li.removeClass('bg-success') }, 1000);
   }
 };
 
 // function to initialize beanlets with appropriate event handlers
 var initializeBeanlets = function(){
   $('.new').each(function(){
-    var beanlet = $(this);
-    var beanletId = beanlet.attr('id');
-    $('#ci-'+beanletId).attr('bid', beanletId).click(function(){service.countIt(beanletId, beanlets.countItSuccess);});
+    var beanletId = $(this).attr('id');
+    $('#ci-'+beanletId).click(function(){beanlets.countIt(beanletId); return false;});
   }).removeClass('new');
 };
 
