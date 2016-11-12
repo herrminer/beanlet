@@ -7,30 +7,35 @@ $(document).ajaxError(function(event, jqxhr, settings, thrownError) {
 });
 
 // function to count a bean
-var countIt = function(beanletId){
-  console.log('counting ' + beanletId);
-  var timeZone = jstz.determine().name();
-  var csrfToken = $("meta[name='_csrf']").attr("content");
-  $.post("/countIt", {beanletId:beanletId, _csrf:csrfToken, timeZone: timeZone})
-    .done(function(data, textStatus, jqXHR){
-      $('#last-' + beanletId).text(data);
-    });
+var service = {
+  countIt: function(beanletId, responseHandler){
+    if (typeof responseHandler != 'function') {
+      throw new Error('successHandler not a function: ' + responseHandler);
+    }
+    console.log('service.countIt ' + beanletId);
+    var timeZone = jstz.determine().name();
+    var csrfToken = $("meta[name='_csrf']").attr("content");
+    $.post("/countIt", {beanletId:beanletId, _csrf:csrfToken, timeZone: timeZone})
+      .done(function(data, textStatus, jqXHR){
+        responseHandler(data);
+      });
+  }
 };
 
-// function to move a beanlet up in the list
-var moveUp = function(){ console.log('moving up') };
-
-// function to move a beanlet down in the list
-var moveDown = function(){ console.log('moving down') };
+var beanlets = {
+  countItSuccess: function(countItResponse){
+    var bid = countItResponse.beanletId;
+    $('#ll-'+bid).text(countItResponse.lastLogged);
+    $('#count-'+bid).text(countItResponse.beanCount);
+  }
+};
 
 // function to initialize beanlets with appropriate event handlers
 var initializeBeanlets = function(){
-  $('div.beanlet.new').each(function(){
+  $('.new').each(function(){
     var beanlet = $(this);
     var beanletId = beanlet.attr('id');
-    $('#ci-'+beanletId).attr('bid', beanletId).click(function(){countIt(beanletId);});
-    $('#mu-'+beanletId).attr('bid', beanletId).click(moveUp);
-    $('#md-'+beanletId).attr('bid', beanletId).click(moveDown);
+    $('#ci-'+beanletId).attr('bid', beanletId).click(function(){service.countIt(beanletId, beanlets.countItSuccess);});
   }).removeClass('new');
 };
 

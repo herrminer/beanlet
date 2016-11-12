@@ -25,11 +25,36 @@ public class CountItController {
   private ConversionService conversionService;
 
   @PostMapping("/countIt")
-  public String countIt(@RequestParam EntityId<Beanlet> beanletId,
+  public CountItResponse countIt(@RequestParam EntityId<Beanlet> beanletId,
                         @RequestParam DateTimeZone timeZone,
                         @AuthenticationPrincipal User user) {
     Beanlet beanlet = beanletService.countIt(user.getId(), beanletId, timeZone);
-    return conversionService.convert(beanlet.getDateLastLogged(), String.class);
+    String formattedLastLogged = conversionService.convert(beanlet.getDateLastLogged(), String.class);
+    return new CountItResponse(beanletId, formattedLastLogged, beanlet.getBeanCount());
+  }
+
+  static class CountItResponse {
+    private EntityId<Beanlet> beanletId;
+    private String lastLogged;
+    private int beanCount;
+
+    CountItResponse(EntityId<Beanlet> beanletId, String lastLogged, int beanCount) {
+      this.beanletId = beanletId;
+      this.lastLogged = lastLogged;
+      this.beanCount = beanCount;
+    }
+
+    public EntityId<Beanlet> getBeanletId() {
+      return beanletId;
+    }
+
+    public String getLastLogged() {
+      return lastLogged;
+    }
+
+    public int getBeanCount() {
+      return beanCount;
+    }
   }
 
 }
