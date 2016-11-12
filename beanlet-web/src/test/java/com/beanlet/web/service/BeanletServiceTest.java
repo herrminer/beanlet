@@ -29,16 +29,22 @@ public class BeanletServiceTest {
   public void testAddBeanlet() {
     EntityId<User> userId = HERRMINER;
     int numBefore = beanletService.getBeanletsForUserId(userId).size();
-    beanletService.addBeanlet(userId, "my beanlet");
+    Beanlet beanlet = beanletService.addBeanlet(userId, "my beanlet");
+    assertThat(beanlet.getSortOrder()).isEqualTo(6); // most recently added gets highest number
     assertThat(beanletService.getBeanletsForUserId(userId).size()).isEqualTo(numBefore + 1);
   }
 
   @Test
   public void testCountIt() {
-    DateTime originalDateLastLogged = beanletRepository.findOne(EXERCISE).getDateLastLogged();
+    Beanlet one = beanletRepository.findOne(EXERCISE);
+    assertThat(one.getBeanCount()).isEqualTo(3);
+    DateTime originalDateLastLogged = one.getDateLastLogged();
+
     Beanlet beanlet = beanletService.countIt(HERRMINER, EXERCISE, DateTimeZone.UTC);
+
     assertThat(beanlet).isNotNull();
     assertThat(beanlet.getDateLastLogged()).isGreaterThan(originalDateLastLogged);
+    assertThat(beanlet.getBeanCount()).isEqualTo(4);
   }
 
 }

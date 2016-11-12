@@ -28,7 +28,6 @@ public class BeanRepositoryTests {
   @Autowired
   private BeanRepository beanRepository;
 
-  @Commit
   @Test
   public void testPersisteBean() {
     EntityId<Beanlet> beanletId = new EntityId<>(uuid());
@@ -83,6 +82,12 @@ public class BeanRepositoryTests {
     Bean bean = beanRepository.findFirstByBeanletIdOrderByLocalDateDesc(
       new EntityId<>("ae1238d456114794a5d35ba7d5a4d180"));
     assertThat(bean).isNull();
+  }
+
+  @Test
+  public void testCountByBeanletId() {
+    assertThat(beanRepository.countByBeanletId(EXERCISE)).isEqualTo(3);
+    assertThat(beanRepository.countByBeanletId(SCRIPTURE_READING)).isEqualTo(0);
   }
 
 }

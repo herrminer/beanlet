@@ -37,6 +37,8 @@ public class BeanletRepositoryTests {
     assertThat(dateLastLogged.getHourOfDay()).isEqualTo(12);
     assertThat(dateLastLogged.getMinuteOfHour()).isEqualTo(0);
     assertThat(dateLastLogged.getSecondOfMinute()).isEqualTo(0);
+    assertThat(beanlet.getBeanCount()).isEqualTo(3);
+    assertThat(beanlet.getSortOrder()).isEqualTo(5);
   }
 
   @Test
@@ -45,6 +47,8 @@ public class BeanletRepositoryTests {
     beanlet.setName("scripture reading");
     beanlet.setUser(userRepository.findOne(HERRMINER));
     beanlet.setDateLastLogged(new DateTime());
+    beanlet.setBeanCount(23);
+    beanlet.setSortOrder(10);
     beanletRepository.save(beanlet);
 
     assertThat(beanlet.getId()).isNotNull();
@@ -53,18 +57,20 @@ public class BeanletRepositoryTests {
     assertThat(beanlet.getDateCreated()).isNotNull();
     assertThat(beanlet.getDateModified()).isNotNull();
     assertThat(beanlet.getDateLastLogged()).isNotNull();
+    assertThat(beanlet.getBeanCount()).isEqualTo(23);
+    assertThat(beanlet.getSortOrder()).isEqualTo(10);
   }
 
   @Test
   public void testFindAllByUserId() {
-    createBeanlet("mar", new DateTime(2016, 3, 1, 1, 1, 1, 1));
-    createBeanlet("jan", new DateTime(2016, 1, 1, 1, 1, 1, 1));
-    createBeanlet("feb", new DateTime(2016, 2, 1, 1, 1, 1, 1));
-    List<Beanlet> beanlets = beanletRepository.findAllByUserIdOrderByDateLastLoggedDesc(FRAUMINER);
+    createBeanlet("mar", 1);
+    createBeanlet("jan", 3);
+    createBeanlet("feb", 2);
+    List<Beanlet> beanlets = beanletRepository.findAllByUserIdOrderBySortOrderDesc(FRAUMINER);
     assertThat(beanlets).isNotNull().hasSize(3);
-    assertThat(beanlets.get(0).getName()).isEqualTo("mar");
+    assertThat(beanlets.get(0).getName()).isEqualTo("jan");
     assertThat(beanlets.get(1).getName()).isEqualTo("feb");
-    assertThat(beanlets.get(2).getName()).isEqualTo("jan");
+    assertThat(beanlets.get(2).getName()).isEqualTo("mar");
   }
 
   @Test
@@ -74,11 +80,17 @@ public class BeanletRepositoryTests {
     beanletRepository.save(beanlet);
   }
 
-  private Beanlet createBeanlet(String name, DateTime lastLogged) {
+  @Test
+  public void testCountByUserId() {
+    assertThat(beanletRepository.countByUserId(HERRMINER)).isEqualTo(5);
+  }
+
+  private Beanlet createBeanlet(String name, int sortOrder) {
     Beanlet beanlet = new Beanlet();
     beanlet.setName(name);
     beanlet.setUser(userRepository.findOne(FRAUMINER));
-    beanlet.setDateLastLogged(lastLogged);
+    beanlet.setDateLastLogged(new DateTime(2016, 3, 1, 1, 1, 1, 1));
+    beanlet.setSortOrder(sortOrder);
     beanletRepository.save(beanlet);
     return beanlet;
   }

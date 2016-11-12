@@ -27,11 +27,9 @@ public class UserRepositoryTests {
     User user = repository.findOne(HERRMINER);
     assertThat(user).isNotNull();
     assertThat(user.getRoles()).hasSize(2);
-    assertThat(user.getRoles().get(0).getRoleType()).isEqualTo(UserRole.RoleType.ROLE_USER);
     assertThat(user.getTimeZone()).isEqualTo(DateTimeZone.forID("America/Chicago"));
   }
 
-  @Commit
   @Test
   public void testSaveUser() throws Exception {
     User user = new User();

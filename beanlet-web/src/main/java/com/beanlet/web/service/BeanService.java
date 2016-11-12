@@ -26,6 +26,8 @@ public interface BeanService {
 
   List<Bean> getBeans(EntityId<User> userId, EntityId<Beanlet> beanletId);
 
+  int getBeanCount(EntityId<Beanlet> beanletId);
+
   @Service
   class DefaultBeanService implements BeanService {
 
@@ -71,6 +73,11 @@ public interface BeanService {
     public List<Bean> getBeans(EntityId<User> userId, EntityId<Beanlet> beanletId) {
       checkBeanletAuthorization(userId, beanletId);
       return beanRepository.findByBeanletId(beanletId, sort);
+    }
+
+    @Override
+    public int getBeanCount(EntityId<Beanlet> beanletId) {
+      return beanRepository.countByBeanletId(beanletId);
     }
 
     void checkBeanletAuthorization(EntityId<User> userId, EntityId<Beanlet> beanletId) {

@@ -31,12 +31,14 @@ public interface BeanletService {
 
     @Override
     public List<Beanlet> getBeanletsForUserId(EntityId<User> userId) {
-      return beanletRepository.findAllByUserIdOrderByDateLastLoggedDesc(userId);
+      return beanletRepository.findAllByUserIdOrderBySortOrderDesc(userId);
     }
 
     @Override
     public Beanlet addBeanlet(EntityId<User> userId, String name) {
-      Beanlet beanlet = new Beanlet(userRepository.findOne(userId), name);
+      User user = userRepository.findOne(userId);
+      Beanlet beanlet = new Beanlet(user, name);
+      beanlet.setSortOrder(beanletRepository.countByUserId(userId) + 1);
       beanletRepository.save(beanlet);
       return beanlet;
     }
@@ -46,12 +48,13 @@ public interface BeanletService {
       User user = userRepository.findOne(userId);
       DateTimeZone zone = timeZone == null ? user.getTimeZone() : timeZone;
       beanService.addBean(userId, beanletId, new DateTime(zone));
-      return updateMostRecent(userId, beanletId);
+      return updateBeanletDataFields(userId, beanletId);
     }
 
-    Beanlet updateMostRecent(EntityId<User> userId, EntityId<Beanlet> beanletId) {
+    Beanlet updateBeanletDataFields(EntityId<User> userId, EntityId<Beanlet> beanletId) {
       Beanlet beanlet = beanletRepository.findOne(beanletId);
       beanlet.setDateLastLogged(beanService.getMostRecentBean(userId, beanletId).getLocalDate());
+      beanlet.setBeanCount(beanService.getBeanCount(beanletId));
       beanletRepository.save(beanlet);
       return beanlet;
     }

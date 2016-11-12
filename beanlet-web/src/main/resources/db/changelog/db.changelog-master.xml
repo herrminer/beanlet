@@ -122,10 +122,14 @@
         <constraints nullable="false"/>
       </column>
       <column name="date_last_logged" type="datetime"/>
+      <column name="sort_order" type="int">
+        <constraints nullable="false"/>
+      </column>
+      <column name="bean_count" type="int"/>
     </createTable>
     <createIndex tableName="beanlet" indexName="beanlet_usr_id_dt_lst_idx">
       <column name="user_id"/>
-      <column name="date_last_logged"/>
+      <column name="sort_order"/>
     </createIndex>
   </changeSet>
 
@@ -139,6 +143,8 @@
       <column name="user_id">52f06c519e0f42dead1ba516bb82cca7</column>
       <column name="name">exercise</column>
       <column name="date_last_logged">2016-07-01 12:00:00</column>
+      <column name="sort_order">5</column>
+      <column name="bean_count">3</column>
     </insert>
     <insert tableName="beanlet">
       <column name="id">6b304b64e03e478c890aee5efb7186d3</column>
@@ -148,6 +154,8 @@
       <column name="user_id">52f06c519e0f42dead1ba516bb82cca7</column>
       <column name="name">scripture reading</column>
       <column name="date_last_logged">2016-07-04 20:30:40</column>
+      <column name="sort_order">4</column>
+      <column name="bean_count">0</column>
     </insert>
     <insert tableName="beanlet">
       <column name="id">f2c7b6daf48f43b2abcb6136d955059d</column>
@@ -157,6 +165,8 @@
       <column name="user_id">52f06c519e0f42dead1ba516bb82cca7</column>
       <column name="name">journal</column>
       <column name="date_last_logged">2016-07-04 20:30:40</column>
+      <column name="sort_order">3</column>
+      <column name="bean_count">0</column>
     </insert>
     <insert tableName="beanlet">
       <column name="id">1151699c9df54abda3db1098912b994e</column>
@@ -166,6 +176,8 @@
       <column name="user_id">52f06c519e0f42dead1ba516bb82cca7</column>
       <column name="name">prayer</column>
       <column name="date_last_logged">2016-07-04 20:30:40</column>
+      <column name="sort_order">2</column>
+      <column name="bean_count">0</column>
     </insert>
     <insert tableName="beanlet">
       <column name="id">f3e51521576f41c8a207f4751bd99ae1</column>
@@ -175,6 +187,8 @@
       <column name="user_id">52f06c519e0f42dead1ba516bb82cca7</column>
       <column name="name">reflux</column>
       <column name="date_last_logged">2016-07-04 20:30:40</column>
+      <column name="sort_order">1</column>
+      <column name="bean_count">0</column>
     </insert>
   </changeSet>
 

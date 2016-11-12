@@ -19,6 +19,10 @@ public class Beanlet extends AbstractEntity<Beanlet> {
 
   private DateTime dateLastLogged;
 
+  private int beanCount;
+
+  private int sortOrder;
+
   public Beanlet() {
     // no-arg constructor
   }
@@ -52,4 +56,19 @@ public class Beanlet extends AbstractEntity<Beanlet> {
     this.dateLastLogged = dateLastLogged;
   }
 
+  public int getBeanCount() {
+    return beanCount;
+  }
+
+  public void setBeanCount(int beanCount) {
+    this.beanCount = beanCount;
+  }
+
+  public int getSortOrder() {
+    return sortOrder;
+  }
+
+  public void setSortOrder(int sortOrder) {
+    this.sortOrder = sortOrder;
+  }
 }
