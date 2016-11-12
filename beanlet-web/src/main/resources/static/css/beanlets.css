@@ -1,9 +1,29 @@
-.beanlet { border: 1px solid #e7e7e7; margin-bottom: 10px; background-color: #f8f8f8; }
-.beanlet h3 { margin-top: 0; }
-.beanlet > a { display: block; padding: 10px; overflow: auto; }
-.beanlet > a:hover { text-decoration: none; }
-.beanlet .most-recent { color: #777; }
-.beanlet .details-link { display: block; width: 100px; height: 100%; border: 1px solid red; float: right; }
+#beanlets {  }
+#beanlets > li { display: table; width: 100%; border: 1px solid #e7e7e7; margin-bottom: 10px; background-color: #ffffff; }
+/*#beanlets > li { display: table; width: 100%; border: 1px solid #e7e7e7; margin-bottom: 10px; background-color: #f8f8f8; }*/
+#beanlets > li > a { display: table-cell; }
+
+a.count-it {
+  width: 70px;
+  background: url("/images/bean-512-512.png");
+  background-size: 50px 50px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+a.main { vertical-align: middle; font-size: 24px; padding: 10px;}
+a.main:hover { text-decoration: none; }
+h3.beanlet-text { margin: 0; color: #101010; font-weight: normal; }
+
+a.count {
+  width: 100px;
+  text-align: right;
+  vertical-align: middle;
+  font-size: 24px;
+  padding-right: 10px;
+  color: #bebebe;
+}
+a.count:hover { text-decoration: none; }
 
 .footer {
   position: fixed;

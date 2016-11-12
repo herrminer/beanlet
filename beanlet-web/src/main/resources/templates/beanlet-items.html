@@ -2,13 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <ol th:fragment="list">
-  <li class="beanlet clearfix new" th:each="beanlet : ${beanlets}" th:id="${beanlet.id}" th:attr="index=${beanletStat.index}">
-    <a href="#" class="details-link">details</a>
-    <a href="#" th:href="@{|/beanlets/${beanlet.id}/beans|}">
-      <h3 class="beanlet-title" th:text="${beanlet.name}">something</h3>
-      <div class="most-recent">Last: <span th:text="${{beanlet.dateLastLogged}}" th:id="|last-${beanlet.id}|">some date</span></div>
-    </a>
+  <li class="beanlet new" th:each="beanlet : ${beanlets}" th:id="${beanlet.id}" th:attr="index=${beanletStat.index}">
+    <a href="#" class="count-it"></a>
+    <a href="#" class="main"><h3 class="beanlet-text"><span th:text="${beanlet.name}"></span><br/><small th:text="${{beanlet.dateLastLogged}}"></small></h3></a>
+    <a href="#" class="count" th:href="@{|/beanlets/${beanlet.id}/beans|}" th:text="${beanletStat.count + 3}"></a>
   </li>
 </ol>
 </body>
 </html>
+
+<!--
+<li class="beanlet clearfix new" th:each="beanlet : ${beanlets}" th:id="${beanlet.id}" th:attr="index=${beanletStat.index}">
+  <a href="#" class="details-link">details</a>
+  <a href="#" th:href="@{|/beanlets/${beanlet.id}/beans|}">
+    <h3 class="beanlet-title" th:text="${beanlet.name}">something</h3>
+    <div class="most-recent">Last: <span th:text="${{beanlet.dateLastLogged}}" th:id="|last-${beanlet.id}|">some date</span></div>
+  </a>
+</li>
+-->

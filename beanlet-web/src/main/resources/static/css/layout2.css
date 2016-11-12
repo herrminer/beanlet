@@ -19,3 +19,21 @@ body > .container {
 .container .text-muted {
   margin: 20px 0;
 }
+
+@media (min-width: 1200px) {
+  .container {
+    width: 450px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    width: 450px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    width: 450px;
+  }
+}
