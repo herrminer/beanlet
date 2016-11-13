@@ -24,16 +24,18 @@ var service = {
 
 var beanlets = {
   countIt: function(beanletId) {
-    $('#'+beanletId).addClass('bg-warning');
-    service.countIt(beanletId, beanlets.countItSuccess);
+    $('#count-'+beanletId).text('').addClass('loading');
+    service.countIt(beanletId, beanlets.countItResponseHandler);
+    // setTimeout(function(){
+    // }, 500);
   },
-  countItSuccess: function(countItResponse){
+  countItResponseHandler: function(countItResponse){
     var beanletId = countItResponse.beanletId;
     $('#ll-'+beanletId).text(countItResponse.lastLogged);
-    $('#count-'+beanletId).text(countItResponse.beanCount);
+    $('#count-'+beanletId).removeClass('loading').text(countItResponse.beanCount);
     var li = $('#'+beanletId);
-    var fadeOut = function(){ setTimeout(function(){ li.removeClass('bg-success', 1000) }, 2000) };
-    li.switchClass('bg-warning', 'bg-success', 1000, 'linear', fadeOut);
+    li.addClass('bg-success', 250);
+    setTimeout(function(){ li.removeClass('bg-success', 500) }, 2000);
   }
 };
 

@@ -5,7 +5,7 @@
 
 a.count-it {
   width: 70px;
-  background: url("/images/bean-512-512.png");
+  background-image: url("/images/bean-512-512.png");
   background-size: 50px 50px;
   background-position: center;
   background-repeat: no-repeat;
@@ -24,6 +24,12 @@ a.count {
   color: #bebebe;
 }
 a.count:hover { text-decoration: none; }
+a.loading {
+  background-image: url(/images/ajax-loader.gif);
+  background-size: 30px 30px;
+  background-position: right 10px center;
+  background-repeat: no-repeat;
+}
 
 .footer {
   position: fixed;
