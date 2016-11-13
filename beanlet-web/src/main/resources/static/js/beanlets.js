@@ -24,7 +24,7 @@ var service = {
 
 var beanlets = {
   countIt: function(beanletId) {
-    $('#'+beanletId).addClass('bg-info');
+    $('#'+beanletId).addClass('bg-warning');
     service.countIt(beanletId, beanlets.countItSuccess);
   },
   countItSuccess: function(countItResponse){
@@ -32,8 +32,8 @@ var beanlets = {
     $('#ll-'+beanletId).text(countItResponse.lastLogged);
     $('#count-'+beanletId).text(countItResponse.beanCount);
     var li = $('#'+beanletId);
-    li.addClass('bg-success').removeClass('bg-info');
-    setTimeout(function(){ li.removeClass('bg-success') }, 1000);
+    var fadeOut = function(){ setTimeout(function(){ li.removeClass('bg-success', 1000) }, 2000) };
+    li.switchClass('bg-warning', 'bg-success', 1000, 'linear', fadeOut);
   }
 };
 

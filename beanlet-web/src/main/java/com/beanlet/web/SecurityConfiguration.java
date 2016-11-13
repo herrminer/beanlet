@@ -33,7 +33,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http
       .authorizeRequests()
-        .antMatchers("/health", "/css/**", "/js/**", "/bootstrap-3.3.7-dist/**").permitAll()
+        .antMatchers(
+          "/manage/health",
+          "/css/**",
+          "/js/**",
+          "/bootstrap-3.3.7-dist/**",
+          "/jquery-ui-1.12.1.custom/**").permitAll()
         .anyRequest().authenticated()
         .and()
       .formLogin()
