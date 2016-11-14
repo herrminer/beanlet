@@ -50,6 +50,14 @@ var initializeBeanlets = function(){
 // run when the DOM is ready
 $(function(){
   initializeBeanlets();
+  $('#modal-add').on('shown.bs.modal', function () {
+    $('#beanlet-name').focus()
+  })
+  $('#btn-add-beanlet').on('click', function(){
+    console.log('adding beanlet');
+    $('#modal-add').modal('hide');
+  });
+/*
   $('#btn-add-beanlet').click(function(){
     var token = $("meta[name='_csrf']").attr("content");
     var name = $('#beanlet-name').val();
@@ -67,4 +75,5 @@ $(function(){
         }
       });
   });
+*/
 });
