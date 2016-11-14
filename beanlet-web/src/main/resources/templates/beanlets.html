@@ -15,12 +15,11 @@
         <h4 class="modal-title" id="modal-add-label">add beanlet</h4>
       </div>
       <div class="modal-body">
-        <form>
+        <form onsubmit="beanlets.addBeanlet(); return false;">
           <div class="form-group">
             <label for="beanlet-name">Beanlet Name</label>
             <input type="text" class="form-control" id="beanlet-name" placeholder="example: exercise" autocomplete="off">
           </div>
-          <!--<button type="submit" class="btn btn-default">Submit</button>-->
         </form>
       </div>
       <div class="modal-footer">

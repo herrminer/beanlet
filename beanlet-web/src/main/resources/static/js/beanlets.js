@@ -33,9 +33,9 @@ var beanlets = {
     beanlets.initializeAddBeanletForm();
   },
   initializeAddBeanletForm: function(){
-    $('#modal-add').on('shown.bs.modal', function(){
-      $('#beanlet-name').focus()
-    });
+    $('#modal-add')
+      .on('show.bs.modal', function(){ $('#beanlet-name').val(''); })
+      .on('shown.bs.modal', function(){ $('#beanlet-name').focus(); });
     $('#btn-add-beanlet').click(beanlets.addBeanlet);
   },
   initializeBeanlets: function(){
@@ -64,9 +64,9 @@ var beanlets = {
   },
   addBeanletResponseHandler: function(response){
     var newRows = $(response).find('li.beanlet');
-    newRows.prependTo($('#beanlets'));
-    beanlets.initializeBeanlets();
     $('#modal-add').modal('hide');
+    newRows.hide().prependTo($('#beanlets')).show('slide', {direction:'up'}, 250);
+    beanlets.initializeBeanlets();
   }
 };
 
