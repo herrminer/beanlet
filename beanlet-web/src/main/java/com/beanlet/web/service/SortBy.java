@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public enum SortBy {
-  NAME("name", (o1, o2) -> o1.getName().compareTo(o2.getName()), false),
+  NAME("name", (o1, o2) -> o1.getName().toLowerCase().compareTo(o2.getName().toLowerCase()), false),
   BEAN_COUNT("beans", (o1, o2) -> o1.getBeanCount() > o2.getBeanCount() ? 1 : o1.getBeanCount() < o2.getBeanCount() ? -1 : 0, true),
   DATE_ADDED("added", (o1, o2) -> o1.getDateCreated().compareTo(o2.getDateCreated()), true);
 

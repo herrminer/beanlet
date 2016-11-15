@@ -15,7 +15,7 @@ public class SortByTest {
   @Test
   public void testSortByName() throws Exception {
     Beanlet b1 = new Beanlet(null, "a");
-    Beanlet b2 = new Beanlet(null, "c");
+    Beanlet b2 = new Beanlet(null, "C");
     Beanlet b3 = new Beanlet(null, "b");
     List<Beanlet> beanlets = new ArrayList<>(3);
     beanlets.add(b1);
@@ -24,7 +24,7 @@ public class SortByTest {
     beanlets.sort(SortBy.NAME.getComparator());
     assertThat(beanlets.get(0).getName()).isEqualTo("a");
     assertThat(beanlets.get(1).getName()).isEqualTo("b");
-    assertThat(beanlets.get(2).getName()).isEqualTo("c");
+    assertThat(beanlets.get(2).getName()).isEqualTo("C");
   }
 
   @Test
