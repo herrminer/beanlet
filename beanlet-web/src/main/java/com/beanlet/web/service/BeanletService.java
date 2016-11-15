@@ -10,6 +10,7 @@ import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface BeanletService {
@@ -19,6 +20,8 @@ public interface BeanletService {
   Beanlet addBeanlet(EntityId<User> userId, String name);
 
   Beanlet countIt(EntityId<User> userId, EntityId<Beanlet> beanletId, DateTimeZone timeZone);
+
+  List<EntityId<Beanlet>> sortBeanlets(EntityId<User> id, SortBy sortBy);
 
   @Service
   class DefaultBeanletService implements BeanletService {
@@ -49,6 +52,21 @@ public interface BeanletService {
       DateTimeZone zone = timeZone == null ? user.getTimeZone() : timeZone;
       beanService.addBean(userId, beanletId, new DateTime(zone));
       return updateBeanletDataFields(userId, beanletId);
+    }
+
+    @Override
+    public List<EntityId<Beanlet>> sortBeanlets(EntityId<User> userId, SortBy sortBy) {
+      List<Beanlet> beanlets = beanletRepository.findAllByUserIdOrderBySortOrderDesc(userId);
+      List<EntityId<Beanlet>> entityIds = new ArrayList<>(beanlets.size());
+      beanlets.sort(sortBy.getComparator());
+      Beanlet beanlet;
+      for (int i = 0, sortOrder = beanlets.size(); i < beanlets.size(); i++, sortOrder--) {
+        beanlet = beanlets.get(i);
+        beanlet.setSortOrder(sortOrder);
+        beanletRepository.save(beanlet);
+        entityIds.add(beanlet.getId());
+      }
+      return entityIds;
     }
 
     Beanlet updateBeanletDataFields(EntityId<User> userId, EntityId<Beanlet> beanletId) {
