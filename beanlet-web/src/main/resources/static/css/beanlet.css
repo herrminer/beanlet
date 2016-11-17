@@ -20,13 +20,10 @@
   font-size: 18px;
 }
 
-#beans-table td.bg-success {
+#beans-table td.not-current {
+  background-color: #eeeeee;
+  color: #999999;
 }
-/*
-#beans-table {
-
-}
-*/
 
 .footer {
   position: fixed;
