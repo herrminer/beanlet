@@ -57,13 +57,4 @@ public interface BeanletCalendarService {
     }
   }
 
-  public static void main(String[] args) {
-    DateTime dateTime = new DateTime();
-    for (int i=0; i < 21; i++) {
-      dateTime = dateTime.plusDays(i);
-      System.out.println(dateTime.getDayOfMonth() + ": " + dateTime.getDayOfWeek());
-    }
-    System.out.println(dateTime.getDayOfWeek());
-  }
-
 }
