@@ -2,6 +2,7 @@ package com.beanlet.web.service;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,7 @@ public interface BeanletCalendarService {
 
   BeanletCalendar getBeanletCalendar(int year, int month);
 
+  @Service
   class DefaultBeanletCalendarService implements BeanletCalendarService {
 
     public static final int DAYS_IN_CALENDAR = 35;
