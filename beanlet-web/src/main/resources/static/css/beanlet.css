@@ -4,6 +4,7 @@
   background-color: #ffffff;
   height: 300px;
   width: 100%;
+  /*border-collapse: separate;*/
 }
 
 #beans-table th {
@@ -16,8 +17,11 @@
   border: 1px solid #ddd;
   text-align: center;
   vertical-align: middle;
+  font-size: 18px;
 }
 
+#beans-table td.bg-success {
+}
 /*
 #beans-table {
 

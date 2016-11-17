@@ -8,8 +8,11 @@ var beanlet = {
       $('#d'+i).text(i+1);
     }
     $('#beans-table').find('td').each(function(i, it){
-      if (i % 3 == 0 && i < 31)
-        $(it).addClass('bg-success');
+      var jq = $(it);
+      jq.click(function(){$(this).toggleClass('bg-success', 250)});
+      if (i % 3 == 0 && i < 31) {
+          jq.addClass('bg-success');
+      }
     });
   }
 };
