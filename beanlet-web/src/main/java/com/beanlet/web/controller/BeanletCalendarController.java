@@ -25,19 +25,21 @@ public class BeanletCalendarController {
 
   @GetMapping("/beanlets/{beanletId}/calendar")
   public BeanletCalendar countIt(@PathVariable EntityId<Beanlet> beanletId,
-                                 @RequestParam(required = false) DateTimeZone timeZone,
+                                 @RequestParam DateTimeZone timeZone,
                                  @RequestParam(required = false) Integer year,
                                  @RequestParam(required = false) Integer month,
                                  @AuthenticationPrincipal User user) {
     BeanletCalendar beanletCalendar;
 
     if (year != null && month != null) {
-      beanletCalendar = beanletCalendarService.getBeanletCalendar(year, month);
+      beanletCalendar = beanletCalendarService.getBeanletCalendar(beanletId, year, month, timeZone);
     } else if (timeZone != null) {
       DateTime localDateTime = new DateTime(timeZone);
       beanletCalendar = beanletCalendarService.getBeanletCalendar(
+        beanletId,
         localDateTime.getYear(),
-        localDateTime.getMonthOfYear());
+        localDateTime.getMonthOfYear(),
+        timeZone);
     } else {
       beanletCalendar = new BeanletCalendar.Builder().getCalendar();
     }

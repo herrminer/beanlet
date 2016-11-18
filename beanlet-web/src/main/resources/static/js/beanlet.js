@@ -8,7 +8,8 @@ $(document).ajaxError(function(event, jqxhr, settings, thrownError) {
 
 var service = {
   getCalendar: function(year, month, timeZone, responseHandler){
-    $.get("/beanlets/12345/calendar", {timeZone:timeZone})
+    var uri = window.location + '/calendar';
+    $.get(uri, {timeZone:timeZone})
       .done(function(data, textStatus, jqXHR){
         responseHandler(data);
       });
@@ -16,18 +17,19 @@ var service = {
 };
 
 var beanlet = {
+  timeZone: '',
   initializeCalendar: function () {
-    var timeZone = jstz.determine().name();
-    service.getCalendar(null, null, timeZone, beanlet.getCalendarResponseHandler);
+    beanlet.timeZone = jstz.determine().name();
+    service.getCalendar(null, null, beanlet.timeZone, beanlet.getCalendarResponseHandler);
   },
   getCalendarResponseHandler: function(beanletCalendar) {
     var days = beanletCalendar.days;
     var day;
     for (var i=0; i < days.length; i++) {
       day = days[i];
-      $('#d'+i)
-        .text(day.dayOfMonth)
-        .attr('class', day.currentMonth ? '' : 'not-current');
+      var cell = $('#d'+i).text(day.dayOfMonth).attr('class', day.currentMonth ? '' : 'not-current');
+      if (day.today) cell.addClass('today');
+      if (day.beanCount) cell.addClass('bg-success');
     }
   },
   initializePage: function () {

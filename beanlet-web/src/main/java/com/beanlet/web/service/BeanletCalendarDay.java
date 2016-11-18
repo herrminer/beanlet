@@ -4,21 +4,24 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class BeanletCalendarDay {
 
-  private boolean currentMonth;
-
   private int year;
 
   private int month;
 
   private int dayOfMonth;
 
+  private boolean currentMonth;
+
+  private boolean today;
+
   private int beanCount;
 
-  public BeanletCalendarDay(int year, int month, int dayOfMonth, boolean currentMonth, int beanCount) {
+  public BeanletCalendarDay(int year, int month, int dayOfMonth, boolean currentMonth, boolean today, int beanCount) {
     this.year = year;
     this.month = month;
     this.dayOfMonth = dayOfMonth;
     this.currentMonth = currentMonth;
+    this.today = today;
     this.beanCount = beanCount;
   }
 
@@ -34,12 +37,16 @@ public class BeanletCalendarDay {
     return dayOfMonth;
   }
 
-  public int getBeanCount() {
-    return beanCount;
-  }
-
   public boolean isCurrentMonth() {
     return currentMonth;
+  }
+
+  public boolean isToday() {
+    return today;
+  }
+
+  public int getBeanCount() {
+    return beanCount;
   }
 
   @Override
@@ -50,6 +57,7 @@ public class BeanletCalendarDay {
       .append("dayOfMonth", dayOfMonth)
       .append("beanCount", beanCount)
       .append("currentMonth", currentMonth)
+      .append("today", today)
       .toString();
   }
 }
