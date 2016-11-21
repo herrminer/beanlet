@@ -49,6 +49,11 @@ var beanlet = {
     service.getCalendar(beanlet.calendar.previousYear, beanlet.calendar.previousMonth, beanlet.timeZone, beanlet.getCalendarResponseHandler);
     return false;
   },
+  goToCurrentMonth: function () {
+    var currentDate = new Date();
+    service.getCalendar(currentDate.getFullYear(), currentDate.getMonth()+1, beanlet.timeZone, beanlet.getCalendarResponseHandler);
+    return false;
+  },
   goToNextMonth: function () {
     if (!beanlet.calendar) return false;
     service.getCalendar(beanlet.calendar.nextYear, beanlet.calendar.nextMonth, beanlet.timeZone, beanlet.getCalendarResponseHandler);
@@ -56,6 +61,7 @@ var beanlet = {
   },
   initializeCalendarLinks: function () {
     $('#cal-prev').click(beanlet.goToPreviousMonth);
+    $('#cal-today').click(beanlet.goToCurrentMonth);
     $('#cal-next').click(beanlet.goToNextMonth);
   },
   initializeCalendar: function () {

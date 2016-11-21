@@ -11,10 +11,11 @@
 <div class="container">
   <h4 style="margin-top: 0;" th:text="${beanlet.name}">Beanlet Name</h4>
   <div id="month-nav">
-    <div style="float: right;">
-      <span id="label-month">November</span>&nbsp;<span id="label-year">2016</span>&nbsp;
-      <a id="cal-prev" href="#" class="glyphicon glyphicon-circle-arrow-left"></a>
-      <a id="cal-next" href="#" class="glyphicon glyphicon-circle-arrow-right"></a>
+    <span id="label-month">November</span>&nbsp;<span id="label-year">2016</span>&nbsp;
+    <div class="btn-group" role="group" aria-label="...">
+      <button id="cal-prev" type="button" class="btn btn-default">&lt;</button>
+      <button id="cal-today" type="button" class="btn btn-default">today</button>
+      <button id="cal-next" type="button" class="btn btn-default">&gt;</button>
     </div>
   </div>
   <table cellpadding="0" cellspacing="0" id="beans-table">
