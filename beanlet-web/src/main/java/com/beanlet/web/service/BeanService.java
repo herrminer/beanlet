@@ -33,7 +33,7 @@ public interface BeanService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultBeanService.class);
 
-    private BeanletRepository beanletRepository;
+    private BeanletAuthorizationService beanletAuthorizationService;
 
     private BeanRepository beanRepository;
 
@@ -42,7 +42,7 @@ public interface BeanService {
     @Override
     public Bean addBean(EntityId<User> userId, EntityId<Beanlet> beanletId, DateTime date) {
 
-      checkBeanletAuthorization(userId, beanletId);
+      beanletAuthorizationService.checkBeanletAuthorization(userId, beanletId);
 
       Bean bean = new Bean();
       bean.setBeanletId(beanletId);
@@ -65,13 +65,13 @@ public interface BeanService {
 
     @Override
     public Bean getMostRecentBean(EntityId<User> userId, EntityId<Beanlet> beanletId) {
-      checkBeanletAuthorization(userId, beanletId);
+      beanletAuthorizationService.checkBeanletAuthorization(userId, beanletId);
       return beanRepository.findFirstByBeanletIdOrderByLocalDateDesc(beanletId);
     }
 
     @Override
     public List<Bean> getBeans(EntityId<User> userId, EntityId<Beanlet> beanletId) {
-      checkBeanletAuthorization(userId, beanletId);
+      beanletAuthorizationService.checkBeanletAuthorization(userId, beanletId);
       return beanRepository.findByBeanletId(beanletId, sort);
     }
 
@@ -80,17 +80,9 @@ public interface BeanService {
       return beanRepository.countByBeanletId(beanletId);
     }
 
-    void checkBeanletAuthorization(EntityId<User> userId, EntityId<Beanlet> beanletId) {
-      Beanlet beanlet = beanletRepository.findOne(beanletId);
-      if (!beanlet.getUser().getId().equals(userId)) {
-        LOGGER.error("beanlet " + beanletId + " does not belong to user " + userId);
-        throw new NotYourBeanException();
-      }
-    }
-
     @Autowired
-    public void setBeanletRepository(BeanletRepository beanletRepository) {
-      this.beanletRepository = beanletRepository;
+    public void setBeanletAuthorizationService(BeanletAuthorizationService beanletAuthorizationService) {
+      this.beanletAuthorizationService = beanletAuthorizationService;
     }
 
     @Autowired

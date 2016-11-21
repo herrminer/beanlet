@@ -24,20 +24,15 @@ public class DefaultBeanServiceTest {
   private BeanService.DefaultBeanService service;
 
   @MockBean
-  private BeanletRepository beanletRepository;
+  private BeanletAuthorizationService beanletAuthorizationService;
 
   @MockBean
   private BeanRepository beanRepository;
 
   @Before
   public void setUp() throws Exception {
-    service = new BeanService.DefaultBeanService(){
-      @Override
-      void checkBeanletAuthorization(EntityId<User> userId, EntityId<Beanlet> beanletId) {
-        // do nothing for now...test this separately
-      }
-    };
-    service.setBeanletRepository(beanletRepository);
+    service = new BeanService.DefaultBeanService();
+    service.setBeanletAuthorizationService(beanletAuthorizationService);
     service.setBeanRepository(beanRepository);
 
   }
@@ -58,28 +53,6 @@ public class DefaultBeanServiceTest {
     Bean bean = service.getMostRecentBean(HERRMINER, EXERCISE);
     assertThat(bean).isNotNull();
     verify(beanRepository).findFirstByBeanletIdOrderByLocalDateDesc(EXERCISE);
-  }
-
-  @Test
-  public void checkBeanletAuthorization_noProblem() throws Exception {
-    BeanService.DefaultBeanService service = new BeanService.DefaultBeanService();
-    service.setBeanletRepository(beanletRepository);
-    User user = new User(HERRMINER.getValue());
-    Beanlet beanlet = new Beanlet(user, "foo");
-    when(beanletRepository.findOne(EXERCISE)).thenReturn(beanlet);
-    service.checkBeanletAuthorization(HERRMINER, EXERCISE);
-    verify(beanletRepository).findOne(EXERCISE);
-  }
-
-  @Test(expected = NotYourBeanException.class)
-  public void checkBeanletAuthorization_authIssue() throws Exception {
-    BeanService.DefaultBeanService service = new BeanService.DefaultBeanService();
-    service.setBeanletRepository(beanletRepository);
-    User user = new User(uuid());
-    Beanlet beanlet = new Beanlet(user, "foo");
-    when(beanletRepository.findOne(EXERCISE)).thenReturn(beanlet);
-    service.checkBeanletAuthorization(HERRMINER, EXERCISE);
-    verify(beanletRepository).findOne(EXERCISE);
   }
 
 }

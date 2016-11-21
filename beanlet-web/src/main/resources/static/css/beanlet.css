@@ -25,6 +25,15 @@
   color: #999999;
 }
 
+#month-nav {
+  overflow: auto;
+  margin-bottom: 10px;
+}
+
+#month-nav a:link, #month-nav a:visited, #month-nav a:hover, #month-nav a:active {
+  text-decoration: none;
+}
+
 .today {
   background-image: url("/images/outline-square-black-50-50.png");
   background-size: 100% 100%;

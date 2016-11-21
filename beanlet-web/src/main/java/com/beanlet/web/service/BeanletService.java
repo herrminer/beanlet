@@ -23,12 +23,16 @@ public interface BeanletService {
 
   List<EntityId<Beanlet>> sortBeanlets(EntityId<User> id, SortBy sortBy);
 
+  Beanlet getBeanlet(EntityId<User> userId, EntityId<Beanlet> beanletId);
+
   @Service
   class DefaultBeanletService implements BeanletService {
 
     private BeanletRepository beanletRepository;
 
     private UserRepository userRepository;
+
+    private BeanletAuthorizationService beanletAuthorizationService;
 
     private BeanService beanService;
 
@@ -69,6 +73,12 @@ public interface BeanletService {
       return entityIds;
     }
 
+    @Override
+    public Beanlet getBeanlet(EntityId<User> userId, EntityId<Beanlet> beanletId) {
+      beanletAuthorizationService.checkBeanletAuthorization(userId, beanletId);
+      return beanletRepository.findOne(beanletId);
+    }
+
     Beanlet updateBeanletDataFields(EntityId<User> userId, EntityId<Beanlet> beanletId) {
       Beanlet beanlet = beanletRepository.findOne(beanletId);
       beanlet.setDateLastLogged(beanService.getMostRecentBean(userId, beanletId).getLocalDate());
@@ -85,6 +95,11 @@ public interface BeanletService {
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
       this.userRepository = userRepository;
+    }
+
+    @Autowired
+    public void setBeanletAuthorizationService(BeanletAuthorizationService beanletAuthorizationService) {
+      this.beanletAuthorizationService = beanletAuthorizationService;
     }
 
     @Autowired

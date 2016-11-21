@@ -7,22 +7,66 @@ $(document).ajaxError(function(event, jqxhr, settings, thrownError) {
 });
 
 var service = {
+  calendarCache: {},
   getCalendar: function(year, month, timeZone, responseHandler){
+    var cacheKey = '' + year + month;
+    if (service.calendarCache[cacheKey]) {
+      console.log('returning cached calendar response for ' + cacheKey);
+      responseHandler(service.calendarCache[cacheKey]);
+      return;
+    }
     var uri = window.location + '/calendar';
-    $.get(uri, {timeZone:timeZone})
+    $.get(uri, {timeZone:timeZone, year:year, month:month})
       .done(function(data, textStatus, jqXHR){
+        service.calendarCache[''+data.year+data.month] = data; // cache the calendar data
         responseHandler(data);
       });
   }
 };
 
+var labels = {
+  months: {
+    1: 'January',
+    2: 'February',
+    3: 'March',
+    4: 'April',
+    5: 'May',
+    6: 'June',
+    7: 'July',
+    8: 'August',
+    9: 'September',
+    10: 'October',
+    11: 'November',
+    12: 'December'
+  }
+};
+
 var beanlet = {
   timeZone: '',
+  calendar: null,
+  goToPreviousMonth: function () {
+    if (!beanlet.calendar) return false;
+    service.getCalendar(beanlet.calendar.previousYear, beanlet.calendar.previousMonth, beanlet.timeZone, beanlet.getCalendarResponseHandler);
+    return false;
+  },
+  goToNextMonth: function () {
+    if (!beanlet.calendar) return false;
+    service.getCalendar(beanlet.calendar.nextYear, beanlet.calendar.nextMonth, beanlet.timeZone, beanlet.getCalendarResponseHandler);
+    return false;
+  },
+  initializeCalendarLinks: function () {
+    $('#cal-prev').click(beanlet.goToPreviousMonth);
+    $('#cal-next').click(beanlet.goToNextMonth);
+  },
   initializeCalendar: function () {
     beanlet.timeZone = jstz.determine().name();
     service.getCalendar(null, null, beanlet.timeZone, beanlet.getCalendarResponseHandler);
+    beanlet.initializeCalendarLinks();
   },
   getCalendarResponseHandler: function(beanletCalendar) {
+    beanlet.calendar = beanletCalendar;
+    $('#label-month').text(labels.months[beanletCalendar.month]);
+    $('#label-year').text(beanletCalendar.year);
     var days = beanletCalendar.days;
     var day;
     for (var i=0; i < days.length; i++) {
@@ -34,13 +78,6 @@ var beanlet = {
   },
   initializePage: function () {
     beanlet.initializeCalendar();
-    $('#beans-table').find('td').each(function(i, it){
-      var jq = $(it);
-      jq.click(function(){$(this).toggleClass('bg-success', 250)});
-      if (i % 3 == 0 && i < 31) {
-          jq.addClass('bg-success');
-      }
-    });
   }
 };
 
