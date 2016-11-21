@@ -39,9 +39,13 @@ public interface BeanletCalendarService {
 
     @Override
     public BeanletCalendar getBeanletCalendar(EntityId<Beanlet> beanletId, int year, int month, DateTimeZone dateTimeZone) {
+      logger.debug("getBeanletCalendar: beanletId " + beanletId + ", year: " + year + ", month: " + month + ", timeZone: " + dateTimeZone);
+
       if (today == null) { // may have been set via testing method
         today = new DateTime(dateTimeZone).withTime(0, 0, 0, 0).withZoneRetainFields(DateTimeZone.UTC);
       }
+
+      logger.debug("getBeanletCalendar: today: " + today);
 
       DateTime currentMonth = new DateTime(year, month, 1, 0, 0, 0);
       DateTime previousMonth = currentMonth.minusMonths(1);

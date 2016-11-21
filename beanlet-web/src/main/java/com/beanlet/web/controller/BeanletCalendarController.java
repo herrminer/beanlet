@@ -8,6 +8,8 @@ import com.beanlet.web.service.BeanletCalendarService;
 import com.beanlet.web.service.BeanletService;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class BeanletCalendarController {
 
+  private static final Logger logger = LoggerFactory.getLogger(BeanletCalendarController.class);
+
   @Autowired
   private BeanletCalendarService beanletCalendarService;
 
@@ -29,6 +33,8 @@ public class BeanletCalendarController {
                                  @RequestParam(required = false) Integer year,
                                  @RequestParam(required = false) Integer month,
                                  @AuthenticationPrincipal User user) {
+    logger.debug("servicing request for beanlet " + beanletId + " and time zone " + timeZone);
+
     BeanletCalendar beanletCalendar;
 
     if (year != null && month != null) {
