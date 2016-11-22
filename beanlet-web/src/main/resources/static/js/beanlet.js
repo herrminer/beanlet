@@ -69,11 +69,21 @@ var beanlet = {
     service.getCalendar(null, null, beanlet.timeZone, beanlet.getCalendarResponseHandler);
     beanlet.initializeCalendarLinks();
   },
+  showWeeks: function (numDays) {
+    var weeksToShow = numDays / 7;
+    for (var i = 0; i < weeksToShow; i++) {
+      $('#week'+i).show();
+    }
+    for (var j = 5; j >= weeksToShow; j--) {
+      $('#week'+j).hide();
+    }
+  },
   getCalendarResponseHandler: function(beanletCalendar) {
     beanlet.calendar = beanletCalendar;
     $('#label-month').text(labels.months[beanletCalendar.month]);
     $('#label-year').text(beanletCalendar.year);
     var days = beanletCalendar.days;
+    beanlet.showWeeks(days.length);
     var day;
     for (var i=0; i < days.length; i++) {
       day = days[i];

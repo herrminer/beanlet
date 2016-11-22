@@ -31,7 +31,9 @@ public interface BeanletCalendarService {
 
     private BeanRepository beanRepository;
 
-    public static final int DAYS_IN_CALENDAR = 35;
+    public static final int DAYS_IN_FOUR_WEEK_CALENDAR = 7 * 4;
+    public static final int DAYS_IN_FIVE_WEEK_CALENDAR = 7 * 5;
+    public static final int DAYS_IN_SIX_WEEK_CALENDAR = 7 * 6;
 
     private static final  DateTimeFormatter KEY_FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
 
@@ -51,11 +53,13 @@ public interface BeanletCalendarService {
       DateTime previousMonth = currentMonth.minusMonths(1);
       DateTime nextMonth = currentMonth.plusMonths(1);
 
-      List<BeanletCalendarDay> days = new ArrayList<>(DAYS_IN_CALENDAR);
-      DateTime day = getFirstDayOfCalendar(currentMonth);
-      Map<String, List<Bean>> beans = getBeansMap(beanletId, day, DAYS_IN_CALENDAR);
+      int daysInCalendar = calculateDaysInCalendar(currentMonth);
 
-      for (int i=0; i < DAYS_IN_CALENDAR; i++){
+      List<BeanletCalendarDay> days = new ArrayList<>(daysInCalendar);
+      DateTime day = getFirstDayOfCalendar(currentMonth);
+      Map<String, List<Bean>> beans = getBeansMap(beanletId, day, daysInCalendar);
+
+      for (int i=0; i < daysInCalendar; i++){
         List<Bean> beansForDay = beans.get(KEY_FORMATTER.print(day));
         days.add(new BeanletCalendarDay(
           day.getYear(),
@@ -76,6 +80,12 @@ public interface BeanletCalendarService {
         .withNextMonth(nextMonth.getMonthOfYear())
         .withDays(days)
         .getCalendar();
+    }
+
+    static int calculateDaysInCalendar(DateTime dateTime) {
+      int calendarDaysRequired = dateTime.dayOfMonth().getMaximumValue() +
+        (dateTime.getDayOfWeek() == DateTimeConstants.SUNDAY ? 0 : dateTime.getDayOfWeek());
+      return ((int) Math.ceil((double) calendarDaysRequired / 7)) * 7;
     }
 
     Map<String, List<Bean>> getBeansMap(EntityId<Beanlet> beanletId, DateTime startDateTime, int daysToInclude) {
