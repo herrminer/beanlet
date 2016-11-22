@@ -40,7 +40,7 @@ public class DefaultBeanletCalendarServiceTest {
     int month = 11;
 
 //    service.setToday(new DateTime(2016, 11, 18, 0, 0, 0, 0, DateTimeZone.UTC));
-    service.setToday(new DateTime(2016, 11, 18, 0, 0, 0, 0, DateTimeZone.UTC));
+    service.setTodayOverride(new DateTime(2016, 11, 18, 0, 0, 0, 0, DateTimeZone.UTC));
     BeanletCalendar calendar = service.getBeanletCalendar(beanletId, year, month, DateTimeZone.UTC);
 
     // current
@@ -74,7 +74,7 @@ public class DefaultBeanletCalendarServiceTest {
     int year = 2016;
     int month = 10;
 
-    service.setToday(new DateTime(2016, 11, 18, 0, 0, 0, 0, DateTimeZone.UTC));
+    service.setTodayOverride(new DateTime(2016, 11, 18, 0, 0, 0, 0, DateTimeZone.UTC));
     BeanletCalendar calendar = service.getBeanletCalendar(beanletId, year, month, DateTimeZone.UTC);
 
     // current

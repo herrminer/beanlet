@@ -4,7 +4,6 @@ import com.beanlet.web.jpa.Bean;
 import com.beanlet.web.jpa.Beanlet;
 import com.beanlet.web.jpa.EntityId;
 import com.beanlet.web.repository.BeanRepository;
-import com.beanlet.web.repository.BeanletRepository;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.DateTimeZone;
@@ -37,14 +36,17 @@ public interface BeanletCalendarService {
 
     private static final  DateTimeFormatter KEY_FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
 
-    private DateTime today;
+    private DateTime todayOverride;
 
     @Override
     public BeanletCalendar getBeanletCalendar(EntityId<Beanlet> beanletId, int year, int month, DateTimeZone dateTimeZone) {
       logger.debug("getBeanletCalendar: beanletId " + beanletId + ", year: " + year + ", month: " + month + ", timeZone: " + dateTimeZone);
 
-      if (today == null) { // may have been set via testing method
-        today = new DateTime(dateTimeZone).withTime(0, 0, 0, 0).withZoneRetainFields(DateTimeZone.UTC);
+      DateTime today = new DateTime(dateTimeZone).withTime(0, 0, 0, 0).withZoneRetainFields(DateTimeZone.UTC);
+
+      // todayOverride may have been set via testing method
+      if (todayOverride != null) {
+        today = todayOverride;
       }
 
       logger.debug("getBeanletCalendar: today: " + today);
@@ -126,8 +128,8 @@ public interface BeanletCalendarService {
     /**
      * For testing only
      */
-    void setToday(DateTime today) {
-      this.today = today;
+    void setTodayOverride(DateTime todayOverride) {
+      this.todayOverride = todayOverride;
     }
   }
 
