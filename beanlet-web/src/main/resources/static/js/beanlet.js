@@ -99,6 +99,7 @@ var beanlet = {
       if (day.today) cell.addClass('today').addClass('selected');
       if (day.beanCount) cell.addClass('bg-success');
     }
+    $('.today').click();
   },
   getBeans: function () {
     $('.selected').removeClass('selected');
