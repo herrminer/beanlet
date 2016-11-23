@@ -96,13 +96,14 @@ var beanlet = {
     for (var i=0; i < days.length; i++) {
       day = days[i];
       var cell = $('#d'+i).text(day.dayOfMonth).attr('class', day.currentMonth ? '' : 'not-current');
-      if (day.today) cell.addClass('today');
+      if (day.today) cell.addClass('today').addClass('selected');
       if (day.beanCount) cell.addClass('bg-success');
     }
   },
   getBeans: function () {
     $('#beans').hide().find('li').remove();
-    var dayIndex = $(this).attr('id').substring(1);
+    $('.selected').removeClass('selected');
+    var dayIndex = $(this).addClass('selected').attr('id').substring(1);
     var day = beanlet.calendar.days[dayIndex];
     var date = [day.year, day.month, day.dayOfMonth].join('-');
     service.getBeans(date, beanlet.getBeansResponseHandler);
