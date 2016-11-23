@@ -101,15 +101,21 @@ var beanlet = {
     }
   },
   getBeans: function () {
-    $('#beans').hide().find('li').remove();
     $('.selected').removeClass('selected');
-    var dayIndex = $(this).addClass('selected').attr('id').substring(1);
-    var day = beanlet.calendar.days[dayIndex];
-    var date = [day.year, day.month, day.dayOfMonth].join('-');
-    service.getBeans(date, beanlet.getBeansResponseHandler);
+    var cell = this;
+    var callback = function () {
+      var dayIndex = $(cell).addClass('selected').attr('id').substring(1);
+      var day = beanlet.calendar.days[dayIndex];
+      var date = [day.year, day.month, day.dayOfMonth].join('-');
+      service.getBeans(date, beanlet.getBeansResponseHandler);
+    };
+    $('#beans').hide('slide', {direction:'up'}, 100, function(){
+      $(this).find('li').remove();
+      callback();
+    });
   },
   getBeansResponseHandler: function (html) {
-    $('#beans').append($(html).find('li')).show();
+    $('#beans').append($(html).find('li')).show('slide', {direction:'up'}, 100);
   },
   initializePage: function () {
     beanlet.initializeCalendar();
