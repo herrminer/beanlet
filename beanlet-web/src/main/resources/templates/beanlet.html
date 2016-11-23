@@ -1,12 +1,45 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout2::head(~{::title},~{::link})">
-  <title>beanlets</title>
+  <title>beanlet</title>
   <link rel="stylesheet" th:href="@{/css/beanlet.css}"/>
+  <link rel="stylesheet" th:href="@{/jquery-ui-1.12.1.custom/jquery-ui.min.css}"/>
 </head>
 <body>
 
 <nav th:replace="layout2::navbar"></nav>
+
+<!-- bean modal -->
+<div class="modal fade" id="modal-bean" tabindex="-1" role="dialog" aria-labelledby="beanModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="beanModalLabel">edit bean</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-inline">
+          <div class="form-group">
+            <input type="text" name="date" class="form-control" id="bean-date" value="10/31/2016">
+          </div>
+          <div class="form-group">
+            <input type="text" name="time" class="form-control" id="bean-time" value="4:50 PM">
+          </div>
+          <label class="radio-inline">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> AM
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> PM
+          </label>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="container">
   <h4 style="margin-top: 0;" th:text="${beanlet.name}">Beanlet Name</h4>
@@ -97,7 +130,7 @@
       <a href="#" data-toggle="modal" data-target="#modal-add"><span class="glyphicon glyphicon-plus"></span></a>
     </li>
     <li>
-      <a href="#" data-toggle="modal" data-target="#modal-sort"><span class="glyphicon glyphicon-sort"></span></a>
+      <a href="#" data-toggle="modal" data-target="#modal-bean"><span class="glyphicon glyphicon-sort"></span></a>
     </li>
   </ul>
 </footer>

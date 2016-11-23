@@ -115,8 +115,13 @@ var beanlet = {
       callback();
     });
   },
+  displayBeanModal: function () {
+    $('#modal-bean').modal();
+    $('#bean-date').datepicker();
+  },
   getBeansResponseHandler: function (html) {
-    $('#beans').append($(html).find('li')).show('slide', {direction:'up'}, 100);
+    var lis = $(html).find('li').click(beanlet.displayBeanModal);
+    $('#beans').append(lis).show('slide', {direction:'up'}, 100);
   },
   initializePage: function () {
     beanlet.initializeCalendar();
