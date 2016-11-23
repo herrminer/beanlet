@@ -28,6 +28,8 @@ public interface BeanService {
 
   int getBeanCount(EntityId<Beanlet> beanletId);
 
+  List<Bean> getBeansForDate(EntityId<User> userId, EntityId<Beanlet> beanletId, DateTime dateTime);
+
   @Service
   class DefaultBeanService implements BeanService {
 
@@ -78,6 +80,14 @@ public interface BeanService {
     @Override
     public int getBeanCount(EntityId<Beanlet> beanletId) {
       return beanRepository.countByBeanletId(beanletId);
+    }
+
+    @Override
+    public List<Bean> getBeansForDate(EntityId<User> userId, EntityId<Beanlet> beanletId, DateTime dateTime) {
+      beanletAuthorizationService.checkBeanletAuthorization(userId, beanletId);
+      DateTime beginTime = dateTime.withTime(0, 0, 0, 0);
+      DateTime endTime = beginTime.plusDays(1);
+      return beanRepository.findByBeanletIdAndLocalDateBetween(beanletId, beginTime, endTime);
     }
 
     @Autowired

@@ -55,4 +55,13 @@ public class DefaultBeanServiceTest {
     verify(beanRepository).findFirstByBeanletIdOrderByLocalDateDesc(EXERCISE);
   }
 
+  @Test
+  public void testGetBeansForDate() {
+    DateTime date = new DateTime(2016, 11, 22, 1, 22, 33);
+    service.getBeansForDate(HERRMINER, EXERCISE, date);
+    verify(beanletAuthorizationService).checkBeanletAuthorization(HERRMINER, EXERCISE);
+    verify(beanRepository).findByBeanletIdAndLocalDateBetween(eq(EXERCISE),
+      eq(new DateTime(2016, 11, 22, 0, 0, 0)), eq(new DateTime(2016, 11, 23, 0, 0, 0)));
+  }
+
 }

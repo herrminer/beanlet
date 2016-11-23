@@ -43,6 +43,14 @@
 
 }
 
+#beans > li {
+  border: 1px solid #dddddd;
+  padding: 10px;
+  font-weight: 300;
+  margin: 5px 0;
+  font-size: 18px;
+}
+
 .footer {
   position: fixed;
   bottom: 0;

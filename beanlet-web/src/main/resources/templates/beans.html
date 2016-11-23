@@ -1,39 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-      layout:decorate="layout">
-<head>
-  <title th:text="'beans'">beans</title>
-  <meta name="_csrf" th:content="${_csrf.token}"/>
-  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-  <style type="text/css">
-  </style>
-  <script>
-    $(function(){
-      $('button').click(function(){
-        var timeZone = jstz.determine().name();
-        var token = $("meta[name='_csrf']").attr("content");
-        var id = $(this).addClass('btn-success').removeClass('btn-primary').attr('id');
-        $.post("/countIt", {beanletId:id, _csrf:token, timeZone: timeZone})
-          .done(function(data, textStatus, jqXHR){
-            $('#last-' + id).text(data);
-          })
-          .fail(function(jqXHR, textStatus, errorThrown){
-            console.log(jqXHR.responseText);
-          });
-      });
-    });
-  </script>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
 <body>
-<div class="container" layout:fragment="content">
-  <table class="table table-striped table-bordered">
-    <tr th:each="bean : ${beans}">
-      <td th:text="${{bean.localDate}}">local date</td>
-      <td th:text="${bean.localTimeZone}">local time zone</td>
-    </tr>
-  </table>
-</div>
+<ul class="list-unstyled">
+  <li th:each="bean : ${beans}" th:text="${{bean.localDate}}">bean date</li>
+</ul>
 </body>
 </html>
-

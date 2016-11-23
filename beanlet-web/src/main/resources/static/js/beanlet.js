@@ -21,6 +21,13 @@ var service = {
         service.calendarCache[''+data.year+data.month] = data; // cache the calendar data
         responseHandler(data);
       });
+  },
+  getBeans: function (date, responseHandler) {
+    var uri = window.location + '/beans';
+    $.get(uri, {date:date})
+      .done(function(data, textStatus, jqXHR){
+        responseHandler(data);
+      });
   }
 };
 
@@ -66,8 +73,9 @@ var beanlet = {
   },
   initializeCalendar: function () {
     beanlet.timeZone = jstz.determine().name();
-    service.getCalendar(null, null, beanlet.timeZone, beanlet.getCalendarResponseHandler);
     beanlet.initializeCalendarLinks();
+    $('#beans-table').find('td').click(beanlet.getBeans);
+    service.getCalendar(null, null, beanlet.timeZone, beanlet.getCalendarResponseHandler);
   },
   showWeeks: function (numDays) {
     var weeksToShow = numDays / 7;
@@ -91,6 +99,16 @@ var beanlet = {
       if (day.today) cell.addClass('today');
       if (day.beanCount) cell.addClass('bg-success');
     }
+  },
+  getBeans: function () {
+    $('#beans').hide().find('li').remove();
+    var dayIndex = $(this).attr('id').substring(1);
+    var day = beanlet.calendar.days[dayIndex];
+    var date = [day.year, day.month, day.dayOfMonth].join('-');
+    service.getBeans(date, beanlet.getBeansResponseHandler);
+  },
+  getBeansResponseHandler: function (html) {
+    $('#beans').append($(html).find('li')).show();
   },
   initializePage: function () {
     beanlet.initializeCalendar();
