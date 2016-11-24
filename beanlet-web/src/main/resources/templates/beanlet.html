@@ -22,18 +22,13 @@
           <div class="form-group">
             <input type="text" name="date" class="form-control" id="bean-date" value="10/31/2016">
           </div>
-          <div class="form-group">
-            <input type="text" name="time" class="form-control" id="bean-time" value="4:50 PM">
-          </div>
-          <label class="radio-inline">
-            <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> AM
-          </label>
-          <label class="radio-inline">
-            <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> PM
-          </label>
+          <select th:replace="~{date-controls::hour}"></select>
+          <select th:replace="~{date-controls::minute}"></select>
+          <select th:replace="~{date-controls::ampm}"></select>
         </form>
       </div>
       <div class="modal-footer">
+        <button type="button" class="btn btn-danger" style="float: left;">Delete</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary">Save</button>
       </div>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<select name="hour" class="form-control force-inline" th:fragment="hour">
+  <option th:each="n : ${#numbers.sequence(1,12)}" th:value="${n}" th:text="${n}">1</option>
+</select>
+<select name="minute" class="form-control force-inline" th:fragment="minute">
+  <option th:each="n : ${#numbers.sequence(0,59)}" th:value="${#numbers.formatDecimal(n,2,0)}" th:text="${#numbers.formatDecimal(n,2,0)}">1</option>
+</select>
+<select name="ampm" class="form-control force-inline" th:fragment="ampm">
+  <option name="am">am</option>
+  <option name="pm">pm</option>
+</select>
+</body>
+</html>

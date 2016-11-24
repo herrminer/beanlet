@@ -4,5 +4,11 @@
 <ul class="list-unstyled">
   <li th:each="bean : ${beans}" th:text="${{bean.localDate}}">bean date</li>
 </ul>
+<!--
+<li th:each="bean : ${beans}">
+  <span th:text="${{bean.localDate}}"></span>
+  <a class="glyphicon glyphicon-trash" style="float: right; color: #333;"></a>
+</li>
+-->
 </body>
 </html>

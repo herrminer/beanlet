@@ -59,6 +59,8 @@
   font-size: 18px;
 }
 
+.force-inline { display: inline-block; width: auto; }
+
 .footer {
   position: fixed;
   bottom: 0;
