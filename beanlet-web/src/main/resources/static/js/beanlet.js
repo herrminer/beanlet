@@ -28,6 +28,9 @@ var service = {
       .done(function(data, textStatus, jqXHR){
         responseHandler(data);
       });
+  },
+  addBean: function (beanletId, date, responseHandler) {
+    console.log('adding bean for beanlet ' + beanletId + ' and date ' + date);
   }
 };
 
@@ -123,8 +126,23 @@ var beanlet = {
     var lis = $(html).find('li').click(beanlet.displayBeanModal);
     $('#beans').append(lis).show('slide', {direction:'up'}, 100);
   },
+  addBean: function () {
+    var dayIndex = $('.selected').attr('id').substring(1);
+    var day = beanlet.calendar.days[dayIndex];
+    var date = [day.year, day.month, day.dayOfMonth].join('-');
+    var beanletId = $('#beanletId').val();
+    service.addBean(beanletId, date, beanlet.addBeanResponseHandler);
+    return false;
+  },
+  addBeanResponseHandler: function () {
+    $('.selected').click();
+  },
+  initializeFooterButtons: function () {
+    $('#add-beanlet').click(beanlet.addBean);
+  },
   initializePage: function () {
     beanlet.initializeCalendar();
+    beanlet.initializeFooterButtons();
   }
 };
 
