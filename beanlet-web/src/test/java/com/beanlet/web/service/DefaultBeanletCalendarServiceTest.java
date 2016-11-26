@@ -128,6 +128,7 @@ public class DefaultBeanletCalendarServiceTest {
     assertThat(day.getDayOfMonth()).isEqualTo(expectedDayOfMonth);
     assertThat(day.isCurrentMonth()).isEqualTo(currentMonth);
     assertThat(day.isToday()).isEqualTo(today);
+    assertThat(day.getDateKey().length()).isNotNull().isEqualTo(8);
   }
 
 }

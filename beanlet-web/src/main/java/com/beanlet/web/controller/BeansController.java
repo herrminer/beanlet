@@ -4,7 +4,6 @@ import com.beanlet.web.jpa.Beanlet;
 import com.beanlet.web.jpa.EntityId;
 import com.beanlet.web.jpa.User;
 import com.beanlet.web.service.BeanService;
-import com.beanlet.web.service.BeanletService;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -16,7 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class BeansController {
@@ -26,17 +27,54 @@ public class BeansController {
   @Autowired
   private BeanService beanService;
 
-  private DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+  private DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyyMMdd");
 
   @GetMapping("/beanlets/{beanletId}/beans")
   public String displayBeans(@PathVariable EntityId<Beanlet> beanletId,
                              @AuthenticationPrincipal User user,
-                             @RequestParam String date,
+                             @RequestParam String dateKey,
                              Model model) {
-    DateTime dateTime = formatter.parseDateTime(date);
+    DateTime dateTime = formatter.parseDateTime(dateKey);
     logger.debug("displayBeans: beanletId: " + beanletId + " and date: " + dateTime);
     model.addAttribute("beans", beanService.getBeansForDate(user.getId(), beanletId, dateTime));
     return "beans";
+  }
+
+  @PostMapping("/beanlets/{beanletId}/beans")
+  @ResponseBody
+  public BeanChangeResponse addBeanForDate(@PathVariable EntityId<Beanlet> beanletId,
+                                           @AuthenticationPrincipal User user,
+                                           @RequestParam String dateKey,
+                                           Model model) {
+    DateTime dateTime = formatter.parseDateTime(dateKey).withTime(12, 0, 0, 0); // default to noon
+    logger.debug("addBeanForDate: beanletId: " + beanletId + " and date: " + dateTime);
+    beanService.addBean(user.getId(), beanletId, dateTime);
+    int beanCount = beanService.getBeansForDate(user.getId(), beanletId, dateTime).size();
+    return new BeanChangeResponse(beanletId, beanCount, dateKey);
+  }
+
+  static class BeanChangeResponse {
+    private EntityId<Beanlet> beanletId;
+    private int beanCountForDate;
+    private String dateKey;
+
+    BeanChangeResponse(EntityId<Beanlet> beanletId, int beanCountForDate, String dateKey) {
+      this.beanletId = beanletId;
+      this.beanCountForDate = beanCountForDate;
+      this.dateKey = dateKey;
+    }
+
+    public EntityId<Beanlet> getBeanletId() {
+      return beanletId;
+    }
+
+    public int getBeanCountForDate() {
+      return beanCountForDate;
+    }
+
+    public String getDateKey() {
+      return dateKey;
+    }
   }
 
 }

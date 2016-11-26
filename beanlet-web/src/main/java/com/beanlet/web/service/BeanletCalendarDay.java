@@ -4,6 +4,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class BeanletCalendarDay {
 
+  private String dateKey;
+
   private int year;
 
   private int month;
@@ -16,13 +18,18 @@ public class BeanletCalendarDay {
 
   private int beanCount;
 
-  public BeanletCalendarDay(int year, int month, int dayOfMonth, boolean currentMonth, boolean today, int beanCount) {
+  public BeanletCalendarDay(String dateKey, int year, int month, int dayOfMonth, boolean currentMonth, boolean today, int beanCount) {
+    this.dateKey = dateKey;
     this.year = year;
     this.month = month;
     this.dayOfMonth = dayOfMonth;
     this.currentMonth = currentMonth;
     this.today = today;
     this.beanCount = beanCount;
+  }
+
+  public String getDateKey() {
+    return dateKey;
   }
 
   public int getYear() {
@@ -52,6 +59,7 @@ public class BeanletCalendarDay {
   @Override
   public String toString() {
     return new ToStringBuilder(this)
+      .append("dateKey", dateKey)
       .append("year", year)
       .append("month", month)
       .append("dayOfMonth", dayOfMonth)

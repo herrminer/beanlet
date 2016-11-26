@@ -34,7 +34,7 @@ public interface BeanletCalendarService {
     public static final int DAYS_IN_FIVE_WEEK_CALENDAR = 7 * 5;
     public static final int DAYS_IN_SIX_WEEK_CALENDAR = 7 * 6;
 
-    private static final  DateTimeFormatter KEY_FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
+    private static final DateTimeFormatter KEY_FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
 
     private DateTime todayOverride;
 
@@ -64,6 +64,7 @@ public interface BeanletCalendarService {
       for (int i=0; i < daysInCalendar; i++){
         List<Bean> beansForDay = beans.get(KEY_FORMATTER.print(day));
         days.add(new BeanletCalendarDay(
+          KEY_FORMATTER.print(day),
           day.getYear(),
           day.getMonthOfYear(),
           day.getDayOfMonth(),
