@@ -62,6 +62,7 @@ var beanlet = {
   goToPreviousMonth: function () {
     if (!beanlet.calendar) return false;
     beanlet.hideBeans(function () {
+      beanlet.disableFooterLinks();
       service.getCalendar(beanlet.calendar.previousYear, beanlet.calendar.previousMonth, beanlet.timeZone, beanlet.getCalendarResponseHandler);
     });
     return false;
@@ -69,6 +70,7 @@ var beanlet = {
   goToCurrentMonth: function () {
     var currentDate = new Date();
     beanlet.hideBeans(function () {
+      beanlet.disableFooterLinks();
       service.getCalendar(currentDate.getFullYear(), currentDate.getMonth()+1, beanlet.timeZone, beanlet.getCalendarResponseHandler);
     });
     return false;
@@ -76,6 +78,7 @@ var beanlet = {
   goToNextMonth: function () {
     if (!beanlet.calendar) return false;
     beanlet.hideBeans(function () {
+      beanlet.disableFooterLinks();
       service.getCalendar(beanlet.calendar.nextYear, beanlet.calendar.nextMonth, beanlet.timeZone, beanlet.getCalendarResponseHandler);
     });
     return false;
@@ -137,15 +140,21 @@ var beanlet = {
     $('#modal-bean').modal();
     $('#bean-date').datepicker();
   },
+  enableFooterLinks: function () {
+    $('#footer').find('a').removeClass('link-disabled');
+  },
+  disableFooterLinks: function () {
+    $('#footer').find('a').addClass('link-disabled');
+  },
   getBeansResponseHandler: function (html) {
     var lis = $(html).find('li').click(beanlet.displayBeanModal);
     $('#beans').append(lis).show('slide', {direction:'up'}, 100);
+    beanlet.enableFooterLinks();
   },
   addBean: function () {
-    var dayIndex = $('.selected').attr('id').substring(1);
-    var day = beanlet.calendar.days[dayIndex];
-    var dateKey = day.dateKey;
-    var beanletId = $('#beanletId').val();
+    var selected = $('.selected');
+    if (!selected.length) return false;
+    var dateKey = selected.attr('dateKey');
     service.addBean(beanletId, dateKey, beanlet.addBeanResponseHandler);
     return false;
   },
