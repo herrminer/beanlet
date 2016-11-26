@@ -61,17 +61,23 @@ var beanlet = {
   calendar: null,
   goToPreviousMonth: function () {
     if (!beanlet.calendar) return false;
-    service.getCalendar(beanlet.calendar.previousYear, beanlet.calendar.previousMonth, beanlet.timeZone, beanlet.getCalendarResponseHandler);
+    beanlet.hideBeans(function () {
+      service.getCalendar(beanlet.calendar.previousYear, beanlet.calendar.previousMonth, beanlet.timeZone, beanlet.getCalendarResponseHandler);
+    });
     return false;
   },
   goToCurrentMonth: function () {
     var currentDate = new Date();
-    service.getCalendar(currentDate.getFullYear(), currentDate.getMonth()+1, beanlet.timeZone, beanlet.getCalendarResponseHandler);
+    beanlet.hideBeans(function () {
+      service.getCalendar(currentDate.getFullYear(), currentDate.getMonth()+1, beanlet.timeZone, beanlet.getCalendarResponseHandler);
+    });
     return false;
   },
   goToNextMonth: function () {
     if (!beanlet.calendar) return false;
-    service.getCalendar(beanlet.calendar.nextYear, beanlet.calendar.nextMonth, beanlet.timeZone, beanlet.getCalendarResponseHandler);
+    beanlet.hideBeans(function () {
+      service.getCalendar(beanlet.calendar.nextYear, beanlet.calendar.nextMonth, beanlet.timeZone, beanlet.getCalendarResponseHandler);
+    });
     return false;
   },
   initializeCalendarLinks: function () {
@@ -103,6 +109,7 @@ var beanlet = {
     var day;
     for (var i=0; i < days.length; i++) {
       day = days[i];
+      beanletCalendar[day.dateKey] = day; // add another attribute for quick access to a day given its dateKey...todo: move this to service call?
       var cell = $('#d'+i).text(day.dayOfMonth).attr('dateKey', day.dateKey).attr('class', day.currentMonth ? '' : 'not-current');
       if (day.today) cell.addClass('today').addClass('selected');
       if (day.beanCount) cell.addClass('bg-success');
@@ -118,9 +125,12 @@ var beanlet = {
       var dateKey = day.dateKey;
       service.getBeans(dateKey, beanlet.getBeansResponseHandler);
     };
+    beanlet.hideBeans(callback);
+  },
+  hideBeans: function (callback) {
     $('#beans').hide('slide', {direction:'up'}, 100, function(){
       $(this).find('li').remove();
-      callback();
+      if (typeof callback == 'function') callback();
     });
   },
   displayBeanModal: function () {
@@ -147,6 +157,7 @@ var beanlet = {
    */
   addBeanResponseHandler: function (beanChangeResponse) {
     var dateCell = $('[dateKey='+beanChangeResponse.dateKey+']');
+    beanlet.calendar[beanChangeResponse.dateKey].beanCount = beanChangeResponse.beanCountForDate; // update the cached count of beans for the day
     if (beanChangeResponse.beanCountForDate) {
       dateCell.addClass('bg-success');
     } else {
