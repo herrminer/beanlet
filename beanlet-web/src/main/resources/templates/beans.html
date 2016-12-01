@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <ul class="list-unstyled">
-  <li th:each="bean : ${beans}" th:text="${{bean.localDate}}">bean date</li>
+  <li th:each="bean : ${beans}" th:id="${bean.id}" th:text="${{bean.localDate}}">bean date</li>
 </ul>
 <!--
 <li th:each="bean : ${beans}">

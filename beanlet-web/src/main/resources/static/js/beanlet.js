@@ -36,6 +36,19 @@ var service = {
       .done(function(data, textStatus, jqXHR){
         responseHandler(data);
       });
+  },
+  deleteBean: function (beanId, responseHandler) {
+    var uri = window.location + '/beans/'+beanId;
+    var csrfToken = $("meta[name='_csrf']").attr("content");
+    $.ajax({
+      url: uri,
+      type: 'DELETE',
+      headers: {
+          "X-CSRF-TOKEN":csrfToken
+      }})
+      .done(function(data, textStatus, jqXHR){
+        responseHandler(data);
+    });
   }
 };
 
@@ -137,6 +150,7 @@ var beanlet = {
     });
   },
   displayBeanModal: function () {
+    beanlet.selectedBeanId = $(this).attr('id');
     $('#modal-bean').modal();
     $('#bean-date').datepicker();
   },
@@ -155,8 +169,14 @@ var beanlet = {
     var selected = $('.selected');
     if (!selected.length) return false;
     var dateKey = selected.attr('dateKey');
-    service.addBean(beanletId, dateKey, beanlet.addBeanResponseHandler);
+    service.addBean(beanletId, dateKey, beanlet.beanChangeResponseHandler);
     return false;
+  },
+  deleteBean: function () {
+    service.deleteBean(beanlet.selectedBeanId, function(data){
+      beanlet.beanChangeResponseHandler(data);
+      $('#modal-bean').modal('hide');
+    });
   },
   /**
    * @param addBeanResponse
@@ -164,7 +184,7 @@ var beanlet = {
    * - beanCountForDate
    * - dateKey
    */
-  addBeanResponseHandler: function (beanChangeResponse) {
+  beanChangeResponseHandler: function (beanChangeResponse) {
     var dateCell = $('[dateKey='+beanChangeResponse.dateKey+']');
     beanlet.calendar[beanChangeResponse.dateKey].beanCount = beanChangeResponse.beanCountForDate; // update the cached count of beans for the day
     if (beanChangeResponse.beanCountForDate) {
@@ -177,9 +197,13 @@ var beanlet = {
   initializeFooterButtons: function () {
     $('#add-beanlet').click(beanlet.addBean);
   },
+  initializeBeanModal: function () {
+    $('#button-delete-bean').click(beanlet.deleteBean);
+  },
   initializePage: function () {
     beanlet.initializeCalendar();
     beanlet.initializeFooterButtons();
+    beanlet.initializeBeanModal();
   }
 };
 

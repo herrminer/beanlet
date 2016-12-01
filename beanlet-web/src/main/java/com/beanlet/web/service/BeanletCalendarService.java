@@ -1,5 +1,6 @@
 package com.beanlet.web.service;
 
+import com.beanlet.web.formatter.DateTimeFormatters;
 import com.beanlet.web.jpa.Bean;
 import com.beanlet.web.jpa.Beanlet;
 import com.beanlet.web.jpa.EntityId;
@@ -34,7 +35,7 @@ public interface BeanletCalendarService {
     public static final int DAYS_IN_FIVE_WEEK_CALENDAR = 7 * 5;
     public static final int DAYS_IN_SIX_WEEK_CALENDAR = 7 * 6;
 
-    private static final DateTimeFormatter KEY_FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
+    private static final DateTimeFormatter KEY_FORMATTER = DateTimeFormatters.dateKeyFormatter();
 
     private DateTime todayOverride;
 

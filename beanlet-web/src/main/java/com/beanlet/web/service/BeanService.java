@@ -30,6 +30,8 @@ public interface BeanService {
 
   List<Bean> getBeansForDate(EntityId<User> userId, EntityId<Beanlet> beanletId, DateTime dateTime);
 
+  Bean deleteBean(EntityId<User> userId, EntityId<Beanlet> beanletId, EntityId<Bean> beanId);
+
   @Service
   class DefaultBeanService implements BeanService {
 
@@ -88,6 +90,25 @@ public interface BeanService {
       DateTime beginTime = dateTime.withTime(0, 0, 0, 0);
       DateTime endTime = beginTime.plusDays(1);
       return beanRepository.findByBeanletIdAndLocalDateBetween(beanletId, beginTime, endTime);
+    }
+
+    @Override
+    public Bean deleteBean(EntityId<User> userId, EntityId<Beanlet> beanletId, EntityId<Bean> beanId) {
+      beanletAuthorizationService.checkBeanletAuthorization(userId, beanletId);
+      Bean bean = beanRepository.findOne(beanId);
+
+      if (bean == null) {
+        throw new IllegalArgumentException("no such bean with ID: " + beanId);
+      }
+
+      // make sure the bean belongs to this beanlet
+      if (!bean.getBeanletId().equals(beanletId)) {
+        throw new NotYourBeanException();
+      }
+
+      beanRepository.delete(bean);
+
+      return bean;
     }
 
     @Autowired

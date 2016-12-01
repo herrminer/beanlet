@@ -1,5 +1,6 @@
 package com.beanlet.web.controller;
 
+import com.beanlet.web.formatter.DateTimeFormatters;
 import com.beanlet.web.jpa.Beanlet;
 import com.beanlet.web.jpa.EntityId;
 import com.beanlet.web.jpa.User;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import static com.beanlet.web.formatter.DateTimeFormatters.dateKeyFormatter;
+
 @Controller
 public class BeansController {
 
@@ -27,14 +30,12 @@ public class BeansController {
   @Autowired
   private BeanService beanService;
 
-  private DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyyMMdd");
-
   @GetMapping("/beanlets/{beanletId}/beans")
   public String displayBeans(@PathVariable EntityId<Beanlet> beanletId,
                              @AuthenticationPrincipal User user,
                              @RequestParam String dateKey,
                              Model model) {
-    DateTime dateTime = formatter.parseDateTime(dateKey);
+    DateTime dateTime = dateKeyFormatter().parseDateTime(dateKey);
     logger.debug("displayBeans: beanletId: " + beanletId + " and date: " + dateTime);
     model.addAttribute("beans", beanService.getBeansForDate(user.getId(), beanletId, dateTime));
     return "beans";
@@ -46,35 +47,11 @@ public class BeansController {
                                            @AuthenticationPrincipal User user,
                                            @RequestParam String dateKey,
                                            Model model) {
-    DateTime dateTime = formatter.parseDateTime(dateKey).withTime(12, 0, 0, 0); // default to noon
+    DateTime dateTime = dateKeyFormatter().parseDateTime(dateKey).withTime(12, 0, 0, 0); // default to noon
     logger.debug("addBeanForDate: beanletId: " + beanletId + " and date: " + dateTime);
     beanService.addBean(user.getId(), beanletId, dateTime);
     int beanCount = beanService.getBeansForDate(user.getId(), beanletId, dateTime).size();
     return new BeanChangeResponse(beanletId, beanCount, dateKey);
-  }
-
-  static class BeanChangeResponse {
-    private EntityId<Beanlet> beanletId;
-    private int beanCountForDate;
-    private String dateKey;
-
-    BeanChangeResponse(EntityId<Beanlet> beanletId, int beanCountForDate, String dateKey) {
-      this.beanletId = beanletId;
-      this.beanCountForDate = beanCountForDate;
-      this.dateKey = dateKey;
-    }
-
-    public EntityId<Beanlet> getBeanletId() {
-      return beanletId;
-    }
-
-    public int getBeanCountForDate() {
-      return beanCountForDate;
-    }
-
-    public String getDateKey() {
-      return dateKey;
-    }
   }
 
 }

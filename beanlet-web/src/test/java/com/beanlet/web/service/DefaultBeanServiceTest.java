@@ -64,4 +64,27 @@ public class DefaultBeanServiceTest {
       eq(new DateTime(2016, 11, 22, 0, 0, 0)), eq(new DateTime(2016, 11, 23, 0, 0, 0)));
   }
 
+  @Test
+  public void testDeleteBean_happyPath() {
+    Bean bean = new Bean();
+    bean.setBeanletId(EXERCISE);
+    when(beanRepository.findOne(BEAN_ID)).thenReturn(bean);
+    service.deleteBean(HERRMINER, EXERCISE, BEAN_ID);
+    verify(beanletAuthorizationService).checkBeanletAuthorization(HERRMINER, EXERCISE);
+    verify(beanRepository).delete(bean);
+  }
+
+  @Test(expected = NotYourBeanException.class)
+  public void testDeleteBean_beanNotPartOfBeanlet() {
+    Bean bean = new Bean();
+    bean.setBeanletId(new EntityId<>("someotherid"));
+    when(beanRepository.findOne(BEAN_ID)).thenReturn(bean);
+    service.deleteBean(HERRMINER, EXERCISE, BEAN_ID);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testDeleteBean_badBeanId() {
+    service.deleteBean(HERRMINER, EXERCISE, BEAN_ID);
+  }
+
 }
