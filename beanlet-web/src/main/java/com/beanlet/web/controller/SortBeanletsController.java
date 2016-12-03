@@ -20,9 +20,6 @@ public class SortBeanletsController {
   @Autowired
   private BeanletService beanletService;
 
-  @Autowired
-  private ConversionService conversionService;
-
   @PostMapping("/beanlets/sort")
   public List<EntityId<Beanlet>> sortBeanlets(@RequestParam String sortBy, @AuthenticationPrincipal User user) {
     return beanletService.sortBeanlets(user.getId(), SortBy.fromName(sortBy));

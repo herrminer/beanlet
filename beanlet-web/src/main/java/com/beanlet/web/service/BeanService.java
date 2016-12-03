@@ -30,6 +30,8 @@ public interface BeanService {
 
   List<Bean> getBeansForDate(EntityId<User> userId, EntityId<Beanlet> beanletId, DateTime dateTime);
 
+  Bean modifyBean(EntityId<User> userId, EntityId<Beanlet> beanletId, EntityId<Bean> beanId, DateTime dateTime);
+
   Bean deleteBean(EntityId<User> userId, EntityId<Beanlet> beanletId, EntityId<Bean> beanId);
 
   @Service
@@ -64,6 +66,8 @@ public interface BeanService {
 
       beanRepository.save(bean);
 
+      LOGGER.debug("added bean " + bean.getId());
+
       return bean;
     }
 
@@ -90,6 +94,43 @@ public interface BeanService {
       DateTime beginTime = dateTime.withTime(0, 0, 0, 0);
       DateTime endTime = beginTime.plusDays(1);
       return beanRepository.findByBeanletIdAndLocalDateBetween(beanletId, beginTime, endTime);
+    }
+
+    @Override
+    public Bean modifyBean(EntityId<User> userId, EntityId<Beanlet> beanletId, EntityId<Bean> beanId, DateTime localDate) {
+      beanletAuthorizationService.checkBeanletAuthorization(userId, beanletId);
+      Bean bean = beanRepository.findOne(beanId);
+
+      if (bean == null) {
+        throw new IllegalArgumentException("no such bean with ID: " + beanId);
+      }
+
+      // make sure the bean belongs to this beanlet
+      if (!bean.getBeanletId().equals(beanletId)) {
+        throw new NotYourBeanException();
+      }
+
+      /**
+       * this could potentially be a different time zone than was originally used.
+       * maybe later i should consider honoring the original time zone...not sure
+       */
+      bean.setLocalTimeZone(localDate.getZone());
+
+      /**
+       * localDate is in the user's time zone, so need to change this to UTC
+       * and retain fields so when it's later converted to UTC the fields are
+       * the same.
+       */
+      bean.setLocalDate(localDate.withZoneRetainFields(DateTimeZone.UTC));
+
+      /**
+       * Setting the UTC date. the withZone=UTC part would have been done implicitly...doing it here just for clarity.
+       */
+      bean.setUtcDate(localDate.withZone(DateTimeZone.UTC)); // conversion would have happened anyway
+
+      beanRepository.save(bean);
+
+      return bean;
     }
 
     @Override

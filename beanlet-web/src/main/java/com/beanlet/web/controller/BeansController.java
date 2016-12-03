@@ -6,6 +6,7 @@ import com.beanlet.web.jpa.EntityId;
 import com.beanlet.web.jpa.User;
 import com.beanlet.web.service.BeanService;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
@@ -43,15 +44,14 @@ public class BeansController {
 
   @PostMapping("/beanlets/{beanletId}/beans")
   @ResponseBody
-  public BeanChangeResponse addBeanForDate(@PathVariable EntityId<Beanlet> beanletId,
+  public String addBeanForDate(@PathVariable EntityId<Beanlet> beanletId,
                                            @AuthenticationPrincipal User user,
                                            @RequestParam String dateKey,
-                                           Model model) {
-    DateTime dateTime = dateKeyFormatter().parseDateTime(dateKey).withTime(12, 0, 0, 0); // default to noon
+                                           @RequestParam DateTimeZone timeZone) {
+    DateTime dateTime = dateKeyFormatter().parseDateTime(dateKey).withZoneRetainFields(timeZone).withTime(12, 0, 0, 0); // default to noon
     logger.debug("addBeanForDate: beanletId: " + beanletId + " and date: " + dateTime);
     beanService.addBean(user.getId(), beanletId, dateTime);
-    int beanCount = beanService.getBeansForDate(user.getId(), beanletId, dateTime).size();
-    return new BeanChangeResponse(beanletId, beanCount, dateKey);
+    return "";
   }
 
 }

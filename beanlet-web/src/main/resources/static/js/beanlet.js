@@ -1,41 +1,62 @@
 // handle ajax errors globally
 $(document).ajaxError(function(event, jqxhr, settings, thrownError) {
-  console.log('ajax error: ' + thrownError);
+  logger.debug('ajax error: ' + thrownError);
   if (jqxhr.status == 403) {
     window.location = '/';
   }
 });
 
+var logger = {
+  level: 'none',
+  debug: function (msg) {
+    if (logger.level == 'debug') {
+      console.log(msg);
+    }
+  }
+};
+
 var service = {
   calendarCache: {},
-  getCalendar: function(year, month, timeZone, responseHandler){
+  getCalendar: function(year, month, timeZone, responseHandler, useCache){
     var cacheKey = '' + year + month;
-    if (service.calendarCache[cacheKey]) {
-      console.log('returning cached calendar response for ' + cacheKey);
+    if (useCache && service.calendarCache[cacheKey]) {
+      logger.debug('using cached calendar response for ' + cacheKey);
       responseHandler(service.calendarCache[cacheKey]);
       return;
     }
+    logger.debug('fetching calendar from server for year ' + year + ' and month ' + month + ' and timezone ' + timeZone);
     var uri = window.location + '/calendar';
     $.get(uri, {timeZone:timeZone, year:year, month:month})
       .done(function(data, textStatus, jqXHR){
+        logger.debug('got response from server: ' + data);
+        logger.debug('caching response for '+data.year+data.month);
         service.calendarCache[''+data.year+data.month] = data; // cache the calendar data
+        logger.debug('calling response handler with ' + data);
         responseHandler(data);
       });
   },
   getBeans: function (dateKey, responseHandler) {
     var uri = window.location + '/beans';
     $.get(uri, {dateKey:dateKey})
-      .done(function(data, textStatus, jqXHR){
-        responseHandler(data);
-      });
+      .done(responseHandler);
   },
-  addBean: function (beanletId, dateKey, responseHandler) {
+  addBean: function (beanletId, dateKey, timeZone, responseHandler) {
     var uri = window.location + '/beans';
     var csrfToken = $("meta[name='_csrf']").attr("content");
-    $.post(uri, {_csrf:csrfToken, dateKey:dateKey})
-      .done(function(data, textStatus, jqXHR){
-        responseHandler(data);
-      });
+    $.post(uri, {_csrf:csrfToken, dateKey:dateKey, timeZone:timeZone})
+      .done(responseHandler);
+  },
+  changeBean: function (beanId, formValues, responseHandler) {
+    var uri = window.location + '/beans/'+beanId;
+    var csrfToken = $("meta[name='_csrf']").attr("content");
+    $.ajax({
+      url: uri,
+      type: 'PUT',
+      data: formValues,
+      headers: {
+        "X-CSRF-TOKEN":csrfToken
+      }})
+      .done(responseHandler);
   },
   deleteBean: function (beanId, responseHandler) {
     var uri = window.location + '/beans/'+beanId;
@@ -46,9 +67,7 @@ var service = {
       headers: {
           "X-CSRF-TOKEN":csrfToken
       }})
-      .done(function(data, textStatus, jqXHR){
-        responseHandler(data);
-    });
+      .done(responseHandler);
   }
 };
 
@@ -76,7 +95,7 @@ var beanlet = {
     if (!beanlet.calendar) return false;
     beanlet.hideBeans(function () {
       beanlet.disableFooterLinks();
-      service.getCalendar(beanlet.calendar.previousYear, beanlet.calendar.previousMonth, beanlet.timeZone, beanlet.getCalendarResponseHandler);
+      service.getCalendar(beanlet.calendar.previousYear, beanlet.calendar.previousMonth, beanlet.timeZone, beanlet.getCalendarResponseHandler, true);
     });
     return false;
   },
@@ -84,7 +103,7 @@ var beanlet = {
     var currentDate = new Date();
     beanlet.hideBeans(function () {
       beanlet.disableFooterLinks();
-      service.getCalendar(currentDate.getFullYear(), currentDate.getMonth()+1, beanlet.timeZone, beanlet.getCalendarResponseHandler);
+      service.getCalendar(currentDate.getFullYear(), currentDate.getMonth()+1, beanlet.timeZone, beanlet.getCalendarResponseHandler, true);
     });
     return false;
   },
@@ -92,9 +111,20 @@ var beanlet = {
     if (!beanlet.calendar) return false;
     beanlet.hideBeans(function () {
       beanlet.disableFooterLinks();
-      service.getCalendar(beanlet.calendar.nextYear, beanlet.calendar.nextMonth, beanlet.timeZone, beanlet.getCalendarResponseHandler);
+      service.getCalendar(beanlet.calendar.nextYear, beanlet.calendar.nextMonth, beanlet.timeZone, beanlet.getCalendarResponseHandler, true);
     });
     return false;
+  },
+  refreshCalendar: function () {
+    logger.debug('refreshing calendar');
+    var c = beanlet.calendar;
+    if (!c) {
+      logger.debug('beanlet.calendar is not there!');
+      return false;
+    }
+    logger.debug('refreshing calendar using ' + c);
+    beanlet.retainSelectedDay = true;
+    service.getCalendar(c.year, c.month, beanlet.timeZone, beanlet.getCalendarResponseHandler);
   },
   initializeCalendarLinks: function () {
     $('#cal-prev').click(beanlet.goToPreviousMonth);
@@ -117,31 +147,60 @@ var beanlet = {
     }
   },
   getCalendarResponseHandler: function(beanletCalendar) {
+    if (!beanletCalendar) {
+      logger.debug('response is ' + beanletCalendar + ', so exiting');
+      return false;
+    }
     beanlet.calendar = beanletCalendar;
     $('#label-month').text(labels.months[beanletCalendar.month]);
     $('#label-year').text(beanletCalendar.year);
     var days = beanletCalendar.days;
     beanlet.showWeeks(days.length);
+
+    // clear "today"
+    $('.today').removeClass('today');
+
+    // clear "selected"
+    if (!beanlet.retainSelectedDay) $('.selected').removeClass('selected');
+
     var day;
     for (var i=0; i < days.length; i++) {
       day = days[i];
       beanletCalendar[day.dateKey] = day; // add another attribute for quick access to a day given its dateKey...todo: move this to service call?
-      var cell = $('#d'+i).text(day.dayOfMonth).attr('dateKey', day.dateKey).attr('class', day.currentMonth ? '' : 'not-current');
-      if (day.today) cell.addClass('today').addClass('selected');
-      if (day.beanCount) cell.addClass('bg-success');
+
+      var cell = $('#d'+i);
+
+      cell.text(day.dayOfMonth).attr('dateKey', day.dateKey);
+
+      if (day.currentMonth) {
+        cell.removeClass('not-current');
+      } else {
+        cell.addClass('not-current');
+      }
+
+      if (day.today) {
+        cell.addClass('today');
+        // select today only if there's not already another one selected
+        if (!beanlet.retainSelectedDay) {
+          cell.addClass('selected');
+        }
+      }
+
+      if (day.beanCount) {
+        cell.addClass('bg-success');
+      } else {
+        cell.removeClass('bg-success');
+      }
     }
-    $('.today').click();
+    beanlet.retainSelectedDay = false; // reset this
+    $('.selected').click();
   },
   getBeans: function () {
     $('.selected').removeClass('selected');
-    var cell = this;
-    var callback = function () {
-      var dayIndex = $(cell).addClass('selected').attr('id').substring(1);
-      var day = beanlet.calendar.days[dayIndex];
-      var dateKey = day.dateKey;
+    var dateKey = $(this).addClass('selected').attr('datekey');
+    beanlet.hideBeans(function () {
       service.getBeans(dateKey, beanlet.getBeansResponseHandler);
-    };
-    beanlet.hideBeans(callback);
+    });
   },
   hideBeans: function (callback) {
     $('#beans').hide('slide', {direction:'up'}, 100, function(){
@@ -150,9 +209,14 @@ var beanlet = {
     });
   },
   displayBeanModal: function () {
-    beanlet.selectedBeanId = $(this).attr('id');
+    var beanElement = $(this);
+    beanlet.selectedBeanId = beanElement.attr('id');
+    var parts = beanElement.attr('dt').split(' ');
+    $('#bean-date').val(parts[0]).datepicker();
+    $('#bean-hour').val(parts[1]);
+    $('#bean-minute').val(parts[2]);
+    $('#bean-ampm').val(parts[3]);
     $('#modal-bean').modal();
-    $('#bean-date').datepicker();
   },
   enableFooterLinks: function () {
     $('#footer').find('a').removeClass('link-disabled');
@@ -169,36 +233,27 @@ var beanlet = {
     var selected = $('.selected');
     if (!selected.length) return false;
     var dateKey = selected.attr('dateKey');
-    service.addBean(beanletId, dateKey, beanlet.beanChangeResponseHandler);
+    service.addBean(null, dateKey, beanlet.timeZone, beanlet.refreshCalendar);
     return false;
   },
-  deleteBean: function () {
-    service.deleteBean(beanlet.selectedBeanId, function(data){
-      beanlet.beanChangeResponseHandler(data);
-      $('#modal-bean').modal('hide');
-    });
+  modifyBean: function () {
+    $('#bean-timezone').val(beanlet.timeZone);
+    var formValues = $('#form-modify-bean').serialize();
+    service.changeBean(beanlet.selectedBeanId, formValues, beanlet.closeModalAndRefreshCalendar);
   },
-  /**
-   * @param addBeanResponse
-   * - beanletId
-   * - beanCountForDate
-   * - dateKey
-   */
-  beanChangeResponseHandler: function (beanChangeResponse) {
-    var dateCell = $('[dateKey='+beanChangeResponse.dateKey+']');
-    beanlet.calendar[beanChangeResponse.dateKey].beanCount = beanChangeResponse.beanCountForDate; // update the cached count of beans for the day
-    if (beanChangeResponse.beanCountForDate) {
-      dateCell.addClass('bg-success');
-    } else {
-      dateCell.removeClass('bg-success');
-    }
-    dateCell.click();
+  deleteBean: function () {
+    service.deleteBean(beanlet.selectedBeanId, beanlet.closeModalAndRefreshCalendar);
+  },
+  closeModalAndRefreshCalendar: function (response) {
+    beanlet.refreshCalendar();
+    $('#modal-bean').modal('hide');
   },
   initializeFooterButtons: function () {
     $('#add-beanlet').click(beanlet.addBean);
   },
   initializeBeanModal: function () {
     $('#button-delete-bean').click(beanlet.deleteBean);
+    $('#button-save-bean').click(beanlet.modifyBean);
   },
   initializePage: function () {
     beanlet.initializeCalendar();
@@ -208,6 +263,6 @@ var beanlet = {
 };
 
 $(function () {
-  console.log('initializing beanlet page');
+  logger.debug('initializing beanlet page');
   beanlet.initializePage();
 });
