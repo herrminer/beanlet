@@ -37,8 +37,33 @@
   </div>
 </div>
 
+<!-- beanlet modal -->
+<div class="modal fade" id="modal-beanlet" tabindex="-1" role="dialog" aria-labelledby="beanletModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="beanletModalLabel">edit beanlet</h4>
+      </div>
+      <div class="modal-body">
+        <form onsubmit="beanlet.saveBeanlet(); return false;">
+          <div class="form-group">
+            <label for="beanlet-name">Beanlet Name</label>
+            <input type="name" class="form-control" id="beanlet-name" placeholder="exercise" th:value="${beanlet.name}">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button id="button-delete-beanlet" type="button" class="btn btn-danger" style="float: left;">Delete</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button id="button-save-beanlet" type="button" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container">
-  <h4 style="margin-top: 0;" th:text="${beanlet.name}">Beanlet Name</h4>
+  <h4 id="beanlet-name-header" style="margin-top: 0;" th:text="${beanlet.name}">Beanlet Name</h4>
   <input type="hidden" id="beanletId" th:value="${beanlet.id}"/>
   <div id="month-nav">
     <span id="label-month">November</span>&nbsp;<span id="label-year">2016</span>&nbsp;
@@ -124,13 +149,11 @@
 <footer class="footer" id="footer">
   <ul class="list-inline">
     <li>
-      <a href="#" id="add-beanlet" class="link-disabled"><span class="glyphicon glyphicon-plus"></span></a>
+      <a href="#" id="add-bean" class="link-disabled"><span class="glyphicon glyphicon-plus"></span></a>
     </li>
-<!--
     <li>
-      <a href="#" data-toggle="modal" data-target="#modal-bean"><span class="glyphicon glyphicon-sort"></span></a>
+      <a href="#" data-toggle="modal" data-target="#modal-beanlet"><span class="glyphicon glyphicon-pencil"></span></a>
     </li>
--->
   </ul>
 </footer>
 

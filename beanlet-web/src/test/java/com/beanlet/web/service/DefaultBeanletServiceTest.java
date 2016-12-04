@@ -29,11 +29,15 @@ public class DefaultBeanletServiceTest {
   @MockBean
   private BeanletRepository beanletRepository;
 
+  @MockBean
+  private BeanletAuthorizationService beanletAuthorizationService;
+
   @Before
   public void setUp() throws Exception {
     service = new BeanletService.DefaultBeanletService();
     service.setUserRepository(userRepository);
     service.setBeanletRepository(beanletRepository);
+    service.setBeanletAuthorizationService(beanletAuthorizationService);
   }
 
   @Test
@@ -58,6 +62,20 @@ public class DefaultBeanletServiceTest {
     for (int i=0; i < entityIds.size(); i++) {
       assertThat(entityIds.get(i).getValue()).isEqualTo(""+(i + 1));
     }
+  }
+
+  @Test
+  public void testModifyBeanlet() {
+    ModifyBeanletRequest request = new ModifyBeanletRequest();
+    request.setName("new name");
+    Beanlet beanlet = new Beanlet();
+    when(beanletRepository.findOne(TestUtils.EXERCISE)).thenReturn(beanlet);
+
+    Beanlet beanletResult = service.modifyBeanlet(TestUtils.HERRMINER, TestUtils.EXERCISE, request);
+
+    assertThat(beanletResult).isNotNull().isEqualTo(beanlet);
+    assertThat(beanlet.getName()).isEqualTo(request.getName());
+    verify(beanletRepository).save(beanlet);
   }
 
   Beanlet createBeanlet(String name, String id) {

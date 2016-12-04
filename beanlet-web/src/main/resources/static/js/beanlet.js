@@ -68,6 +68,17 @@ var service = {
           "X-CSRF-TOKEN":csrfToken
       }})
       .done(responseHandler);
+  },
+  changeBeanlet: function (beanlet, responseHandler) {
+    var csrfToken = $("meta[name='_csrf']").attr("content");
+    $.ajax({
+      url: window.location,
+      type: 'PUT',
+      data: beanlet,
+      headers: {
+        "X-CSRF-TOKEN":csrfToken
+      }})
+      .done(responseHandler);
   }
 };
 
@@ -244,21 +255,32 @@ var beanlet = {
   deleteBean: function () {
     service.deleteBean(beanlet.selectedBeanId, beanlet.closeModalAndRefreshCalendar);
   },
+  saveBeanlet: function () {
+    service.changeBeanlet({name:$('#beanlet-name').val()}, beanlet.changeBeanletResponseHandler);
+  },
+  changeBeanletResponseHandler: function (beanlet) {
+    $('#modal-beanlet').modal('hide');
+    $('#beanlet-name-header').text(beanlet.name);
+  },
   closeModalAndRefreshCalendar: function (response) {
     beanlet.refreshCalendar();
     $('#modal-bean').modal('hide');
   },
   initializeFooterButtons: function () {
-    $('#add-beanlet').click(beanlet.addBean);
+    $('#add-bean').click(beanlet.addBean);
   },
   initializeBeanModal: function () {
     $('#button-delete-bean').click(beanlet.deleteBean);
     $('#button-save-bean').click(beanlet.modifyBean);
   },
+  initializeBeanletModal: function () {
+    $('#button-save-beanlet').click(beanlet.saveBeanlet);
+  },
   initializePage: function () {
     beanlet.initializeCalendar();
     beanlet.initializeFooterButtons();
     beanlet.initializeBeanModal();
+    beanlet.initializeBeanletModal();
   }
 };
 

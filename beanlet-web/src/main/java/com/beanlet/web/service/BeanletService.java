@@ -25,6 +25,8 @@ public interface BeanletService {
 
   Beanlet getBeanlet(EntityId<User> userId, EntityId<Beanlet> beanletId);
 
+  Beanlet modifyBeanlet(EntityId<User> userId, EntityId<Beanlet> beanletId, ModifyBeanletRequest request);
+
   @Service
   class DefaultBeanletService implements BeanletService {
 
@@ -77,6 +79,14 @@ public interface BeanletService {
     public Beanlet getBeanlet(EntityId<User> userId, EntityId<Beanlet> beanletId) {
       beanletAuthorizationService.checkBeanletAuthorization(userId, beanletId);
       return beanletRepository.findOne(beanletId);
+    }
+
+    @Override
+    public Beanlet modifyBeanlet(EntityId<User> userId, EntityId<Beanlet> beanletId, ModifyBeanletRequest request) {
+      Beanlet beanlet = getBeanlet(userId, beanletId);
+      beanlet.setName(request.getName());
+      beanletRepository.save(beanlet);
+      return beanlet;
     }
 
     Beanlet updateBeanletDataFields(EntityId<User> userId, EntityId<Beanlet> beanletId) {
