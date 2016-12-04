@@ -79,6 +79,17 @@ var service = {
         "X-CSRF-TOKEN":csrfToken
       }})
       .done(responseHandler);
+  },
+  deleteBeanlet: function (beanletId, responseHandler) {
+    var uri = '/beanlets/' + beanletId;
+    var csrfToken = $("meta[name='_csrf']").attr("content");
+    $.ajax({
+      url: uri,
+      type: 'DELETE',
+      headers: {
+        "X-CSRF-TOKEN":csrfToken
+      }})
+      .done(responseHandler);
   }
 };
 
@@ -262,6 +273,15 @@ var beanlet = {
     $('#modal-beanlet').modal('hide');
     $('#beanlet-name-header').text(beanlet.name);
   },
+  deleteBeanlet: function () {
+    if (!confirm('Delete beanlet?')) return false;
+    var uri = window.location.pathname;
+    var beanletId = uri.substring(uri.lastIndexOf('/')+1);
+    service.deleteBeanlet(beanletId, beanlet.deleteBeanletResponseHandler);
+  },
+  deleteBeanletResponseHandler: function (deletedBeanlet) {
+    window.location = '/beanlets';
+  },
   closeModalAndRefreshCalendar: function (response) {
     beanlet.refreshCalendar();
     $('#modal-bean').modal('hide');
@@ -275,6 +295,7 @@ var beanlet = {
   },
   initializeBeanletModal: function () {
     $('#button-save-beanlet').click(beanlet.saveBeanlet);
+    $('#button-delete-beanlet').click(beanlet.deleteBeanlet);
   },
   initializePage: function () {
     beanlet.initializeCalendar();

@@ -14,6 +14,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.beanlet.web.TestUtils.EXERCISE;
+import static com.beanlet.web.TestUtils.HERRMINER;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,9 +56,9 @@ public class DefaultBeanletServiceTest {
     beanlets.add(createBeanlet("b", "2"));
     beanlets.add(createBeanlet("d", "4"));
     beanlets.add(createBeanlet("c", "3"));
-    when(beanletRepository.findAllByUserIdOrderBySortOrderDesc(TestUtils.HERRMINER)).thenReturn(beanlets);
+    when(beanletRepository.findAllByUserIdOrderBySortOrderDesc(HERRMINER)).thenReturn(beanlets);
 
-    List<EntityId<Beanlet>> entityIds = service.sortBeanlets(TestUtils.HERRMINER, SortBy.NAME);
+    List<EntityId<Beanlet>> entityIds = service.sortBeanlets(HERRMINER, SortBy.NAME);
 
     verify(beanletRepository, times(5)).save(isA(Beanlet.class));
     for (int i=0; i < entityIds.size(); i++) {
@@ -69,13 +71,27 @@ public class DefaultBeanletServiceTest {
     ModifyBeanletRequest request = new ModifyBeanletRequest();
     request.setName("new name");
     Beanlet beanlet = new Beanlet();
-    when(beanletRepository.findOne(TestUtils.EXERCISE)).thenReturn(beanlet);
+    when(beanletRepository.findOne(EXERCISE)).thenReturn(beanlet);
 
-    Beanlet beanletResult = service.modifyBeanlet(TestUtils.HERRMINER, TestUtils.EXERCISE, request);
+    Beanlet beanletResult = service.modifyBeanlet(HERRMINER, EXERCISE, request);
 
     assertThat(beanletResult).isNotNull().isEqualTo(beanlet);
     assertThat(beanlet.getName()).isEqualTo(request.getName());
     verify(beanletRepository).save(beanlet);
+  }
+
+  @Test
+  public void testDeleteBeanlet_happyPath() {
+    Beanlet beanlet = new Beanlet();
+    when(beanletRepository.findOne(EXERCISE)).thenReturn(beanlet);
+    service.deleteBeanlet(HERRMINER, EXERCISE);
+    verify(beanletRepository).delete(beanlet);
+  }
+
+  @Test
+  public void testDeleteBeanlet_alreadyDeleted() {
+    service.deleteBeanlet(HERRMINER, EXERCISE);
+    verify(beanletRepository, times(0)).delete(any(Beanlet.class));
   }
 
   Beanlet createBeanlet(String name, String id) {

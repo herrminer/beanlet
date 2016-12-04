@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -33,6 +34,12 @@ public class BeanletController {
                               ModifyBeanletRequest request,
                               @AuthenticationPrincipal User user) {
     return beanletService.modifyBeanlet(user.getId(), beanletId, request);
+  }
+
+  @DeleteMapping("/beanlets/{beanletId}")
+  @ResponseBody
+  public Beanlet deleteBeanlet(@PathVariable EntityId<Beanlet> beanletId, @AuthenticationPrincipal User user) {
+    return beanletService.deleteBeanlet(user.getId(), beanletId);
   }
 
   @Autowired

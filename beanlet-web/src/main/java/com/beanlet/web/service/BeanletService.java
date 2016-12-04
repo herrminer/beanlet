@@ -27,6 +27,8 @@ public interface BeanletService {
 
   Beanlet modifyBeanlet(EntityId<User> userId, EntityId<Beanlet> beanletId, ModifyBeanletRequest request);
 
+  Beanlet deleteBeanlet(EntityId<User> userId, EntityId<Beanlet> beanletId);
+
   @Service
   class DefaultBeanletService implements BeanletService {
 
@@ -86,6 +88,20 @@ public interface BeanletService {
       Beanlet beanlet = getBeanlet(userId, beanletId);
       beanlet.setName(request.getName());
       beanletRepository.save(beanlet);
+      return beanlet;
+    }
+
+    @Override
+    public Beanlet deleteBeanlet(EntityId<User> userId, EntityId<Beanlet> beanletId) {
+      Beanlet beanlet = getBeanlet(userId, beanletId);
+
+      // may have already been deleted...
+      if (beanlet != null) {
+        beanletRepository.delete(beanlet);
+      }
+
+      // todo: delete beans also?
+
       return beanlet;
     }
 

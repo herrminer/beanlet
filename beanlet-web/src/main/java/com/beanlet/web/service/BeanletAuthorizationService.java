@@ -21,7 +21,7 @@ public interface BeanletAuthorizationService {
 
     public void checkBeanletAuthorization(EntityId<User> userId, EntityId<Beanlet> beanletId) {
       Beanlet beanlet = beanletRepository.findOne(beanletId);
-      if (!beanlet.getUser().getId().equals(userId)) {
+      if (beanlet != null && !beanlet.getUser().getId().equals(userId)) {
         LOGGER.error("beanlet " + beanletId + " does not belong to user " + userId);
         throw new NotYourBeanException();
       }
