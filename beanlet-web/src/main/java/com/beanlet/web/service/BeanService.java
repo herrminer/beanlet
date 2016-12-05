@@ -22,11 +22,7 @@ public interface BeanService {
 
   Bean addBean(EntityId<User> userId, EntityId<Beanlet> beanletId, DateTime date);
 
-  Bean getMostRecentBean(EntityId<User> userId, EntityId<Beanlet> beanletId);
-
   List<Bean> getBeans(EntityId<User> userId, EntityId<Beanlet> beanletId);
-
-  int getBeanCount(EntityId<Beanlet> beanletId);
 
   List<Bean> getBeansForDate(EntityId<User> userId, EntityId<Beanlet> beanletId, DateTime dateTime);
 
@@ -40,6 +36,8 @@ public interface BeanService {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultBeanService.class);
 
     private BeanletAuthorizationService beanletAuthorizationService;
+
+    private BeanletSummaryDataUpdater beanletSummaryDataUpdater;
 
     private BeanRepository beanRepository;
 
@@ -66,26 +64,17 @@ public interface BeanService {
 
       beanRepository.save(bean);
 
+      beanletSummaryDataUpdater.updateSummaryData(beanletId);
+
       LOGGER.debug("added bean " + bean.getId());
 
       return bean;
     }
 
     @Override
-    public Bean getMostRecentBean(EntityId<User> userId, EntityId<Beanlet> beanletId) {
-      beanletAuthorizationService.checkBeanletAuthorization(userId, beanletId);
-      return beanRepository.findFirstByBeanletIdOrderByLocalDateDesc(beanletId);
-    }
-
-    @Override
     public List<Bean> getBeans(EntityId<User> userId, EntityId<Beanlet> beanletId) {
       beanletAuthorizationService.checkBeanletAuthorization(userId, beanletId);
       return beanRepository.findByBeanletId(beanletId, sort);
-    }
-
-    @Override
-    public int getBeanCount(EntityId<Beanlet> beanletId) {
-      return beanRepository.countByBeanletId(beanletId);
     }
 
     @Override
@@ -96,6 +85,9 @@ public interface BeanService {
       return beanRepository.findByBeanletIdAndLocalDateBetween(beanletId, beginTime, endTime);
     }
 
+    /**
+     * todo: add test for this method!
+     */
     @Override
     public Bean modifyBean(EntityId<User> userId, EntityId<Beanlet> beanletId, EntityId<Bean> beanId, DateTime localDate) {
       beanletAuthorizationService.checkBeanletAuthorization(userId, beanletId);
@@ -130,6 +122,8 @@ public interface BeanService {
 
       beanRepository.save(bean);
 
+      beanletSummaryDataUpdater.updateSummaryData(beanletId);
+
       return bean;
     }
 
@@ -149,6 +143,8 @@ public interface BeanService {
 
       beanRepository.delete(bean);
 
+      beanletSummaryDataUpdater.updateSummaryData(beanletId);
+
       return bean;
     }
 
@@ -160,6 +156,11 @@ public interface BeanService {
     @Autowired
     public void setBeanRepository(BeanRepository beanRepository) {
       this.beanRepository = beanRepository;
+    }
+
+    @Autowired
+    public void setBeanletSummaryDataUpdater(BeanletSummaryDataUpdater beanletSummaryDataUpdater) {
+      this.beanletSummaryDataUpdater = beanletSummaryDataUpdater;
     }
   }
 

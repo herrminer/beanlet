@@ -11,6 +11,7 @@ import org.joda.time.DateTimeZone;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -29,12 +30,15 @@ public class DefaultBeanServiceTest {
   @MockBean
   private BeanRepository beanRepository;
 
+  @MockBean
+  private BeanletSummaryDataUpdater beanletSummaryDataUpdater;
+
   @Before
   public void setUp() throws Exception {
     service = new BeanService.DefaultBeanService();
     service.setBeanletAuthorizationService(beanletAuthorizationService);
     service.setBeanRepository(beanRepository);
-
+    service.setBeanletSummaryDataUpdater(beanletSummaryDataUpdater);
   }
 
   @Test
@@ -45,14 +49,7 @@ public class DefaultBeanServiceTest {
     assertThat(bean.getUtcDate().getMillis()).isEqualTo(date.getMillis());
     assertThat(bean.getLocalDate()).isEqualTo(date.withZoneRetainFields(DateTimeZone.UTC));
     verify(beanRepository).save(isA(Bean.class));
-  }
-
-  @Test
-  public void getMostRecentBean() throws Exception {
-    when(beanRepository.findFirstByBeanletIdOrderByLocalDateDesc(EXERCISE)).thenReturn(new Bean());
-    Bean bean = service.getMostRecentBean(HERRMINER, EXERCISE);
-    assertThat(bean).isNotNull();
-    verify(beanRepository).findFirstByBeanletIdOrderByLocalDateDesc(EXERCISE);
+    verify(beanletSummaryDataUpdater, times(1)).updateSummaryData(any(EntityId.class));
   }
 
   @Test
@@ -72,6 +69,7 @@ public class DefaultBeanServiceTest {
     service.deleteBean(HERRMINER, EXERCISE, BEAN_ID);
     verify(beanletAuthorizationService).checkBeanletAuthorization(HERRMINER, EXERCISE);
     verify(beanRepository).delete(bean);
+    verify(beanletSummaryDataUpdater, times(1)).updateSummaryData(EXERCISE);
   }
 
   @Test(expected = NotYourBeanException.class)

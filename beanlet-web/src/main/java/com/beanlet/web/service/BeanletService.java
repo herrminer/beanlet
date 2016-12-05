@@ -59,7 +59,7 @@ public interface BeanletService {
       User user = userRepository.findOne(userId);
       DateTimeZone zone = timeZone == null ? user.getTimeZone() : timeZone;
       beanService.addBean(userId, beanletId, new DateTime(zone));
-      return updateBeanletDataFields(userId, beanletId);
+      return beanletRepository.findOne(beanletId);
     }
 
     @Override
@@ -102,14 +102,6 @@ public interface BeanletService {
 
       // todo: delete beans also?
 
-      return beanlet;
-    }
-
-    Beanlet updateBeanletDataFields(EntityId<User> userId, EntityId<Beanlet> beanletId) {
-      Beanlet beanlet = beanletRepository.findOne(beanletId);
-      beanlet.setDateLastLogged(beanService.getMostRecentBean(userId, beanletId).getLocalDate());
-      beanlet.setBeanCount(beanService.getBeanCount(beanletId));
-      beanletRepository.save(beanlet);
       return beanlet;
     }
 
