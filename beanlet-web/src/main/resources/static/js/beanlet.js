@@ -6,8 +6,39 @@ $(document).ajaxError(function(event, jqxhr, settings, thrownError) {
   }
 });
 
+var ajax = {
+  get: function (options, responseHandler) {
+    ajax.doWithMethod('GET', options, responseHandler);
+  },
+  put: function (options, responseHandler) {
+    options.addCsrfToken = true;
+    ajax.doWithMethod('PUT', options, responseHandler);
+  },
+  post: function (options, responseHandler) {
+    options.addCsrfToken = true;
+    ajax.doWithMethod('POST', options, responseHandler);
+  },
+  delete: function (options, responseHandler) {
+    options.addCsrfToken = true;
+    ajax.doWithMethod('DELETE', options, responseHandler);
+  },
+  doWithMethod: function(method, options, responseHandler) {
+    options.type = method;
+    if (options.addCsrfToken) {
+      ajax.addCsrfTokenHeader(options);
+    }
+    $.ajax(options).done(responseHandler);
+  },
+  addCsrfTokenHeader: function (options) {
+    var csrfToken = $("meta[name='_csrf']").attr("content");
+    if (!csrfToken) { logger.debug('no csrf token found in meta tag'); return false; }
+    if (!options.headers) { options.headers = {}; }
+    options.headers["X-CSRF-TOKEN"] = csrfToken;
+  }
+};
+
 var logger = {
-  level: 'none',
+  level: 'debug',
   debug: function (msg) {
     if (logger.level == 'debug') {
       console.log(msg);
@@ -20,76 +51,43 @@ var service = {
   getCalendar: function(year, month, timeZone, responseHandler, useCache){
     var cacheKey = '' + year + month;
     if (useCache && service.calendarCache[cacheKey]) {
-      logger.debug('using cached calendar response for ' + cacheKey);
       responseHandler(service.calendarCache[cacheKey]);
       return;
     }
-    logger.debug('fetching calendar from server for year ' + year + ' and month ' + month + ' and timezone ' + timeZone);
-    var uri = window.location + '/calendar';
-    $.get(uri, {timeZone:timeZone, year:year, month:month})
-      .done(function(data, textStatus, jqXHR){
-        logger.debug('got response from server: ' + data);
-        logger.debug('caching response for '+data.year+data.month);
-        service.calendarCache[''+data.year+data.month] = data; // cache the calendar data
-        logger.debug('calling response handler with ' + data);
-        responseHandler(data);
-      });
+    ajax.get({
+      url: window.location + '/calendar',
+      data: {timeZone:timeZone, year:year, month:month}
+    }, function(data){
+      service.calendarCache[''+data.year+data.month] = data; // cache the calendar data
+      responseHandler(data);
+    });
   },
   getBeans: function (dateKey, responseHandler) {
-    var uri = window.location + '/beans';
-    $.get(uri, {dateKey:dateKey})
-      .done(responseHandler);
+    ajax.get({
+      url: window.location + '/beans',
+      data: {dateKey:dateKey}
+    }, responseHandler);
   },
   addBean: function (beanletId, dateKey, timeZone, responseHandler) {
-    var uri = window.location + '/beans';
-    var csrfToken = $("meta[name='_csrf']").attr("content");
-    $.post(uri, {_csrf:csrfToken, dateKey:dateKey, timeZone:timeZone})
-      .done(responseHandler);
+    ajax.post({
+      url: window.location + '/beans',
+      data:{dateKey:dateKey, timeZone:timeZone}
+    }, responseHandler);
   },
   changeBean: function (beanId, formValues, responseHandler) {
-    var uri = window.location + '/beans/'+beanId;
-    var csrfToken = $("meta[name='_csrf']").attr("content");
-    $.ajax({
-      url: uri,
-      type: 'PUT',
-      data: formValues,
-      headers: {
-        "X-CSRF-TOKEN":csrfToken
-      }})
-      .done(responseHandler);
+    ajax.put({
+      url: window.location + '/beans/'+beanId,
+      data: formValues
+    }, responseHandler);
   },
   deleteBean: function (beanId, responseHandler) {
-    var uri = window.location + '/beans/'+beanId;
-    var csrfToken = $("meta[name='_csrf']").attr("content");
-    $.ajax({
-      url: uri,
-      type: 'DELETE',
-      headers: {
-          "X-CSRF-TOKEN":csrfToken
-      }})
-      .done(responseHandler);
+    ajax.delete({url: window.location + '/beans/'+beanId}, responseHandler);
   },
   changeBeanlet: function (beanlet, responseHandler) {
-    var csrfToken = $("meta[name='_csrf']").attr("content");
-    $.ajax({
-      url: window.location,
-      type: 'PUT',
-      data: beanlet,
-      headers: {
-        "X-CSRF-TOKEN":csrfToken
-      }})
-      .done(responseHandler);
+    ajax.put({ url: window.location, data: beanlet}, responseHandler);
   },
   deleteBeanlet: function (beanletId, responseHandler) {
-    var uri = '/beanlets/' + beanletId;
-    var csrfToken = $("meta[name='_csrf']").attr("content");
-    $.ajax({
-      url: uri,
-      type: 'DELETE',
-      headers: {
-        "X-CSRF-TOKEN":csrfToken
-      }})
-      .done(responseHandler);
+    ajax.delete({ url: '/beanlets/' + beanletId }, responseHandler);
   }
 };
 
