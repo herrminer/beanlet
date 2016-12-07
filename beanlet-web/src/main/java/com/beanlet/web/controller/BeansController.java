@@ -28,7 +28,6 @@ public class BeansController {
 
   private static final Logger logger = LoggerFactory.getLogger(BeansController.class);
 
-  @Autowired
   private BeanService beanService;
 
   @GetMapping("/beanlets/{beanletId}/beans")
@@ -54,4 +53,8 @@ public class BeansController {
     return "";
   }
 
+  @Autowired
+  public void setBeanService(BeanService beanService) {
+    this.beanService = beanService;
+  }
 }

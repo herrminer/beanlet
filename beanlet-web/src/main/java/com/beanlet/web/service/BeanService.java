@@ -81,7 +81,7 @@ public interface BeanService {
     public List<Bean> getBeansForDate(EntityId<User> userId, EntityId<Beanlet> beanletId, DateTime dateTime) {
       beanletAuthorizationService.checkBeanletAuthorization(userId, beanletId);
       DateTime beginTime = dateTime.withTime(0, 0, 0, 0);
-      DateTime endTime = beginTime.plusDays(1);
+      DateTime endTime = dateTime.withTime(23, 59, 59, 999);
       return beanRepository.findByBeanletIdAndLocalDateBetween(beanletId, beginTime, endTime);
     }
 

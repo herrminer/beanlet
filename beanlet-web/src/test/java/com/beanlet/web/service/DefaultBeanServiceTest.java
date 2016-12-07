@@ -58,7 +58,7 @@ public class DefaultBeanServiceTest {
     service.getBeansForDate(HERRMINER, EXERCISE, date);
     verify(beanletAuthorizationService).checkBeanletAuthorization(HERRMINER, EXERCISE);
     verify(beanRepository).findByBeanletIdAndLocalDateBetween(eq(EXERCISE),
-      eq(new DateTime(2016, 11, 22, 0, 0, 0)), eq(new DateTime(2016, 11, 23, 0, 0, 0)));
+      eq(new DateTime(2016, 11, 22, 0, 0, 0)), eq(new DateTime(2016, 11, 22, 23, 59, 59, 999)));
   }
 
   @Test
