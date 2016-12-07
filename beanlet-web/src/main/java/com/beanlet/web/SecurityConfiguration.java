@@ -60,4 +60,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
+
+  void printHashedPassword(String password) {
+    System.out.println(passwordEncoder().encode(password));
+  }
 }
