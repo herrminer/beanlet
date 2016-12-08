@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -23,4 +25,7 @@ public interface BeanRepository extends JpaRepository<Bean, EntityId<Bean>> {
 
   Bean findFirstByBeanletIdOrderByLocalDateDesc(EntityId<Beanlet> beanletId);
 
+  @Modifying
+  @Query("delete Bean b where b.beanletId = ?1")
+  void deleteAllByBeanletId(EntityId<Beanlet> beanletId);
 }

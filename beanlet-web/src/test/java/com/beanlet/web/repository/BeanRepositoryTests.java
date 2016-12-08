@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -30,13 +29,7 @@ public class BeanRepositoryTests {
 
   @Test
   public void testPersisteBean() {
-    EntityId<Beanlet> beanletId = new EntityId<>(uuid());
-    Bean bean = new Bean();
-    bean.setBeanletId(beanletId);
-    DateTime date = new DateTime(2016, 8, 1, 12, 0, 0, DateTimeZone.forID("America/Chicago"));
-    bean.setUtcDate(date);
-    bean.setLocalDate(date.withZoneRetainFields(DateTimeZone.UTC));
-    bean.setLocalTimeZone(DateTimeZone.forID("America/Chicago"));
+    Bean bean = buildBean();
     beanRepository.save(bean);
     assertThat(bean.getId()).isNotNull();
     assertThat(bean.getId().length()).isEqualTo(32);
@@ -88,6 +81,26 @@ public class BeanRepositoryTests {
   public void testCountByBeanletId() {
     assertThat(beanRepository.countByBeanletId(EXERCISE)).isEqualTo(3);
     assertThat(beanRepository.countByBeanletId(SCRIPTURE_READING)).isEqualTo(0);
+  }
+
+  @Test
+  public void testDeleteAllByBeanletId() {
+    Bean bean = buildBean();
+    beanRepository.save(bean);
+    assertThat(beanRepository.countByBeanletId(bean.getBeanletId())).isEqualTo(1);
+    beanRepository.deleteAllByBeanletId(bean.getBeanletId());
+    assertThat(beanRepository.countByBeanletId(bean.getBeanletId())).isEqualTo(0);
+  }
+
+  private Bean buildBean() {
+    EntityId<Beanlet> beanletId = new EntityId<>(uuid());
+    Bean bean = new Bean();
+    bean.setBeanletId(beanletId);
+    DateTime date = new DateTime(2016, 8, 1, 12, 0, 0, DateTimeZone.forID("America/Chicago"));
+    bean.setUtcDate(date);
+    bean.setLocalDate(date.withZoneRetainFields(DateTimeZone.UTC));
+    bean.setLocalTimeZone(DateTimeZone.forID("America/Chicago"));
+    return bean;
   }
 
 }

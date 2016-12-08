@@ -3,6 +3,7 @@ package com.beanlet.web.service;
 import com.beanlet.web.TestUtils;
 import com.beanlet.web.jpa.Beanlet;
 import com.beanlet.web.jpa.EntityId;
+import com.beanlet.web.repository.BeanRepository;
 import com.beanlet.web.repository.BeanletRepository;
 import com.beanlet.web.repository.UserRepository;
 import org.junit.Before;
@@ -32,6 +33,9 @@ public class DefaultBeanletServiceTest {
   private BeanletRepository beanletRepository;
 
   @MockBean
+  private BeanRepository beanRepository;
+
+  @MockBean
   private BeanletAuthorizationService beanletAuthorizationService;
 
   @Before
@@ -39,6 +43,7 @@ public class DefaultBeanletServiceTest {
     service = new BeanletService.DefaultBeanletService();
     service.setUserRepository(userRepository);
     service.setBeanletRepository(beanletRepository);
+    service.setBeanRepository(beanRepository);
     service.setBeanletAuthorizationService(beanletAuthorizationService);
   }
 
@@ -83,15 +88,18 @@ public class DefaultBeanletServiceTest {
   @Test
   public void testDeleteBeanlet_happyPath() {
     Beanlet beanlet = new Beanlet();
+    beanlet.setId(EXERCISE);
     when(beanletRepository.findOne(EXERCISE)).thenReturn(beanlet);
     service.deleteBeanlet(HERRMINER, EXERCISE);
     verify(beanletRepository).delete(beanlet);
+    verify(beanRepository).deleteAllByBeanletId(beanlet.getId());
   }
 
   @Test
   public void testDeleteBeanlet_alreadyDeleted() {
     service.deleteBeanlet(HERRMINER, EXERCISE);
     verify(beanletRepository, times(0)).delete(any(Beanlet.class));
+    verify(beanRepository, times(0)).deleteAllByBeanletId(any());
   }
 
   Beanlet createBeanlet(String name, String id) {

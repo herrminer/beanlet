@@ -3,12 +3,14 @@ package com.beanlet.web.service;
 import com.beanlet.web.jpa.Beanlet;
 import com.beanlet.web.jpa.EntityId;
 import com.beanlet.web.jpa.User;
+import com.beanlet.web.repository.BeanRepository;
 import com.beanlet.web.repository.BeanletRepository;
 import com.beanlet.web.repository.UserRepository;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,8 @@ public interface BeanletService {
   class DefaultBeanletService implements BeanletService {
 
     private BeanletRepository beanletRepository;
+
+    private BeanRepository beanRepository;
 
     private UserRepository userRepository;
 
@@ -91,6 +95,7 @@ public interface BeanletService {
       return beanlet;
     }
 
+    @Transactional
     @Override
     public Beanlet deleteBeanlet(EntityId<User> userId, EntityId<Beanlet> beanletId) {
       Beanlet beanlet = getBeanlet(userId, beanletId);
@@ -98,9 +103,8 @@ public interface BeanletService {
       // may have already been deleted...
       if (beanlet != null) {
         beanletRepository.delete(beanlet);
+        beanRepository.deleteAllByBeanletId(beanletId);
       }
-
-      // todo: delete beans also?
 
       return beanlet;
     }
@@ -113,6 +117,11 @@ public interface BeanletService {
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
       this.userRepository = userRepository;
+    }
+
+    @Autowired
+    public void setBeanRepository(BeanRepository beanRepository) {
+      this.beanRepository = beanRepository;
     }
 
     @Autowired
