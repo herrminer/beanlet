@@ -16,6 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,7 +30,7 @@ public class BeanletCalendarController {
 
   @GetMapping("/beanlets/{beanletId}/calendar")
   public BeanletCalendar countIt(@PathVariable EntityId<Beanlet> beanletId,
-                                 @RequestParam DateTimeZone timeZone,
+                                 @RequestHeader("X-BNLT-TIMEZONE") DateTimeZone timeZone,
                                  @RequestParam(required = false) Integer year,
                                  @RequestParam(required = false) Integer month,
                                  @AuthenticationPrincipal User user) {

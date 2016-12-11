@@ -11,26 +11,22 @@ var service = {
     if (typeof responseHandler != 'function') {
       throw new Error('successHandler not a function: ' + responseHandler);
     }
-    var timeZone = jstz.determine().name();
-    var csrfToken = $("meta[name='_csrf']").attr("content");
-    $.post("/countIt", {beanletId:beanletId, _csrf:csrfToken, timeZone: timeZone})
-      .done(function(data, textStatus, jqXHR){
-        responseHandler(data);
-      });
+    ajax.post({
+      url:"/countIt",
+      data:{beanletId:beanletId}
+    }, responseHandler);
   },
   addBeanlet: function(name, responseHandler){
-    var token = $("meta[name='_csrf']").attr("content");
-    $.post("/beanlets", {_csrf:token, name:name})
-      .done(function(data, textStatus, jqXHR){
-        responseHandler(data);
-      });
+    ajax.post({
+      url:'/beanlets',
+      data:{name:name}
+    }, responseHandler);
   },
   sortBeanlets: function(sortBy, responseHandler){
-    var token = $("meta[name='_csrf']").attr("content");
-    $.post("/beanlets/sort", {_csrf:token, sortBy:sortBy})
-      .done(function(data, textStatus, jqXHR){
-        responseHandler(data);
-      });
+    ajax.post({
+      url:'/beanlets/sort',
+      data:{sortBy:sortBy}
+    }, responseHandler);
   }
 };
 

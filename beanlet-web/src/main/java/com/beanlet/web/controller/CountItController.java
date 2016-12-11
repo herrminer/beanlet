@@ -12,6 +12,7 @@ import org.springframework.format.Formatter;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,7 +27,7 @@ public class CountItController {
 
   @PostMapping("/countIt")
   public CountItResponse countIt(@RequestParam EntityId<Beanlet> beanletId,
-                        @RequestParam DateTimeZone timeZone,
+                        @RequestHeader("X-BNLT-TIMEZONE") DateTimeZone timeZone,
                         @AuthenticationPrincipal User user) {
     Beanlet beanlet = beanletService.countIt(user.getId(), beanletId, timeZone);
     String formattedLastLogged = conversionService.convert(beanlet.getDateLastLogged(), String.class);

@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -46,7 +47,7 @@ public class BeansController {
   public String addBeanForDate(@PathVariable EntityId<Beanlet> beanletId,
                                            @AuthenticationPrincipal User user,
                                            @RequestParam String dateKey,
-                                           @RequestParam DateTimeZone timeZone) {
+                                           @RequestHeader("X-BNLT-TIMEZONE") DateTimeZone timeZone) {
     DateTime dateTime = dateKeyFormatter().parseDateTime(dateKey).withZoneRetainFields(timeZone).withTime(12, 0, 0, 0); // default to noon
     logger.debug("addBeanForDate: beanletId: " + beanletId + " and date: " + dateTime);
     beanService.addBean(user.getId(), beanletId, dateTime);

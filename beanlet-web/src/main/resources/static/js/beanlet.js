@@ -6,37 +6,6 @@ $(document).ajaxError(function(event, jqxhr, settings, thrownError) {
   }
 });
 
-var ajax = {
-  get: function (options, responseHandler) {
-    ajax.doWithMethod('GET', options, responseHandler);
-  },
-  put: function (options, responseHandler) {
-    options.addCsrfToken = true;
-    ajax.doWithMethod('PUT', options, responseHandler);
-  },
-  post: function (options, responseHandler) {
-    options.addCsrfToken = true;
-    ajax.doWithMethod('POST', options, responseHandler);
-  },
-  delete: function (options, responseHandler) {
-    options.addCsrfToken = true;
-    ajax.doWithMethod('DELETE', options, responseHandler);
-  },
-  doWithMethod: function(method, options, responseHandler) {
-    options.type = method;
-    if (options.addCsrfToken) {
-      ajax.addCsrfTokenHeader(options);
-    }
-    $.ajax(options).done(responseHandler);
-  },
-  addCsrfTokenHeader: function (options) {
-    var csrfToken = $("meta[name='_csrf']").attr("content");
-    if (!csrfToken) { logger.debug('no csrf token found in meta tag'); return false; }
-    if (!options.headers) { options.headers = {}; }
-    options.headers["X-CSRF-TOKEN"] = csrfToken;
-  }
-};
-
 var logger = {
   level: 'debug',
   debug: function (msg) {
@@ -48,7 +17,7 @@ var logger = {
 
 var service = {
   calendarCache: {},
-  getCalendar: function(year, month, timeZone, responseHandler, useCache){
+  getCalendar: function(year, month, responseHandler, useCache){
     var cacheKey = '' + year + month;
     if (useCache && service.calendarCache[cacheKey]) {
       responseHandler(service.calendarCache[cacheKey]);
@@ -56,7 +25,7 @@ var service = {
     }
     ajax.get({
       url: window.location + '/calendar',
-      data: {timeZone:timeZone, year:year, month:month}
+      data: {year:year, month:month}
     }, function(data){
       service.calendarCache[''+data.year+data.month] = data; // cache the calendar data
       responseHandler(data);
@@ -68,10 +37,10 @@ var service = {
       data: {dateKey:dateKey}
     }, responseHandler);
   },
-  addBean: function (beanletId, dateKey, timeZone, responseHandler) {
+  addBean: function (beanletId, dateKey, responseHandler) {
     ajax.post({
       url: window.location + '/beans',
-      data:{dateKey:dateKey, timeZone:timeZone}
+      data:{dateKey:dateKey}
     }, responseHandler);
   },
   changeBean: function (beanId, formValues, responseHandler) {
@@ -109,13 +78,12 @@ var labels = {
 };
 
 var beanlet = {
-  timeZone: '',
   calendar: null,
   goToPreviousMonth: function () {
     if (!beanlet.calendar) return false;
     beanlet.hideBeans(function () {
       beanlet.disableFooterLinks();
-      service.getCalendar(beanlet.calendar.previousYear, beanlet.calendar.previousMonth, beanlet.timeZone, beanlet.getCalendarResponseHandler, true);
+      service.getCalendar(beanlet.calendar.previousYear, beanlet.calendar.previousMonth, beanlet.getCalendarResponseHandler, true);
     });
     return false;
   },
@@ -123,7 +91,7 @@ var beanlet = {
     var currentDate = new Date();
     beanlet.hideBeans(function () {
       beanlet.disableFooterLinks();
-      service.getCalendar(currentDate.getFullYear(), currentDate.getMonth()+1, beanlet.timeZone, beanlet.getCalendarResponseHandler, true);
+      service.getCalendar(currentDate.getFullYear(), currentDate.getMonth()+1, beanlet.getCalendarResponseHandler, true);
     });
     return false;
   },
@@ -131,7 +99,7 @@ var beanlet = {
     if (!beanlet.calendar) return false;
     beanlet.hideBeans(function () {
       beanlet.disableFooterLinks();
-      service.getCalendar(beanlet.calendar.nextYear, beanlet.calendar.nextMonth, beanlet.timeZone, beanlet.getCalendarResponseHandler, true);
+      service.getCalendar(beanlet.calendar.nextYear, beanlet.calendar.nextMonth, beanlet.getCalendarResponseHandler, true);
     });
     return false;
   },
@@ -144,7 +112,7 @@ var beanlet = {
     }
     logger.debug('refreshing calendar using ' + c);
     beanlet.retainSelectedDay = true;
-    service.getCalendar(c.year, c.month, beanlet.timeZone, beanlet.getCalendarResponseHandler);
+    service.getCalendar(c.year, c.month, beanlet.getCalendarResponseHandler);
   },
   initializeCalendarLinks: function () {
     $('#cal-prev').click(beanlet.goToPreviousMonth);
@@ -152,10 +120,9 @@ var beanlet = {
     $('#cal-next').click(beanlet.goToNextMonth);
   },
   initializeCalendar: function () {
-    beanlet.timeZone = jstz.determine().name();
     beanlet.initializeCalendarLinks();
     $('#beans-table').find('td').click(beanlet.getBeans);
-    service.getCalendar(null, null, beanlet.timeZone, beanlet.getCalendarResponseHandler);
+    service.getCalendar(null, null, beanlet.getCalendarResponseHandler);
   },
   showWeeks: function (numDays) {
     var weeksToShow = numDays / 7;
@@ -253,11 +220,10 @@ var beanlet = {
     var selected = $('.selected');
     if (!selected.length) return false;
     var dateKey = selected.attr('dateKey');
-    service.addBean(null, dateKey, beanlet.timeZone, beanlet.refreshCalendar);
+    service.addBean(null, dateKey, beanlet.refreshCalendar);
     return false;
   },
   modifyBean: function () {
-    $('#bean-timezone').val(beanlet.timeZone);
     var formValues = $('#form-modify-bean').serialize();
     service.changeBean(beanlet.selectedBeanId, formValues, beanlet.closeModalAndRefreshCalendar);
   },
