@@ -15,7 +15,20 @@ body {
 
 body > .container {
   padding: 60px 15px 0;
+  position: relative; /* so the Loading... element is positioned correctly */
 }
+
+#loading {
+  background-color: #ff0000;
+  color: #ffffff;
+  padding: 5px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1040; /* 10 higher than the nav bar (1030) */
+  display: none;
+}
+
 .container .text-muted {
   margin: 20px 0;
 }

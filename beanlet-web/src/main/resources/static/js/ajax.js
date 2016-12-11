@@ -1,3 +1,9 @@
+$(document).ajaxStart(function () {
+  $("#loading").show();
+});
+$(document).ajaxStop(function () {
+  $("#loading").hide();
+});
 var ajax = {
   get: function (options, responseHandler) {
     ajax.doWithMethod('GET', options, responseHandler);

@@ -63,6 +63,7 @@
 </div>
 
 <div class="container">
+  <div th:replace="layout2::#loading"></div>
   <h4 id="beanlet-name-header" style="margin-top: 0;" th:text="${beanlet.name}">Beanlet Name</h4>
   <input type="hidden" id="beanletId" th:value="${beanlet.id}"/>
   <div id="month-nav">
